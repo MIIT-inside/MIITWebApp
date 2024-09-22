@@ -1,4 +1,4 @@
-package com.example.BackendMIIT.models;
+package com.example.BackendMIIT.models.domain;
 
 import com.example.BackendMIIT.util.exceptions.IncorrectExamPointsException;
 import jakarta.persistence.Column;

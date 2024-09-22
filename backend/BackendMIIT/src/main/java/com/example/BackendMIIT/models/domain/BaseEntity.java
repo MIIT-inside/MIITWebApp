@@ -1,4 +1,4 @@
-package com.example.BackendMIIT.models;
+package com.example.BackendMIIT.models.domain;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

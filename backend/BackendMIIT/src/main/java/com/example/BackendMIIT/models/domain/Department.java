@@ -1,4 +1,4 @@
-package com.example.BackendMIIT.models;
+package com.example.BackendMIIT.models.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
