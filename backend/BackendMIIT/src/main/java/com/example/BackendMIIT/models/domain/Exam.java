@@ -1,27 +1,15 @@
 package com.example.BackendMIIT.models.domain;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "exams")
+@Data
+@ToString
 public class Exam extends BaseEntity {
 
     private String name;
-
-    protected Exam() {}
-
-    public Exam(String name) {
-        this.name = name;
-    }
-
-    @Column(name = "exam_name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
