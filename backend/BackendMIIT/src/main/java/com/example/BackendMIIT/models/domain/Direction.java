@@ -12,8 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "directions")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Direction extends BaseEntity {
 
     private String name;
