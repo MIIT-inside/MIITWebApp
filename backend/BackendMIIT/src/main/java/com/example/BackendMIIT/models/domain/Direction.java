@@ -13,7 +13,7 @@ import java.util.List;
 public class Direction extends BaseEntity {
 
     private String name;
-    private int minPoints;
+    private int passPoint;
 
     @OneToMany(mappedBy = "direction")
     private List<Profile> profiles;

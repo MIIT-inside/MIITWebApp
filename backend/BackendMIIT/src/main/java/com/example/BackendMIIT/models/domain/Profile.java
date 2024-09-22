@@ -9,7 +9,7 @@ import lombok.Data;
 public class Profile extends BaseEntity {
 
     private String name;
-    private int minPoints;
+    private int passPoint;
     private String description;
 
     @ManyToOne
