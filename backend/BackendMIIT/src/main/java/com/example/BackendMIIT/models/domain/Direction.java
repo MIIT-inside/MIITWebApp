@@ -6,7 +6,6 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,5 +18,8 @@ public class Direction extends BaseEntity {
     private int minPoints;
 
     @OneToMany(mappedBy = "direction")
-    private List<Profile> profiles = new ArrayList<>();
+    private List<Profile> profiles;
+
+    @OneToMany(mappedBy = "exam")
+    private List<Exam> exams;
 }
