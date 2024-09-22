@@ -10,7 +10,6 @@ public class Profile extends BaseEntity {
     private int minPoints;
     private String description;
     private Department department;
-    // TODO: add direction
 
     protected Profile() {}
 
