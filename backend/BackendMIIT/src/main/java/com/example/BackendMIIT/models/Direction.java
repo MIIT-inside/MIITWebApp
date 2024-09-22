@@ -1,5 +1,6 @@
 package com.example.BackendMIIT.models;
 
+import com.example.BackendMIIT.util.exceptions.IncorrectExamPointsException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -39,7 +40,10 @@ public class Direction extends BaseEntity {
     }
 
     public void setMinPoints(int minPoints) {
-        if (minPoints < 0) { return; } // TODO: replace with the actual exception
+        if (minPoints < 0) {
+            throw new IncorrectExamPointsException();
+        }
+
         this.minPoints = minPoints;
     }
 
