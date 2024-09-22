@@ -13,6 +13,6 @@ public class Profile extends BaseEntity {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department;
+    @JoinColumn(name = "direction_id")
+    private Direction direction;
 }
