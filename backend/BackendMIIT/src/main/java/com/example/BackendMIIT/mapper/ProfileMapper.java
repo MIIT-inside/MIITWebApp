@@ -9,5 +9,5 @@ public interface ProfileMapper {
 
     Profile dtoToProfile(ProfileDto profileDto);
 
-    Profile profileToDto(Profile profile);
+    ProfileDto profileToDto(Profile profile);
 }
