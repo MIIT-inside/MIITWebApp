@@ -1,10 +1,14 @@
 package com.example.BackendMIIT.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class DirectionDto {
 
+    @JsonProperty("name")
     private String name;
-    private int passPoints;
+
+    @JsonProperty("pass_point")
+    private int passPoint;
 }
