@@ -4,14 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Table(name = "directions")
 @Data
-@ToString
 public class Direction extends BaseEntity {
 
     private String name;

@@ -2,12 +2,10 @@ package com.example.BackendMIIT.models.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.ToString;
 
 @Entity
 @Table(name = "profiles")
 @Data
-@ToString
 public class Profile extends BaseEntity {
 
     private String name;
