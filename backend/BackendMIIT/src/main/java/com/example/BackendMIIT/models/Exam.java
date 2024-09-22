@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "exams")
 public class Exam extends BaseEntity {
+
     private String name;
 
     protected Exam() {}

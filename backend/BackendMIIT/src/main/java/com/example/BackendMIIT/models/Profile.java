@@ -35,7 +35,7 @@ public class Profile extends BaseEntity {
     }
 
     public void setMinPoints(int minPoints) {
-        if (minPoints < 0) return; // TODO: replace with the actual exception
+        if (minPoints < 0) { return; } // TODO: replace with the actual exception
         this.minPoints = minPoints;
     }
 
