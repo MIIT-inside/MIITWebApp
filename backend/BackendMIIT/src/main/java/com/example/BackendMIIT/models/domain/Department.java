@@ -4,20 +4,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.util.List;
-
 @Entity
 @Table(name = "departments")
 public class Department extends BaseEntity {
 
     private String name;
-    private List<String> teachers;
+    private String teacher;
 
     protected Department() {}
 
-    public Department(String name, List<String> teachers) {
+    public Department(String name, String teacher) {
         this.name = name;
-        this.teachers = teachers;
+        this.teacher = teacher;
     }
 
     @Column(name = "department_name")
@@ -30,11 +28,11 @@ public class Department extends BaseEntity {
     }
 
     @Column(name = "teachers")
-    public List<String> getTeachers() {
-        return teachers;
+    public String getTeacher() {
+        return teacher;
     }
 
-    public void setTeachers(List<String> teachers) {
-        this.teachers = teachers;
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
     }
 }
