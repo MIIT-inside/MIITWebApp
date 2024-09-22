@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface DirectionMapper {
+
     Direction dtoToDirection(DirectionDto directionDto);
-    DirectionDto departmentToDto(Direction direction);
+
+    DirectionDto directionToDto(Direction direction);
 }

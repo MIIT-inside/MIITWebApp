@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ExamMapper {
-    Exam dtoToDirection(ExamDto examDto);
-    ExamDto departmentToDto(Exam exam);
+
+    Exam dtoToExam(ExamDto examDto);
+
+    ExamDto examToDto(Exam exam);
 }
