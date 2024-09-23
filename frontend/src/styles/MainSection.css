@@ -4,7 +4,30 @@
     display: flex;
     flex-direction: column;
     padding: 0 2rem;
+    position: relative;
+    overflow: hidden;
 }
+
+.background-image-left {
+    position: absolute;
+    top: 5%;
+    left: -10%;
+    width: 450px;
+    height: auto;
+    z-index: 1;
+}
+
+
+.background-image-right {
+    position: absolute;
+    bottom: -70%;
+    right: -25%;
+    width: 1000px;
+    height: auto;
+    z-index: 1;
+    transform: rotate(-70deg);
+}
+
 
 .main-content {
     margin: 10vh auto;
@@ -13,6 +36,7 @@
     justify-content: center;
     max-width: 1200px;
     color: white;
+    z-index: 2;
 }
 
 .main-content h1 {

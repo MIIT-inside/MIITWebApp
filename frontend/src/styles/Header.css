@@ -1,11 +1,12 @@
 .header {
     width: 90%;
     background-color: #003399;
-    height: 6vh;
+    height: 7vh;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
+    z-index: 2;
 }
 
 .header--container {
