@@ -10,19 +10,31 @@
 
 .background-image-left {
     position: absolute;
-    top: 5%;
-    left: -10%;
-    width: 450px;
+    top: 5vh;
+    left: -10vw;
+    width: 30vw;
     height: auto;
     z-index: 1;
 }
 
+.search-block, .subject-block {
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+}
+
+.search-button {
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    padding: 1rem 1.5rem;
+}
 
 .background-image-right {
     position: absolute;
-    bottom: -70%;
-    right: -25%;
-    width: 1000px;
+    bottom: -70vh;
+    right: -20vw;
+    width: 70vw;
     height: auto;
     z-index: 1;
     transform: rotate(-66deg);
@@ -64,7 +76,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.subject-input {
+.subject-input, .mark-input {
     width: 200px;
     padding: 1rem 1rem;
     font-size: 1rem;
@@ -74,7 +86,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.search-input::placeholder {
+.mark-input {
+    font-weight: bold;
+    width: 1rem;
+}
+
+.search-input::placeholder, .mark-input::placeholder {
     color: #2979FF;
     font-weight: bold;
 }

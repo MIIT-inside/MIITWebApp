@@ -15,12 +15,14 @@ const MainSection = () => {
                     <h1>Абитуриенту</h1>
                     <div className="search-block">
                         <input type="text" placeholder="Поиск учебной программы" className="search-input"/>
+                        <button className="search-button"/>
                     </div>
                 </div>
                 <div className="main-content--bottom">
-                    <h2>Результаты ЕГЭ</h2>
+                <h2>Результаты ЕГЭ</h2>
                     <div className="subject-block">
                         <input type="text" placeholder="Дисциплина" className="subject-input"/>
+                        <input type="text" placeholder="" className="mark-input"/>
                     </div>
                 </div>
             </div>
