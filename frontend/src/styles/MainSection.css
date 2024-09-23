@@ -1,0 +1,45 @@
+.main-section {
+    background: linear-gradient(to right, #2563EB, #153885);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 2rem;
+}
+
+.main-content {
+    margin: 7vh auto;
+    width: 50%;
+    max-width: 1200px;
+    color: white;
+}
+
+.main-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.main-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subject-input {
+    width: 200px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
