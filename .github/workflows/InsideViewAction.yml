@@ -10,7 +10,10 @@ name: Spring and React CI
 
 on:
   pull_request:
-    branches: develop
+    branches: 
+    - develop
+    - feature/*
+    - fix/*
 
 jobs:
   backend:
