@@ -20,7 +20,7 @@ public class ExamController {
     }
 
     @GetMapping
-    public ResponseEntity<ExamDto> getExamByDirection(@RequestParam String directionName) {
-        return ResponseEntity.ok().body(new ExamDto());
+    public ResponseEntity<List<ExamDto>> getExamsByDirection(@RequestParam String directionName) {
+        return ResponseEntity.ok().body(new ArrayList<>());
     }
 }
