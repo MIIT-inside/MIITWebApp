@@ -20,7 +20,7 @@ public class EducatorController {
     }
 
     @GetMapping
-    public ResponseEntity<Educator> getEducatorsByDepartmentName(@RequestParam String departmentName) {
-        return ResponseEntity.ok().body(new Educator());
+    public ResponseEntity<List<Educator>> getEducatorsByDepartment(@RequestParam String departmentName) {
+        return ResponseEntity.ok().body(new ArrayList<>());
     }
 }
