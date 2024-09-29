@@ -13,16 +13,16 @@ public class DirectionController {
 
     @GetMapping
     public ResponseEntity<List<DirectionDto>> getAllDirections() {
-        return ResponseEntity.ok().body(new ArrayList<>());
+        return ResponseEntity.ok(new ArrayList<>());
     }
 
     @GetMapping
     public ResponseEntity<List<DirectionDto>> getDirectionsByPassPoint(@PathVariable int passPoint) {
-        return ResponseEntity.ok().body(new ArrayList<>());
+        return ResponseEntity.ok(new ArrayList<>());
     }
 
     @GetMapping
     public ResponseEntity<DirectionDto> getDirectionByName(@RequestParam String directionName) {
-        return ResponseEntity.ok().body(new DirectionDto());
+        return ResponseEntity.ok(new DirectionDto());
     }
 }

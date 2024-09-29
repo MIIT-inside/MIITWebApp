@@ -16,11 +16,11 @@ public class ExamController {
 
     @GetMapping
     public ResponseEntity<List<ExamDto>> getAllExams() {
-        return ResponseEntity.ok().body(new ArrayList<>());
+        return ResponseEntity.ok(new ArrayList<>());
     }
 
     @GetMapping
     public ResponseEntity<List<ExamDto>> getExamsByDirection(@RequestParam String directionName) {
-        return ResponseEntity.ok().body(new ArrayList<>());
+        return ResponseEntity.ok(new ArrayList<>());
     }
 }

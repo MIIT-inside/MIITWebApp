@@ -16,11 +16,11 @@ public class EducatorController {
 
     @GetMapping
     public ResponseEntity<List<Educator>> getAllEducators() {
-        return ResponseEntity.ok().body(new ArrayList<>());
+        return ResponseEntity.ok(new ArrayList<>());
     }
 
     @GetMapping
     public ResponseEntity<List<Educator>> getEducatorsByDepartment(@RequestParam String departmentName) {
-        return ResponseEntity.ok().body(new ArrayList<>());
+        return ResponseEntity.ok(new ArrayList<>());
     }
 }

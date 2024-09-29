@@ -16,16 +16,16 @@ public class ProfileController {
 
     @GetMapping
     public ResponseEntity<List<ProfileDto>> getAllProfiles() {
-        return ResponseEntity.ok().body(new ArrayList<>());
+        return ResponseEntity.ok(new ArrayList<>());
     }
 
     @GetMapping
     public ResponseEntity<List<ProfileDto>> getProfilesByPassPoint(@PathVariable int passPoint) {
-        return ResponseEntity.ok().body(new ArrayList<>());
+        return ResponseEntity.ok(new ArrayList<>());
     }
 
     @GetMapping
     public ResponseEntity<ProfileDto> getProfileByName(@PathVariable String name) {
-        return ResponseEntity.ok().body(new ProfileDto());
+        return ResponseEntity.ok(new ProfileDto());
     }
 }

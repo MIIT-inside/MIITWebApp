@@ -15,6 +15,6 @@ public class DepartmentController {
 
     @GetMapping
     public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
-        return ResponseEntity.ok().body(new ArrayList<>());
+        return ResponseEntity.ok(new ArrayList<>());
     }
 }
