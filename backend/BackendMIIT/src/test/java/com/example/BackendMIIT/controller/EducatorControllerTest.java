@@ -16,11 +16,11 @@ public class EducatorControllerTest {
 
     @Test
     public void getAllEducatorsTest() throws Exception {
-
+        //TODO
     }
 
     @Test
     public void getEducatorsByDepartmentTest() throws Exception {
-
+        //TODO
     }
 }

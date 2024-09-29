@@ -7,15 +7,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = DepartmentController.class)
+@WebMvcTest(controllers = DirectionController.class)
 @ExtendWith(MockitoExtension.class)
-public class DepartmentControllerTest {
+public class DirectionControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void getAllDepartmentsTest() throws Exception {
+    public void getAllDirectionsTest() throws Exception {
+        //TODO
+    }
+
+    @Test
+    public void getDirectionsByPassPointTest() throws Exception {
+        //TODO
+    }
+
+    @Test
+    public void getDirectionByName() throws Exception {
         //TODO
     }
 }
