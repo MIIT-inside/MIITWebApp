@@ -22,7 +22,7 @@ jobs:
     
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: backend/BackendMIIT
     
     steps:
     - name: Code check
@@ -40,7 +40,7 @@ jobs:
       run: mvn compile
 
     - name: Run Tests
-      run: mvn tests
+      run: mvn test
 
     - name: Build with Maven
       run: mvn clean install
@@ -64,6 +64,7 @@ jobs:
     - name: Set up Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
+        cache-dependency-path: frontend/package-lock.json
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
