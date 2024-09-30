@@ -22,7 +22,7 @@ jobs:
     
     defaults:
       run:
-        working-directory: ./BackendMIIT
+        working-directory: backend/BackendMIIT
     
     steps:
     - name: Code check
