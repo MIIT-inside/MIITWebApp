@@ -1,14 +1,14 @@
-package com.example.BackendMIIT.models.dto;
+package com.example.BackendMIIT.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class DirectionDto {
+public class DepartmentDto {
 
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("pass_point")
-    private int passPoint;
+    @JsonProperty("teacher")
+    private String teacher;
 }
