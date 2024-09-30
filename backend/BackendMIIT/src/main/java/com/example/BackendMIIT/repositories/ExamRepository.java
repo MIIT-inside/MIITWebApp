@@ -1,6 +1,6 @@
 package com.example.BackendMIIT.repositories;
 
-import com.example.BackendMIIT.models.domain.Exam;
+import com.example.BackendMIIT.model.domain.Exam;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
