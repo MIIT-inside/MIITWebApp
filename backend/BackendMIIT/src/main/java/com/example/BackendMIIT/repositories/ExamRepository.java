@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ExamRepository<T, ID> extends BaseRepository<T, ID> {
+public interface ExamRepository extends BaseRepository<Exam> {
     List<Exam> findByDirectionName(String directionName);
 }

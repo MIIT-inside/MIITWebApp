@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProfileRepository<T, ID> extends BaseRepository<T, ID> {
+public interface ProfileRepository extends BaseRepository<Profile> {
     List<Profile> findByPassPoint(int passPoint);
     Profile findByName(String name);
 }

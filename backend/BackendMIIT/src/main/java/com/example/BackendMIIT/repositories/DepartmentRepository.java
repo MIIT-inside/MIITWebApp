@@ -1,8 +1,9 @@
 package com.example.BackendMIIT.repositories;
 
+import com.example.BackendMIIT.models.domain.Department;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DepartmentRepository<T, ID> extends BaseRepository<T, ID> {
+public interface DepartmentRepository extends BaseRepository<Department> {
 
 }

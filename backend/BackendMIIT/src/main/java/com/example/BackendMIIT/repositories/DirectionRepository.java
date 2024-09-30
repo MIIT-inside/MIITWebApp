@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DirectionRepository<T, ID> extends BaseRepository<T, ID> {
+public interface DirectionRepository extends BaseRepository<Direction> {
     List<Direction> findByPassPoint(int passPoint);
     Direction findByName(String name);
 }
