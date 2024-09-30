@@ -1,0 +1,29 @@
+.step-card {
+    background-color: #2563EB;
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 150px;
+}
+
+.step-number {
+    background-color: #1C54B2;
+    color: white;
+    font-size: 2rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.step-description {
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
