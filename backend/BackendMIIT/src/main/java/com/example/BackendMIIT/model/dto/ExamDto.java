@@ -1,4 +1,4 @@
-package com.example.BackendMIIT.models.dto;
+package com.example.BackendMIIT.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
