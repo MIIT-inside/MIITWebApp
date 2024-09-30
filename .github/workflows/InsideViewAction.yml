@@ -22,7 +22,7 @@ jobs:
     
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./BackendMIIT
     
     steps:
     - name: Code check
@@ -40,7 +40,7 @@ jobs:
       run: mvn compile
 
     - name: Run Tests
-      run: mvn tests
+      run: mvn test
 
     - name: Build with Maven
       run: mvn clean install
