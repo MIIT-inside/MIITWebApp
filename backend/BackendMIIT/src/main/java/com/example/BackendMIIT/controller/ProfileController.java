@@ -14,17 +14,17 @@ import java.util.List;
 @RequestMapping(path = "api/miit/profiles")
 public class ProfileController {
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<ProfileDto>> getAllProfiles() {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-    @GetMapping
+    @GetMapping("/pass")
     public ResponseEntity<List<ProfileDto>> getProfilesByPassPoint(@PathVariable int passPoint) {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-    @GetMapping
+    @GetMapping("/profile")
     public ResponseEntity<ProfileDto> getProfileByName(@PathVariable String name) {
         return ResponseEntity.ok(new ProfileDto());
     }

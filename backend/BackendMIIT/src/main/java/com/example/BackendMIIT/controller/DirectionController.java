@@ -11,17 +11,17 @@ import java.util.List;
 @RequestMapping(path = "api/miit/directions")
 public class DirectionController {
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<DirectionDto>> getAllDirections() {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-    @GetMapping
+    @GetMapping("/{passPoint}")
     public ResponseEntity<List<DirectionDto>> getDirectionsByPassPoint(@PathVariable int passPoint) {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-    @GetMapping
+    @GetMapping("/direction")
     public ResponseEntity<DirectionDto> getDirectionByName(@RequestParam String directionName) {
         return ResponseEntity.ok(new DirectionDto());
     }

@@ -1,7 +1,7 @@
 package com.example.BackendMIIT.mapper;
 
-import com.example.BackendMIIT.models.domain.Profile;
-import com.example.BackendMIIT.models.dto.ProfileDto;
+import com.example.BackendMIIT.model.domain.Profile;
+import com.example.BackendMIIT.model.dto.ProfileDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
