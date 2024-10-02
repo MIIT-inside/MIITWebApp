@@ -1,1 +1,18 @@
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
 
+.item-1 {
+    background-color: #1C54B2;
+}
+
+.item-2 {
+    background-color: red;
+}
+
+.item-3 {
+    background-color: yellowgreen;
+}
