@@ -5,4 +5,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DirectionServiceImpl implements DirectionService {
+    @Override
+    public void addDirection(String url) {
+
+    }
 }
