@@ -1,0 +1,29 @@
+.main-container {
+    height: 150px;
+    width: 450px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem auto;
+}
+
+.window {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.all-pages-container {
+    height: 100%;
+    display: flex;
+
+    transition: translate;
+    transition-property: transform;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in-out;
+}
+
+.arrow {
+    cursor: pointer;
+}
