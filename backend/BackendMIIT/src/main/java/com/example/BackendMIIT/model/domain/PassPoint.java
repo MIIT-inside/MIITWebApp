@@ -18,4 +18,7 @@ public class PassPoint extends BaseEntity{
 
     @OneToOne
     private Direction direction;
+
+    @OneToOne
+    private PassPoint passPoint;
 }
