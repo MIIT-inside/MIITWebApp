@@ -6,7 +6,7 @@ import TitleWithLine from './TitleWithLine';
 const InstructionSteps = () => {
     return (
         <div className="instruction-steps">
-            <TitleWithLine title="Как поступить" />
+
             <div className="steps-container">
                 <StepCard stepNumber="1" description="Выбор программы" />
                 <StepCard stepNumber="2" description="Подача документов" />
