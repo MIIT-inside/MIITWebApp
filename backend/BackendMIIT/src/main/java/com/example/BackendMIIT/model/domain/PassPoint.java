@@ -11,6 +11,7 @@ import lombok.Data;
 public class PassPoint extends BaseEntity{
 
     private int main;
+    private int average;
     private int target;
     private int special;
     private int separate;
@@ -20,5 +21,5 @@ public class PassPoint extends BaseEntity{
     private Direction direction;
 
     @OneToOne
-    private PassPoint passPoint;
+    private Profile profile;
 }
