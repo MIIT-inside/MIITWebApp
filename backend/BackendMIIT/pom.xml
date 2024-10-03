@@ -34,6 +34,8 @@
 		<lombok.version>1.18.30</lombok.version>
 		<pdfbox.version>3.0.2</pdfbox.version>
 		<jsoup.verison>1.17.2</jsoup.verison>
+		<webflux.version>6.1.12</webflux.version>
+		<org-json.version>20240303</org-json.version>
 	</properties>
 
 	<dependencies>
@@ -96,6 +98,18 @@
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 			<version>${pdfbox.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+			<version>${webflux.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>${org-json.version}</version>
 		</dependency>
 
 	</dependencies>
