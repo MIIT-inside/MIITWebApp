@@ -18,11 +18,9 @@ import org.springframework.stereotype.Service;
 public class DirectionServiceImpl implements DirectionService {
 
     private final DirectionRepository directionRepository;
-    private final ProfileRepository profileRepository;
 
     public DirectionServiceImpl(DirectionRepository directionRepository, ProfileRepository profileRepository) {
         this.directionRepository = directionRepository;
-        this.profileRepository = profileRepository;
     }
 
     @Override
@@ -57,7 +55,5 @@ public class DirectionServiceImpl implements DirectionService {
                 }
             }
         }
-
-
     }
 }
