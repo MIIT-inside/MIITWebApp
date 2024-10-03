@@ -18,7 +18,7 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    @PostMapping
+    @PostMapping("/parse")
     public ResponseEntity<String> parseProfiles(@RequestParam String url) {
         profileService.parseProfile(url);
 
