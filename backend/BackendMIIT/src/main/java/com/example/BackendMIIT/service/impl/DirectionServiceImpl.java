@@ -25,7 +25,7 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     @SneakyThrows
-    public void addDirection(String url) {
+    public void parseDirections(String url) {
 
         Document doc = Jsoup.connect(url).maxBodySize(0).get();
         String currentDirection;
