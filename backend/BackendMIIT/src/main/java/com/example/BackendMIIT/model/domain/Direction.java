@@ -15,6 +15,7 @@ public class Direction extends BaseEntity {
 
     private String code;
     private String name;
+    private String level;
 
     @OneToMany(mappedBy = "direction")
     private List<Profile> profiles;
