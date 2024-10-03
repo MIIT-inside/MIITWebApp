@@ -22,7 +22,7 @@ public class DirectionController {
     public ResponseEntity<String> parseDirections(@RequestParam String url) {
         directionService.parseDirections(url);
 
-        return ResponseEntity.ok().body("Parse success!");
+        return ResponseEntity.ok().body("Directions successfully parsed");
     }
 
     @GetMapping("/")
