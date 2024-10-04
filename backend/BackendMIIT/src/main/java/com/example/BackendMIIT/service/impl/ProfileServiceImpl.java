@@ -53,6 +53,7 @@ public class ProfileServiceImpl implements ProfileService {
                     profile.setDirection(direction);
 
                     profileRepository.save(profile);
+                    previousDirection = currentDirection;
                 }
             }
         }

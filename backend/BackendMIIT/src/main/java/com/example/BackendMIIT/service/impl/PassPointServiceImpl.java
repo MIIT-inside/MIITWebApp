@@ -1,17 +1,15 @@
 package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.model.domain.Direction;
+import com.example.BackendMIIT.model.domain.Category;
 import com.example.BackendMIIT.model.domain.PassPoint;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.repositories.PassPointRepository;
 import com.example.BackendMIIT.service.PassPointService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.util.json.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
@@ -50,24 +48,37 @@ public class PassPointServiceImpl implements PassPointService {
 
         for (int i = 0; i < jsonArray.length(); i++) {
 
-            PassPoint passPoint = new PassPoint();
-
             JSONObject groups = jsonArray.getJSONObject(i);
             JSONObject doubles = groups.getJSONObject("planNumbers").getJSONObject("doubles");
 
-            doublesValues.add(doubles.getJSONObject("BUDGET"));
             doublesValues.add(doubles.getJSONObject("CONCOURSE"));
             doublesValues.add(doubles.getJSONObject("SPECIAL_QUOTA"));
             doublesValues.add(doubles.getJSONObject("TARGET_QUOTA"));
+            doublesValues.add(doubles.getJSONObject("QUOTA_07"));
             doublesValues.add(doubles.getJSONObject("PAID_CONCOURSE"));
 
-            Direction direction = directionRepository.findByName(groups.getString("specName"));
+            Direction direction = directionRepository.findByName(groups.getString("specName").trim());
 
             for (int j = 0; j < doublesValues.size(); j++) {
+                PassPoint passPoint = new PassPoint();
+
                 int avg = (int) doublesValues.get(j).optDouble("AVERAGE_SCORE");
-                int min = (int) doublesValues.get(j).optDouble("MIN_SCORE"); //TODO{ Set passPoint values}
+                int min = (int) doublesValues.get(j).optDouble("MIN_SCORE");
 
                 passPoint.setDirection(direction);
+
+                switch (j) {
+                    case 0 -> passPoint.setCategory(Category.MAIN);
+                    case 1 -> passPoint.setCategory(Category.SPECIAL);
+                    case 2 -> passPoint.setCategory(Category.TARGET);
+                    case 3 -> passPoint.setCategory(Category.SEPARATE);
+                    case 4 -> passPoint.setCategory(Category.CONTRACT);
+                }
+
+                passPoint.setAvg(avg);
+                passPoint.setMin(min);
+
+                passPointRepository.save(passPoint);
             }
             doublesValues.clear();
         }

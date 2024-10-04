@@ -15,7 +15,4 @@ public class Profile extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "direction_id")
     private Direction direction;
-
-    @OneToOne
-    private PassPoint passPoint;
 }

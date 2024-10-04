@@ -5,6 +5,7 @@ import com.example.BackendMIIT.model.domain.Profile;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.repositories.ProfileRepository;
 import com.example.BackendMIIT.service.DirectionService;
+import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -25,6 +26,7 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     @SneakyThrows
+    @Transactional
     public void parseDirections(String url) {
 
         Document doc = Jsoup.connect(url).maxBodySize(0).get();
@@ -45,13 +47,14 @@ public class DirectionServiceImpl implements DirectionService {
                 if (!previousDirection.equals(currentDirection) && form.text().equals("очная") && (level.text().equals("бакалавриат") || level.text().equals("специалитет"))) {
                     Direction direction = new Direction();
 
-                    nameText = name.text().substring(0, name.text().indexOf("\\."));
+                    nameText = name.text().substring(0, name.text().indexOf("."));
 
                     direction.setCode(code.text().trim());
                     direction.setName(nameText.trim());
                     direction.setLevel(level.text().trim());
 
                     directionRepository.save(direction);
+                    previousDirection = currentDirection;
                 }
             }
         }

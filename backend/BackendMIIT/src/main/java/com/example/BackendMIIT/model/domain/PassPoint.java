@@ -1,25 +1,19 @@
 package com.example.BackendMIIT.model.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "pass_points")
 @Data
-public class PassPoint extends BaseEntity{
+public class PassPoint extends BaseEntity {
 
-    private int main;
-    private int average;
-    private int target;
-    private int special;
-    private int separate;
-    private int contract;
+    private int min;
+    private int avg;
 
-    @OneToOne
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Direction direction;
-
-    @OneToOne
-    private Profile profile;
 }
