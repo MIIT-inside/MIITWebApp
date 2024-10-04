@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface ProfileRepository extends BaseRepository<Profile> {
-    List<Profile> findByPassPoint(int passPoint);
     Profile findByName(String name);
 }

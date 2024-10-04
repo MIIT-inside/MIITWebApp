@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface DirectionRepository extends BaseRepository<Direction> {
-    List<Direction> findByPassPoint(int passPoint);
     Direction findByName(String name);
 }
