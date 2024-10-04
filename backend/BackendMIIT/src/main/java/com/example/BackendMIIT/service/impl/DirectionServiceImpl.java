@@ -1,18 +1,15 @@
 package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.model.domain.Direction;
-import com.example.BackendMIIT.model.domain.Profile;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.repositories.ProfileRepository;
 import com.example.BackendMIIT.service.DirectionService;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

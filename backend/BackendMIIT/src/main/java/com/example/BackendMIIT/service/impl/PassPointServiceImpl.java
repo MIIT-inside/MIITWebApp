@@ -1,7 +1,7 @@
 package com.example.BackendMIIT.service.impl;
 
-import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.domain.Category;
+import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.domain.PassPoint;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.repositories.PassPointRepository;

@@ -17,6 +17,4 @@ public class Educator extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "department_id")
     public Department department;
-
-
 }
