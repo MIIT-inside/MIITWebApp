@@ -14,6 +14,7 @@ public class PassPoint extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "direction_id")
     private Direction direction;
 }

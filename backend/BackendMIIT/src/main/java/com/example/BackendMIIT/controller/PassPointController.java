@@ -17,7 +17,7 @@ public class PassPointController {
 
     @PostMapping("/parse")
     public ResponseEntity<String> parsePassPoints(@RequestParam String uri) {
-        passPointService.savePoints(uri);
+        passPointService.parsePoints(uri);
 
         return ResponseEntity.ok("Points parsed successfully");
     }

@@ -29,7 +29,7 @@ public class PassPointServiceImpl implements PassPointService {
     private WebClient webClient;
 
     @Override
-    public void savePoints(String uri) {
+    public void parsePoints(String uri) {
 
         List<JSONObject> doublesValues = new ArrayList<>();
 
@@ -57,30 +57,35 @@ public class PassPointServiceImpl implements PassPointService {
             doublesValues.add(doubles.getJSONObject("QUOTA_07"));
             doublesValues.add(doubles.getJSONObject("PAID_CONCOURSE"));
 
-            Direction direction = directionRepository.findByName(groups.getString("specName").trim());
-
-            for (int j = 0; j < doublesValues.size(); j++) {
-                PassPoint passPoint = new PassPoint();
-
-                int avg = (int) doublesValues.get(j).optDouble("AVERAGE_SCORE");
-                int min = (int) doublesValues.get(j).optDouble("MIN_SCORE");
-
-                passPoint.setDirection(direction);
-
-                switch (j) {
-                    case 0 -> passPoint.setCategory(Category.MAIN);
-                    case 1 -> passPoint.setCategory(Category.SPECIAL);
-                    case 2 -> passPoint.setCategory(Category.TARGET);
-                    case 3 -> passPoint.setCategory(Category.SEPARATE);
-                    case 4 -> passPoint.setCategory(Category.CONTRACT);
-                }
-
-                passPoint.setAvg(avg);
-                passPoint.setMin(min);
-
-                passPointRepository.save(passPoint);
-            }
+            savePoints(doublesValues, groups);
             doublesValues.clear();
+        }
+    }
+
+    @Override
+    public void savePoints(List<JSONObject> doublesValues, JSONObject groups) {
+
+        for (int i = 0; i < doublesValues.size(); i++) {
+
+            PassPoint passPoint = new PassPoint();
+            Direction direction = directionRepository.findByName(groups.getString("specName"));
+
+            int avg = (int) doublesValues.get(i).optDouble("AVERAGE_SCORE");
+            int min = (int) doublesValues.get(i).optDouble("MIN_SCORE");
+
+            switch (i) {
+                case 0 -> passPoint.setCategory(Category.MAIN);
+                case 1 -> passPoint.setCategory(Category.SPECIAL);
+                case 2 -> passPoint.setCategory(Category.TARGET);
+                case 3 -> passPoint.setCategory(Category.SEPARATE);
+                case 4 -> passPoint.setCategory(Category.CONTRACT);
+            }
+
+            passPoint.setDirection(direction);
+            passPoint.setAvg(avg);
+            passPoint.setMin(min);
+
+            passPointRepository.save(passPoint);
         }
     }
 }

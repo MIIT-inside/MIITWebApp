@@ -24,6 +24,6 @@ public class Direction extends BaseEntity {
     @OneToMany(mappedBy = "direction")
     private List<Exam> exams;
 
-    @OneToOne
-    private PassPoint passPoint;
+    @OneToMany(mappedBy = "direction")
+    private List<PassPoint> passPoints;
 }
