@@ -4,13 +4,15 @@ import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.repositories.ProfileRepository;
 import com.example.BackendMIIT.service.DirectionService;
-import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DirectionServiceImpl implements DirectionService {
@@ -23,37 +25,50 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     @SneakyThrows
-    @Transactional
     public void parseDirections(String url) {
 
         Document doc = Jsoup.connect(url).maxBodySize(0).get();
-        String currentDirection;
+
+        List<Element> list = new ArrayList<>();
         String previousDirection = "";
-        String nameText;
 
         Elements elements = doc.select("tr");
 
         for (Element element : elements) {
-            Element code = element.selectFirst("td[itemprop=eduCode]");
-            Element name = element.selectFirst("td[itemprop=eduName]");
-            Element level = element.selectFirst("td[itemprop=eduLevel]");
-            Element form = element.selectFirst("td[itemprop=eduForm]");
+            list.add(element.selectFirst("td[itemprop=eduCode]"));
+            list.add(element.selectFirst("td[itemprop=eduName]"));
+            list.add(element.selectFirst("td[itemprop=eduLevel]"));
+            list.add(element.selectFirst("td[itemprop=eduForm]"));
 
-            if (code != null && name != null && level != null && form != null) {
-                currentDirection = code.text();
-                if (!previousDirection.equals(currentDirection) && form.text().equals("очная") && (level.text().equals("бакалавриат") || level.text().equals("специалитет"))) {
-                    Direction direction = new Direction();
-
-                    nameText = name.text().substring(0, name.text().indexOf("."));
-
-                    direction.setCode(code.text().trim());
-                    direction.setName(nameText.trim());
-                    direction.setLevel(level.text().trim());
-
-                    directionRepository.save(direction);
-                    previousDirection = currentDirection;
-                }
-            }
+            previousDirection = saveDirection(list, previousDirection);
+            list.clear();
         }
+    }
+
+    @Override
+    public String saveDirection(List<Element> elements, String previousDirection) {
+        if (elements.get(0) != null && elements.get(1) != null && elements.get(2) != null && elements.get(3) != null) {
+
+            String code = elements.get(0).text();
+            String name = elements.get(1).text();
+            String level = elements.get(2).text();
+            String form = elements.get(3).text();
+
+            if (!previousDirection.equals(code) && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+                Direction direction = new Direction();
+
+                String nameDirection = name.substring(0, name.indexOf("."));
+
+                direction.setCode(code.trim());
+                direction.setName(nameDirection.trim());
+                direction.setLevel(level.trim());
+                direction.setForm(form.trim());
+
+                directionRepository.save(direction);
+            }
+            return code;
+        }
+
+        return previousDirection;
     }
 }
