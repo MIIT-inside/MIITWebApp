@@ -12,6 +12,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ProfileServiceImpl implements ProfileService {
 
@@ -28,34 +31,48 @@ public class ProfileServiceImpl implements ProfileService {
     public void parseProfile(String url) {
 
         Document doc = Jsoup.connect(url).maxBodySize(0).get();
-        String currentDirection;
-        String previousDirection = "";
-        String[] directionAndProfile;
+
+        String previousProfile = "";
+        List<Element> props = new ArrayList<>();
 
         Elements elements = doc.select("tr");
 
         for (Element element : elements) {
-            Element code = element.selectFirst("td[itemprop=eduCode]");
-            Element name = element.selectFirst("td[itemprop=eduName]");
-            Element level = element.selectFirst("td[itemprop=eduLevel]");
-            Element form = element.selectFirst("td[itemprop=eduForm]");
+            props.add(element.selectFirst("td[itemprop=eduCode]"));
+            props.add(element.selectFirst("td[itemprop=eduName]"));
+            props.add(element.selectFirst("td[itemprop=eduLevel]"));
+            props.add(element.selectFirst("td[itemprop=eduForm]"));
 
-            if (code != null && name != null && level != null && form != null) {
-                currentDirection = code.text();
-                if (!previousDirection.equals(currentDirection) && form.text().equals("очная") && (level.text().equals("бакалавриат") || level.text().equals("специалитет"))) {
-                    Profile profile = new Profile();
+            previousProfile = saveProfile(props, previousProfile);
 
-                    directionAndProfile = name.text().split("\\. ");
+            props.clear();
+        }
+    }
 
-                    Direction direction = directionRepository.findByName(directionAndProfile[0].trim());
-                    profile.setName(directionAndProfile[1].trim());
-                    profile.setForm(form.text());
-                    profile.setDirection(direction);
+    @Override
+    public String saveProfile(List<Element> props, String previousProfile) {
+        if (props.get(0) != null && props.get(1) != null && props.get(2) != null && props.get(3) != null) {
 
-                    profileRepository.save(profile);
-                    previousDirection = currentDirection;
-                }
+            String code = props.get(0).text();
+            String name = props.get(1).text();
+            String level = props.get(2).text();
+            String form = props.get(3).text();
+
+            if (!previousProfile.equals(name) && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+                previousProfile = name;
+                Profile profile = new Profile();
+
+                String profileName = name.substring(name.indexOf(".")).trim();
+
+                Direction direction = directionRepository.findByCode(code.trim());
+                profile.setName(profileName);
+                profile.setForm(form.trim());
+                profile.setDirection(direction);
+
+                profileRepository.save(profile);
             }
         }
+
+        return previousProfile;
     }
 }

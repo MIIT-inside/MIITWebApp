@@ -29,32 +29,34 @@ public class DirectionServiceImpl implements DirectionService {
 
         Document doc = Jsoup.connect(url).maxBodySize(0).get();
 
-        List<Element> list = new ArrayList<>();
+        List<Element> props = new ArrayList<>();
         String previousDirection = "";
 
         Elements elements = doc.select("tr");
 
         for (Element element : elements) {
-            list.add(element.selectFirst("td[itemprop=eduCode]"));
-            list.add(element.selectFirst("td[itemprop=eduName]"));
-            list.add(element.selectFirst("td[itemprop=eduLevel]"));
-            list.add(element.selectFirst("td[itemprop=eduForm]"));
+            props.add(element.selectFirst("td[itemprop=eduCode]"));
+            props.add(element.selectFirst("td[itemprop=eduName]"));
+            props.add(element.selectFirst("td[itemprop=eduLevel]"));
+            props.add(element.selectFirst("td[itemprop=eduForm]"));
 
-            previousDirection = saveDirection(list, previousDirection);
-            list.clear();
+            previousDirection = saveDirection(props, previousDirection);
+            props.clear();
         }
     }
 
     @Override
-    public String saveDirection(List<Element> elements, String previousDirection) {
-        if (elements.get(0) != null && elements.get(1) != null && elements.get(2) != null && elements.get(3) != null) {
+    public String saveDirection(List<Element> props, String previousDirection) {
+        if (props.get(0) != null && props.get(1) != null && props.get(2) != null && props.get(3) != null) {
 
-            String code = elements.get(0).text();
-            String name = elements.get(1).text();
-            String level = elements.get(2).text();
-            String form = elements.get(3).text();
+            String code = props.get(0).text();
+            String name = props.get(1).text();
+            String level = props.get(2).text();
+            String form = props.get(3).text();
 
             if (!previousDirection.equals(code) && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+
+                previousDirection = code;
                 Direction direction = new Direction();
 
                 String nameDirection = name.substring(0, name.indexOf("."));
@@ -66,7 +68,6 @@ public class DirectionServiceImpl implements DirectionService {
 
                 directionRepository.save(direction);
             }
-            return code;
         }
 
         return previousDirection;

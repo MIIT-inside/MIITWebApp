@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DirectionRepository extends BaseRepository<Direction> {
     Direction findByName(String name);
+    Direction findByCode(String code);
 }
