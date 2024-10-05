@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 public enum Category {
 
-    MAIN ("Общий конкурс"),
-    TARGET ("Целевая квота"),
-    SPECIAL ("Особая квота"),
-    SEPARATE ("Отдельная квота"),
-    CONTRACT ("Договорная основа");
+    MAIN("Общий конкурс"),
+    TARGET("Целевая квота"),
+    SPECIAL("Особая квота"),
+    SEPARATE("Отдельная квота"),
+    CONTRACT("Договорная основа");
 
     private final String value;
 }
