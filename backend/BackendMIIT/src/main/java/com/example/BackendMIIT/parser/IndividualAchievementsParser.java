@@ -7,16 +7,20 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+@Component
 public class IndividualAchievementsParser {
 
-    @Autowired
-    private UrlsConfig urlsConfig;
+    private final UrlsConfig urlsConfig;
+
+    public IndividualAchievementsParser(UrlsConfig urlsConfig) {
+        this.urlsConfig = urlsConfig;
+    }
 
     public Set<IndividualAchievements> parse() {
         String iaUrl = urlsConfig.getIa();
