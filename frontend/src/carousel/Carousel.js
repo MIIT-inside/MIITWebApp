@@ -1,44 +1,54 @@
-import { useEffect, useState, Children, cloneElement } from 'react'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
-import './Carousel.css'
-
-const PAGE_WIDTH = 900
+import { useEffect, useState, Children, cloneElement } from 'react';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import './Carousel.css';
 
 export const Carousel = ({ children }) => {
-    const [pages, setPages] = useState([])
-    const [offset, setOffset] = useState(0)
+    const [pages, setPages] = useState([]);
+    const [offset, setOffset] = useState(0);
+    const [pageWidth, setPageWidth] = useState(window.innerWidth * 0.65);  // Задаем ширину как 90% от ширины экрана
 
     const handleLeftArrowClick = () => {
         setOffset((currentOffset) => {
-            const newOffset = currentOffset + PAGE_WIDTH
-            console.log(newOffset)
-            return Math.min(newOffset, 0)
-        })
-    }
+            const newOffset = currentOffset + pageWidth;
+            return Math.min(newOffset, 0);  // Ограничение на скролл влево
+        });
+    };
+
     const handleRightArrowClick = () => {
         setOffset((currentOffset) => {
-            const newOffset = currentOffset - PAGE_WIDTH
+            const newOffset = currentOffset - pageWidth;
+            const maxOffset = -(pageWidth * (pages.length - 1));  // Ограничение на скролл вправо
+            return Math.max(newOffset, maxOffset);  // Не даем прокрутить дальше последней карточки
+        });
+    };
 
-            const maxOffset = -(PAGE_WIDTH * (pages.length - 1))
+    // Обновляем ширину карточек при изменении размера окна
+    useEffect(() => {
+        const handleResize = () => {
+            setPageWidth(window.innerWidth * 0.65);  // Обновляем ширину при изменении размера окна
+        };
 
-            console.log(newOffset, maxOffset)
-            return Math.max(newOffset, maxOffset)
-        })
-    }
+        window.addEventListener('resize', handleResize);  // Добавляем обработчик на событие resize
+
+        // Удаляем обработчик при размонтировании компонента
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         setPages(
             Children.map(children, (child) => {
                 return cloneElement(child, {
                     style: {
-                        minWidth: `${PAGE_WIDTH}px`,
-                        maxWidth: `${PAGE_WIDTH}px`,
+                        minWidth: `${pageWidth}px`,
+                        maxWidth: `${pageWidth}px`,
                         height: '100%',
                     },
-                })
+                });
             })
-        )
-    }, [])
+        );
+    }, [children, pageWidth]);
 
     return (
         <div className="main-container">
@@ -55,5 +65,5 @@ export const Carousel = ({ children }) => {
             </div>
             <FaChevronRight className="arrow" onClick={handleRightArrowClick} />
         </div>
-    )
-}
+    );
+};

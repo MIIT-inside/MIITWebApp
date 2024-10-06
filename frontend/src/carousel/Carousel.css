@@ -1,30 +1,28 @@
 .main-container {
-    height: auto;
-    width: 1000px;
-
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 2rem auto;
+    margin: 2rem 10rem;
+    overflow: hidden;
 }
 
 .window {
     height: 100%;
-    width: 100%;
-    margin: 0 2rem;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    width: 65vw;
+    margin: 0 1rem;
 }
 
 .all-pages-container {
-    height: 100%;
     display: flex;
-    gap: 1rem;
-    transition: translate;
-    transition-property: transform;
-    transition-duration: 300ms;
-    transition-timing-function: ease-in-out;
+    transition: transform 300ms ease-in-out;
+    height: 100%;
 }
 
 .arrow {
     cursor: pointer;
+    color: #1C54B2;
+    font-size: 2rem;
 }
