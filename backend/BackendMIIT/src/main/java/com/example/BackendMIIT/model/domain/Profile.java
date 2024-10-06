@@ -14,6 +14,7 @@ public class Profile extends BaseEntity {
     private String name;
     private int passPoint;
     private String description;
+    private String educationPlan;
 
     @ManyToOne
     @JoinColumn(name = "direction_id")
