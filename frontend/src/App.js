@@ -4,6 +4,7 @@ import InstructionSteps from "./components/InstructionSteps";
 import TitleWithLine from "./components/TitleWithLine";
 import {Carousel} from "./carousel/Carousel";
 import React from "react";
+import AchievementCard from "./components/AchievementCard";
 
 function App() {
   return (
@@ -13,9 +14,10 @@ function App() {
           <InstructionSteps/>
           <TitleWithLine title="Баллы за индивидуальные достижения" />
           <Carousel>
-              <div className="item item-1">Item 1</div>
-              <div className="item item-2">Item 2</div>
-              <div className="item item-3">Item 3</div>
+              <div><AchievementCard/></div>
+
+              <div><AchievementCard/></div>
+              <div><AchievementCard/></div>
           </Carousel>
       </div>
   );
