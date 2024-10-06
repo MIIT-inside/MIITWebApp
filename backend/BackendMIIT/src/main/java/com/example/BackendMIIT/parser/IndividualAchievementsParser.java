@@ -1,24 +1,30 @@
 package com.example.BackendMIIT.parser;
 
+import com.example.BackendMIIT.config.UrlsConfig;
 import com.example.BackendMIIT.model.domain.IndividualAchievements;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 public class IndividualAchievementsParser {
-    private static final String URL = "https://miit.ru/page/136668";
+
+    @Autowired
+    private UrlsConfig urlsConfig;
 
     public Set<IndividualAchievements> parse() {
+        String iaUrl = urlsConfig.getIa();
+
         Set<IndividualAchievements> achievements = new HashSet<>();
 
         try {
-            Document document = Jsoup.connect(URL).get();
+            Document document = Jsoup.connect(iaUrl).get();
             Elements achievementsElements  = document.select("tr");
 
             for (Element achievement: achievementsElements) {
