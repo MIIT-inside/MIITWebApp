@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -16,7 +17,9 @@ public class EducationPlanParser {
     //TODO: delegate url init to the url config after merging feature/ii/parse-ia branch
     private static final String educationProgramsUrl = "https://www.miit.ru/sveden/education/programs";
 
-    public void parseEducationPlan(List<Profile> profiles) {
+    public List<Profile> parseEducationPlan(List<Profile> profiles) {
+        List<Profile> updatedProfiles = new ArrayList<>();
+
         try {
             Elements rows = getRows();
 
@@ -30,13 +33,16 @@ public class EducationPlanParser {
 
                 Profile profile = findProfileByName(profiles, specialty);
 
-                if (profile != null && pdfLink != null) {
+                if (isNotNull(profile) && isNotNull(pdfLink)) {
                     profile.setEducationPlan(pdfLink);
+                    updatedProfiles.add(profile);
                 }
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+
+        return updatedProfiles;
     }
 
     private Document getDocumentByUrl() throws IOException {
@@ -63,7 +69,7 @@ public class EducationPlanParser {
 
     private String extractPdfLink(Element row) {
         Element pdfElement = row.select("td[itemprop='EducationPlan'] a").first();
-        return pdfElement != null ? pdfElement.attr("href") : null;
+        return isNotNull(pdfElement) ? pdfElement.attr("href") : null;
     }
 
     private Profile findProfileByName(List<Profile> profiles, String specialty) {
@@ -76,4 +82,6 @@ public class EducationPlanParser {
                 .findFirst()
                 .orElse(null);
     }
+
+    private boolean isNotNull(Object arg) { return arg != null; }
 }
