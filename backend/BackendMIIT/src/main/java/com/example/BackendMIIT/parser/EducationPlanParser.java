@@ -18,8 +18,7 @@ public class EducationPlanParser {
 
     public void parseEducationPlan(List<Profile> profiles) {
         try {
-            Document document = Jsoup.connect(educationProgramsUrl).get();
-            Elements rows = document.select("tr[itemprop='eduOp']");
+            Elements rows = getRows();
 
             for (Element row : rows) {
                 String specialty = getStringFromElement(row, "td[itemprop='eduName']");
@@ -38,6 +37,15 @@ public class EducationPlanParser {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private Document getDocumentByUrl() throws IOException {
+        return Jsoup.connect(educationProgramsUrl).get();
+    }
+
+    private Elements getRows() throws IOException {
+        Document document = getDocumentByUrl();
+        return document.select("tr[itemprop='eduOp']");
     }
 
     private static String getStringFromElement(Element element, String prop) {
