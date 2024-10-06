@@ -14,7 +14,7 @@ import java.util.Set;
 public class IndividualAchievementsParser {
     private static final String URL = "https://miit.ru/page/136668";
 
-    public static Set<IndividualAchievements> parse() {
+    public Set<IndividualAchievements> parse() {
         Set<IndividualAchievements> achievements = new HashSet<>();
 
         try {
