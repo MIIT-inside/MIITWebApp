@@ -24,7 +24,7 @@ public class IndividualAchievementsParser {
             for (Element achievement: achievementsElements) {
                 IndividualAchievements individualAchievement = extractAchievement(achievement);
 
-                if (individualAchievement != null) {
+                if (areAllNotNull(individualAchievement)) {
                     achievements.add(individualAchievement);
                 }
             }
@@ -37,17 +37,61 @@ public class IndividualAchievementsParser {
 
     private static IndividualAchievements extractAchievement(Element achievement) {
         try {
-            String description = achievement.select("td:nth-child(2)").text().trim();
-            int countPoints = Integer.parseInt(achievement.select("td:nth-child(3)").text().trim());
 
-            IndividualAchievements individualAchievements = new IndividualAchievements();
-            individualAchievements.setDescription(description);
-            individualAchievements.setCountPoints(countPoints);
+            Elements columns = achievement.select("td");
+            if (!isValidSize(columns)) { return null; }
 
-            return individualAchievements;
-        } catch (NumberFormatException e) {
+            String description = getStringFromElement(columns, 1);
+            String pointsText = getStringFromElement(columns, 2);
+
+            Integer countPoints = parseCountPoints(pointsText);
+
+            return achievementWithParams(description, countPoints);
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
         }
+    }
+
+    private static boolean isValidSize(Elements elements) {
+        if (elements.size() < 3) {
+            System.err.println("Invalid number of columns in achievement row");
+            return false;
+        }
+        return true;
+    }
+
+
+    private static String getStringFromElement(Elements elements, int index) {
+        return elements.get(index).text().trim();
+    }
+
+    private static Integer parseCountPoints(String points) {
+        Integer countPoints = null;
+
+        try {
+            countPoints = Integer.parseInt(points);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid count points format:" + e.getMessage());
+        }
+        return countPoints;
+    }
+
+    private static IndividualAchievements achievementWithParams(String description, Integer countPoints) {
+        IndividualAchievements achievement = new IndividualAchievements();
+
+        if (areAllNotNull(description, countPoints)) {
+            achievement.setDescription(description);
+            achievement.setCountPoints(countPoints);
+        }
+
+        return achievement;
+    }
+
+    private static boolean areAllNotNull(Object... args) {
+        for (Object arg : args) {
+            if (arg == null) { return false; }
+        }
+        return true;
     }
 }
