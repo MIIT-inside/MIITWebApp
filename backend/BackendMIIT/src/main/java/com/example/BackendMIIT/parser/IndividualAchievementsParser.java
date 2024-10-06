@@ -14,7 +14,7 @@ import java.util.Set;
 public class IndividualAchievementsParser {
     private static final String URL = "https://miit.ru/page/136668";
 
-    public Set<IndividualAchievements> parse() {
+    public static Set<IndividualAchievements> parse() {
         Set<IndividualAchievements> achievements = new HashSet<>();
 
         try {
@@ -35,7 +35,7 @@ public class IndividualAchievementsParser {
         return achievements;
     }
 
-    private IndividualAchievements extractAchievement(Element achievement) {
+    private static IndividualAchievements extractAchievement(Element achievement) {
         try {
             String description = achievement.select("td:nth-child(2)").text().trim();
             int countPoints = Integer.parseInt(achievement.select("td:nth-child(3)").text().trim());
