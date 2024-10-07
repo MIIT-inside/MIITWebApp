@@ -19,14 +19,20 @@ import java.util.List;
 @Service
 public class PassPointServiceImpl implements PassPointService {
 
-    @Autowired
-    private PassPointRepository passPointRepository;
+    private final PassPointRepository passPointRepository;
 
-    @Autowired
-    private DirectionRepository directionRepository;
+    private final DirectionRepository directionRepository;
 
-    @Autowired
-    private WebClient webClient;
+    private final WebClient webClient;
+
+    public PassPointServiceImpl(PassPointRepository passPointRepository,
+                                DirectionRepository directionRepository,
+                                WebClient webClient) {
+
+        this.passPointRepository = passPointRepository;
+        this.directionRepository = directionRepository;
+        this.webClient = webClient;
+    }
 
     @Override
     public void parsePoints(String uri) {

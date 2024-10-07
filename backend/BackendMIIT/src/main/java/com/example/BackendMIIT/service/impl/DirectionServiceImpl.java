@@ -2,7 +2,6 @@ package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.repositories.DirectionRepository;
-import com.example.BackendMIIT.repositories.ProfileRepository;
 import com.example.BackendMIIT.service.DirectionService;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
@@ -19,7 +18,7 @@ public class DirectionServiceImpl implements DirectionService {
 
     private final DirectionRepository directionRepository;
 
-    public DirectionServiceImpl(DirectionRepository directionRepository, ProfileRepository profileRepository) {
+    public DirectionServiceImpl(DirectionRepository directionRepository) {
         this.directionRepository = directionRepository;
     }
 

@@ -33,7 +33,7 @@
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<lombok.version>1.18.30</lombok.version>
 		<pdfbox.version>3.0.2</pdfbox.version>
-		<jsoup.verison>1.17.2</jsoup.verison>
+		<jsoup.verison>1.18.1</jsoup.verison>
 		<webflux.version>6.1.12</webflux.version>
 		<org-json.version>20240303</org-json.version>
 	</properties>
