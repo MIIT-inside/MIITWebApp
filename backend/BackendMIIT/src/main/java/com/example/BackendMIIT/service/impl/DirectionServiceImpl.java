@@ -58,10 +58,12 @@ public class DirectionServiceImpl implements DirectionService {
                 previousDirection = code;
                 Direction direction = new Direction();
 
-                String nameDirection = name.substring(0, name.indexOf("."));
+                if (name.contains(".")) {
+                    name = name.substring(0, name.indexOf("."));
+                }
 
                 direction.setCode(code.trim());
-                direction.setName(nameDirection.trim());
+                direction.setName(name.trim());
                 direction.setLevel(level.trim());
                 direction.setForm(form.trim());
 

@@ -59,13 +59,16 @@ public class ProfileServiceImpl implements ProfileService {
             String form = props.get(3).text();
 
             if (!previousProfile.equals(name) && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+
                 previousProfile = name;
                 Profile profile = new Profile();
 
-                String profileName = name.substring(name.indexOf(".")).trim();
+                if (name.contains(".")) {
+                    name = name.substring(name.indexOf("."));
+                }
 
                 Direction direction = directionRepository.findByCode(code.trim());
-                profile.setName(profileName);
+                profile.setName(name.trim());
                 profile.setForm(form.trim());
                 profile.setDirection(direction);
 
