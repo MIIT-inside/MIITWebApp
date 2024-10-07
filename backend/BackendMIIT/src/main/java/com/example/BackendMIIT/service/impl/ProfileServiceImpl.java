@@ -31,8 +31,6 @@ public class ProfileServiceImpl implements ProfileService {
     public void parseProfile(String url) {
 
         Document doc = Jsoup.connect(url).maxBodySize(0).get();
-
-        String previousProfile = "";
         List<Element> props = new ArrayList<>();
 
         Elements elements = doc.select("tr");
@@ -43,39 +41,36 @@ public class ProfileServiceImpl implements ProfileService {
             props.add(element.selectFirst("td[itemprop=eduLevel]"));
             props.add(element.selectFirst("td[itemprop=eduForm]"));
 
-            previousProfile = saveProfile(props, previousProfile);
-
+            saveProfile(props);
             props.clear();
         }
     }
 
     @Override
-    public String saveProfile(List<Element> props, String previousProfile) {
+    public void saveProfile(List<Element> props) {
+
         if (props.get(0) != null && props.get(1) != null && props.get(2) != null && props.get(3) != null) {
 
-            String code = props.get(0).text();
-            String name = props.get(1).text();
-            String level = props.get(2).text();
-            String form = props.get(3).text();
+            String code = props.get(0).text().trim();
+            String name = props.get(1).text().trim(); //TODO { Parse profile names by https://www.miit.ru/admissions/degrees?year=2024&city=1&level=4&training=20773 }
+            String level = props.get(2).text().trim();
+            String form = props.get(3).text().trim();
 
-            if (!previousProfile.equals(name) && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+            if (name.contains(".")) {
+                name = name.substring(name.indexOf("."+1));
+            }
 
-                previousProfile = name;
+            if (profileRepository.findByName(name) == null && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+
                 Profile profile = new Profile();
 
-                if (name.contains(".")) {
-                    name = name.substring(name.indexOf("."));
-                }
-
-                Direction direction = directionRepository.findByCode(code.trim());
-                profile.setName(name.trim());
-                profile.setForm(form.trim());
+                Direction direction = directionRepository.findByCode(code);
+                profile.setName(name);
+                profile.setForm(form);
                 profile.setDirection(direction);
 
                 profileRepository.save(profile);
             }
         }
-
-        return previousProfile;
     }
 }

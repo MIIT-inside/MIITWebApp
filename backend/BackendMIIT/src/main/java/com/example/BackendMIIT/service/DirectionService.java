@@ -8,5 +8,5 @@ public interface DirectionService {
 
     void parseDirections(String url);
 
-    String saveDirection(List<Element> elements, String previousDirection);
+    void saveDirection(List<Element> elements);
 }

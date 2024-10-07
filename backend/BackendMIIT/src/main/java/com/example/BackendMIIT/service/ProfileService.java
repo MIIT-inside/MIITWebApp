@@ -8,5 +8,5 @@ public interface ProfileService {
 
     void parseProfile(String url);
 
-    String saveProfile(List<Element> elements, String previousProfile);
+    void saveProfile(List<Element> elements);
 }

@@ -27,9 +27,7 @@ public class DirectionServiceImpl implements DirectionService {
     public void parseDirections(String url) {
 
         Document doc = Jsoup.connect(url).maxBodySize(0).get();
-
         List<Element> props = new ArrayList<>();
-        String previousDirection = "";
 
         Elements elements = doc.select("tr");
 
@@ -39,38 +37,36 @@ public class DirectionServiceImpl implements DirectionService {
             props.add(element.selectFirst("td[itemprop=eduLevel]"));
             props.add(element.selectFirst("td[itemprop=eduForm]"));
 
-            previousDirection = saveDirection(props, previousDirection);
+            saveDirection(props);
             props.clear();
         }
     }
 
     @Override
-    public String saveDirection(List<Element> props, String previousDirection) {
+    public void saveDirection(List<Element> props) {
+
         if (props.get(0) != null && props.get(1) != null && props.get(2) != null && props.get(3) != null) {
 
-            String code = props.get(0).text();
-            String name = props.get(1).text();
-            String level = props.get(2).text();
-            String form = props.get(3).text();
+            String code = props.get(0).text().trim();
+            String name = props.get(1).text().trim();
+            String level = props.get(2).text().trim();
+            String form = props.get(3).text().trim();
 
-            if (!previousDirection.equals(code) && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+            if (directionRepository.findByCode(code) == null && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
 
-                previousDirection = code;
                 Direction direction = new Direction();
 
                 if (name.contains(".")) {
                     name = name.substring(0, name.indexOf("."));
                 }
 
-                direction.setCode(code.trim());
-                direction.setName(name.trim());
-                direction.setLevel(level.trim());
-                direction.setForm(form.trim());
+                direction.setCode(code);
+                direction.setName(name);
+                direction.setLevel(level);
+                direction.setForm(form);
 
                 directionRepository.save(direction);
             }
         }
-
-        return previousDirection;
     }
 }
