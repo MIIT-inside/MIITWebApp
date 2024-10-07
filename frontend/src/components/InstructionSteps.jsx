@@ -1,7 +1,6 @@
 import React from 'react';
 import '../styles/InstructionSteps.css';
 import StepCard from './StepCard';
-import TitleWithLine from './TitleWithLine';
 
 const InstructionSteps = () => {
     return (
