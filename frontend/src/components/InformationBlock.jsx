@@ -9,10 +9,12 @@ const InformationBlock = () => {
                     <span className="number">60</span>
                     <span>Направлений подготовки</span>
                 </div>
+                <hr />
                 <div className="item">
                     <span className="number">00</span>
                     <span>Бюджетных мест</span>
                 </div>
+                <hr />
                 <div className="item">
                     <span className="number">300</span>
                     <span>Проходной балл в 2023 году</span>

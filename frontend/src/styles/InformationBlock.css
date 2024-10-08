@@ -51,3 +51,7 @@
     display: block;
     margin-bottom: 5px;
 }
+.hr{
+    color: aliceblue;
+    rotate: -90deg;
+}
