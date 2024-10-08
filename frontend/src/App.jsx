@@ -6,7 +6,7 @@ import {Carousel} from "./carousel/Carousel";
 import React from "react";
 import AchievementCard from "./components/AchievementCard";
 
-function App() {
+export default function App() {
     return (<div className="App">
             <MainSection/>
             <TitleWithLine title="Как поступить"/>
@@ -31,5 +31,3 @@ function App() {
             </Carousel>
         </div>);
 }
-
-export default App;

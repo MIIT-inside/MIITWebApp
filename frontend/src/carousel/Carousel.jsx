@@ -1,6 +1,7 @@
 import {useEffect, useState, Children, cloneElement} from 'react';
 import {FaChevronLeft, FaChevronRight} from 'react-icons/fa';
 import './Carousel.css';
+import React from 'react'
 
 export const Carousel = ({children}) => {
     const [pages, setPages] = useState([]);
@@ -45,7 +46,8 @@ export const Carousel = ({children}) => {
         }));
     }, [children, pageWidth]);
 
-    return (<div className="main-container">
+    return (
+        <div className="main-container">
             <FaChevronLeft className="arrow" onClick={handleLeftArrowClick}/>
             <div className="window">
                 <div
