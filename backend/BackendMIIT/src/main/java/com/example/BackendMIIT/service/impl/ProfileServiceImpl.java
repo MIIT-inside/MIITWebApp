@@ -6,11 +6,14 @@ import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.repositories.ProfileRepository;
 import com.example.BackendMIIT.service.ProfileService;
 import lombok.SneakyThrows;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,41 +23,54 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepository profileRepository;
     private final DirectionRepository directionRepository;
+    private final WebClient webClient;
 
-    public ProfileServiceImpl(ProfileRepository profileRepository, DirectionRepository directionRepository) {
+    public ProfileServiceImpl(ProfileRepository profileRepository, DirectionRepository directionRepository, WebClient webClient) {
         this.profileRepository = profileRepository;
         this.directionRepository = directionRepository;
+        this.webClient = webClient;
     }
 
     @Override
     @SneakyThrows
-    public void parseProfile(String url) {
+    public void parseProfile(String uri) {
 
-        Document doc = Jsoup.connect(url).maxBodySize(0).get();
-        List<Element> props = new ArrayList<>();
+        List<JSONObject> profiles = new ArrayList<>();
 
-        Elements elements = doc.select("tr");
+        String json = webClient.get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
-        for (Element element : elements) {
-            props.add(element.selectFirst("td[itemprop=eduCode]"));
-            props.add(element.selectFirst("td[itemprop=eduName]"));
-            props.add(element.selectFirst("td[itemprop=eduLevel]"));
-            props.add(element.selectFirst("td[itemprop=eduForm]"));
+        JSONObject jsonObject = new JSONObject(json);
 
-            saveProfile(props);
-            props.clear();
+        JSONArray jsonArray = jsonObject
+                .getJSONArray("result")
+                .getJSONObject(0)
+                .getJSONArray("concourseGroups");
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+
+            profiles.add(jsonArray.getJSONArray(22)
+                    .getJSONObject(i));
+
+            String directionCode = jsonArray.getString(6).trim();
+
+            saveProfile(profiles, directionCode);
+            profiles.clear();
         }
     }
 
     @Override
-    public void saveProfile(List<Element> props) {
+    public void saveProfile(List<JSONObject> profiles, String directionCode) {
 
-        if (props.get(0) != null && props.get(1) != null && props.get(2) != null && props.get(3) != null) {
+        if (profiles.get(0) != null && profiles.get(1) != null && profiles.get(2) != null && profiles.get(3) != null) {
 
-            String code = props.get(0).text().trim();
-            String name = props.get(1).text().trim(); //TODO { Parse profile names by https://www.miit.ru/admissions/degrees?year=2024&city=1&level=4&training=20773 }
-            String level = props.get(2).text().trim();
-            String form = props.get(3).text().trim();
+            String code = profiles.get(0).text().trim();
+            String name = profiles.get(1).text().trim(); //TODO { Parse profile names by https://www.miit.ru/admissions/degrees?year=2024&city=1&level=4&training=20773 }
+            String level = profiles.get(2).text().trim();
+            String form = profiles.get(3).text().trim();
 
             if (name.contains(".")) {
                 name = name.substring(name.indexOf("."+1));
