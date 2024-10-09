@@ -1,0 +1,28 @@
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem auto;
+    overflow: hidden;
+}
+
+.window {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    width: 65.8%;
+    margin: 0 1rem;
+}
+
+.all-pages-container {
+    display: flex;
+    transition: transform 300ms ease-in-out;
+    height: 100%;
+}
+
+.arrow {
+    cursor: pointer;
+    color: #1C54B2;
+    font-size: 2rem;
+}
