@@ -1,0 +1,5 @@
+.center-achievement-card {
+    display: flex;
+    min-width: 0.65vh;
+    justify-content: center;
+}

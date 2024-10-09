@@ -8,26 +8,26 @@ import AchievementCard from "./components/AchievementCard";
 
 export default function App() {
     return (<div className="App">
-            <MainSection/>
-            <TitleWithLine title="Как поступить"/>
-            <InstructionSteps/>
-            <TitleWithLine title="Баллы за индивидуальные достижения"/>
-            <Carousel>
-                <div><AchievementCard
-                    title="Достижение"
-                    description="Наличие полученных в образовательных организациях Российской Федерации документов об образовании или об образовании и о квалификации с отличием:"
-                    score="3"/>
-                </div>
-                <div><AchievementCard
-                    title="Достижение"
-                    description="Наличие полученных в образовательных организациях Российской Федерации документов об образовании или об образовании и о квалификации с отличием:"
-                    score="3"/>
-                </div>
-                <div><AchievementCard
-                    title="Достижение"
-                    description="Наличие полученных в образовательных организациях Российской Федерации документов об образовании или об образовании и о квалификации с отличием:"
-                    score="3"/>
-                </div>
-            </Carousel>
-        </div>);
+        <MainSection/>
+        <TitleWithLine title="Как поступить"/>
+        <InstructionSteps/>
+        <TitleWithLine title="Баллы за индивидуальные достижения"/>
+        <Carousel>
+            <div className="center-achievement-card"><AchievementCard
+                title="Достижение"
+                description="Наличие полученных в образовательных организациях Российской Федерации документов об образовании или об образовании и о квалификации с отличием:"
+                score="3"/>
+            </div>
+            <div className="center-achievement-card"><AchievementCard
+                title="Достижение"
+                description="Наличие полученных в образовательных организациях Российской Федерации документов об образовании или об образовании и о квалификации с отличием:"
+                score="3"/>
+            </div>
+            <div className="center-achievement-card"><AchievementCard
+                title="Достижение"
+                description="Наличие полученных в образовательных организациях Российской Федерации документов об образовании или об образовании и о квалификации с отличием:"
+                score="3"/>
+            </div>
+        </Carousel>
+    </div>);
 }
