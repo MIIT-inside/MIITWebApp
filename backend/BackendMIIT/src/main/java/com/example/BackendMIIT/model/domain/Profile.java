@@ -12,7 +12,7 @@ import lombok.Data;
 public class Profile extends BaseEntity {
 
     private String name;
-    private int passPoint;
+    private String form;
     private String description;
 
     @ManyToOne
