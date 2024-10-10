@@ -9,5 +9,5 @@ public interface ProfileService {
 
     void parseProfile(String url);
 
-    void saveProfile(List<JSONObject> props, String directionCode);
+    void saveProfile(List<String> directionLinks, String directionCode);
 }

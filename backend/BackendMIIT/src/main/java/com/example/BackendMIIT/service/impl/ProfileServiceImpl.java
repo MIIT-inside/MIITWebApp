@@ -10,8 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -35,7 +33,7 @@ public class ProfileServiceImpl implements ProfileService {
     @SneakyThrows
     public void parseProfile(String uri) {
 
-        List<JSONObject> profiles = new ArrayList<>();
+        List<String> directionLinks = new ArrayList<>();
 
         String json = webClient.get()
                 .uri(uri)
@@ -52,23 +50,29 @@ public class ProfileServiceImpl implements ProfileService {
 
         for (int i = 0; i < jsonArray.length(); i++) {
 
-            profiles.add(jsonArray.getJSONArray(22)
-                    .getJSONObject(i));
-
-            String directionCode = jsonArray.getString(6).trim();
-
-            saveProfile(profiles, directionCode);
-            profiles.clear();
+            directionLinks.add(jsonArray.getJSONArray(i).getString(13));
         }
+
+        readProfiles(directionLinks);
+        //saveProfile(directionLinks, directionCode);
+    }
+
+    @SneakyThrows
+    public void readProfiles(List<String> profilesLinks) {
+
+        for (String link : profilesLinks) {
+            Document directionPage = Jsoup.connect(link).maxBodySize(0).get();
+        }
+
     }
 
     @Override
-    public void saveProfile(List<JSONObject> profiles, String directionCode) {
+    public void saveProfile(List<String> directionLinks, String directionCode) {
 
         if (profiles.get(0) != null && profiles.get(1) != null && profiles.get(2) != null && profiles.get(3) != null) {
 
             String code = profiles.get(0).text().trim();
-            String name = profiles.get(1).text().trim(); //TODO { Parse profile names by https://www.miit.ru/admissions/degrees?year=2024&city=1&level=4&training=20773 }
+            String name = profiles.get(1).text().trim(); //TODO { Parse profiles by urls, containing in direction }
             String level = profiles.get(2).text().trim();
             String form = profiles.get(3).text().trim();
 
