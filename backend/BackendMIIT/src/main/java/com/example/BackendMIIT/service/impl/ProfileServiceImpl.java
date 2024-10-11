@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -22,6 +24,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final ProfileRepository profileRepository;
     private final DirectionRepository directionRepository;
     private final WebClient webClient;
+    private final String BASE_URL = "https://www.miit.ru";
 
     public ProfileServiceImpl(ProfileRepository profileRepository, DirectionRepository directionRepository, WebClient webClient) {
         this.profileRepository = profileRepository;
@@ -50,47 +53,96 @@ public class ProfileServiceImpl implements ProfileService {
 
         for (int i = 0; i < jsonArray.length(); i++) {
 
-            directionLinks.add(jsonArray.getJSONArray(i).getString(13));
+            directionLinks.add(jsonArray.getJSONObject(i).getString("planReceptionUrl"));
         }
 
-        readProfiles(directionLinks);
+        readDirectionLinks(directionLinks);
         //saveProfile(directionLinks, directionCode);
     }
 
     @SneakyThrows
-    public void readProfiles(List<String> profilesLinks) {
+    public void readDirectionLinks(List<String> directionLinks) {
 
-        for (String link : profilesLinks) {
-            Document directionPage = Jsoup.connect(link).maxBodySize(0).get();
+        List<String> profileLinks = new ArrayList<>();
+        Elements elements;
+
+        for (String link : directionLinks) {
+            Document directionPage = Jsoup.connect(BASE_URL + link).maxBodySize(0).get();
+
+            elements = directionPage.select("a[href*=/admissions/degrees/]");
+            for (Element element : elements) {
+                profileLinks.add(element.attr("href"));
+            }
         }
 
+        readProfiles(profileLinks);
     }
 
-    @Override
-    public void saveProfile(List<String> directionLinks, String directionCode) {
+    @SneakyThrows
+    private void readProfiles(List<String> profileLinks) {
 
-        if (profiles.get(0) != null && profiles.get(1) != null && profiles.get(2) != null && profiles.get(3) != null) {
+        List<String> properties = new ArrayList<>();
 
-            String code = profiles.get(0).text().trim();
-            String name = profiles.get(1).text().trim(); //TODO { Parse profiles by urls, containing in direction }
-            String level = profiles.get(2).text().trim();
-            String form = profiles.get(3).text().trim();
+        for (String link : profileLinks) {
+            StringBuilder sb = new StringBuilder();
+            Document profilePage = Jsoup.connect(BASE_URL + link).maxBodySize(0).get();
 
-            if (name.contains(".")) {
-                name = name.substring(name.indexOf("."+1));
+            String profileHeader = profilePage.select("h2").text();
+            properties.add(profileHeader.substring(0, profileHeader.indexOf(" "))); //Direction code
+            properties.add(profileHeader.substring(profileHeader.indexOf(". ")+1, profileHeader.indexOf("("))); //Profile
+
+            Elements elements = profilePage.select("li[class=text-form__item]");
+
+            properties.add(getInstitute(elements));
+
+            int index = profileHeader.trim().length()-1;
+            boolean isGroup = false;
+
+            while (profileHeader.charAt(index) != '(') {
+                if (isGroup) {
+                    sb.insert(0, profileHeader.charAt(index--));
+                    continue;
+                }
+                if (profileHeader.charAt(index--) == ')')
+                    isGroup = true;
             }
 
-            if (profileRepository.findByName(name) == null && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+            properties.add(sb.toString()); //Abbreviation
+            saveProfile(properties);
+        }
+    }
 
-                Profile profile = new Profile();
+    private String getInstitute(Elements elements) {
+        String institute = null;
 
-                Direction direction = directionRepository.findByCode(code);
-                profile.setName(name);
-                profile.setForm(form);
-                profile.setDirection(direction);
-
-                profileRepository.save(profile);
+        for (Element element : elements) {
+            String text = element.text();
+            if (text.contains("Институт")) {
+                institute = text.substring(text.indexOf(" "));
             }
+        }
+
+        return institute;
+    }
+
+    public void saveProfile(List<String> properties) {
+
+        int i = 0;
+
+        while (i < properties.size()) {
+
+            Profile profile = new Profile();
+
+            Direction direction = directionRepository.findByCode(properties.get(i++).trim());
+            profile.setName(properties.get(i++).trim());
+            profile.setLevel(direction.getLevel());
+            profile.setForm(direction.getForm());
+            profile.setInstitute(properties.get(i++).trim());
+            profile.setAbbreviation(properties.get(i++).trim());
+            profile.setDirection(direction);
+
+            profileRepository.save(profile);
+            properties.clear();
         }
     }
 }
