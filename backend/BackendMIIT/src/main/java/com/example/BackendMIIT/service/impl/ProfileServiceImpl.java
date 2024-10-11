@@ -57,11 +57,10 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         readDirectionLinks(directionLinks);
-        //saveProfile(directionLinks, directionCode);
     }
 
     @SneakyThrows
-    public void readDirectionLinks(List<String> directionLinks) {
+    private void readDirectionLinks(List<String> directionLinks) {
 
         List<String> profileLinks = new ArrayList<>();
         Elements elements;
@@ -84,32 +83,36 @@ public class ProfileServiceImpl implements ProfileService {
         List<String> properties = new ArrayList<>();
 
         for (String link : profileLinks) {
-            StringBuilder sb = new StringBuilder();
             Document profilePage = Jsoup.connect(BASE_URL + link).maxBodySize(0).get();
 
             String profileHeader = profilePage.select("h2").text();
             properties.add(profileHeader.substring(0, profileHeader.indexOf(" "))); //Direction code
-            properties.add(profileHeader.substring(profileHeader.indexOf(". ")+1, profileHeader.indexOf("("))); //Profile
+            properties.add(profileHeader.substring(profileHeader.indexOf(". ") + 1, profileHeader.indexOf("("))); //Profile
 
             Elements elements = profilePage.select("li[class=text-form__item]");
 
-            properties.add(getInstitute(elements));
-
-            int index = profileHeader.trim().length()-1;
-            boolean isGroup = false;
-
-            while (profileHeader.charAt(index) != '(') {
-                if (isGroup) {
-                    sb.insert(0, profileHeader.charAt(index--));
-                    continue;
-                }
-                if (profileHeader.charAt(index--) == ')')
-                    isGroup = true;
-            }
-
-            properties.add(sb.toString()); //Abbreviation
+            properties.add(getInstitute(elements)); //Institute
+            properties.add(getGroup(profileHeader)); //Abbreviation
             saveProfile(properties);
         }
+    }
+
+    private String getGroup(String profileHeader) {
+
+        StringBuilder sb = new StringBuilder();
+        int index = profileHeader.trim().length() - 1;
+        boolean isGroup = false;
+
+        while (profileHeader.charAt(index) != '(') {
+            if (isGroup) {
+                sb.insert(0, profileHeader.charAt(index--));
+                continue;
+            }
+            if (profileHeader.charAt(index--) == ')')
+                isGroup = true;
+        }
+
+        return sb.toString();
     }
 
     private String getInstitute(Elements elements) {
@@ -125,6 +128,7 @@ public class ProfileServiceImpl implements ProfileService {
         return institute;
     }
 
+    @Override
     public void saveProfile(List<String> properties) {
 
         int i = 0;
@@ -132,8 +136,8 @@ public class ProfileServiceImpl implements ProfileService {
         while (i < properties.size()) {
 
             Profile profile = new Profile();
-
             Direction direction = directionRepository.findByCode(properties.get(i++).trim());
+
             profile.setName(properties.get(i++).trim());
             profile.setLevel(direction.getLevel());
             profile.setForm(direction.getForm());
