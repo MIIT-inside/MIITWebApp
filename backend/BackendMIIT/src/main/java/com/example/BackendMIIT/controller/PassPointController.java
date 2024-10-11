@@ -1,7 +1,6 @@
 package com.example.BackendMIIT.controller;
 
 import com.example.BackendMIIT.service.PassPointService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

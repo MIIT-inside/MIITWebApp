@@ -8,7 +8,6 @@ import com.example.BackendMIIT.repositories.PassPointRepository;
 import com.example.BackendMIIT.service.PassPointService;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
