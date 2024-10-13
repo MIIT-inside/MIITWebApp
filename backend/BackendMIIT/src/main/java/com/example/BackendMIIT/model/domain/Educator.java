@@ -11,12 +11,10 @@ import lombok.Data;
 @Data
 public class Educator extends BaseEntity {
 
-    private String name;
-    private String surname;
-    private String patronymic;
     @ManyToOne
     @JoinColumn(name = "department_id")
     public Department department;
-
-
+    private String name;
+    private String surname;
+    private String patronymic;
 }
