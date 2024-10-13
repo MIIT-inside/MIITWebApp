@@ -3,10 +3,12 @@ package com.example.BackendMIIT.parser;
 import com.example.BackendMIIT.model.domain.Discipline;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class DisciplineParser {
 
     private final LessonParser lessonParser;

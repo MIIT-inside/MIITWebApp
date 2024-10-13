@@ -4,11 +4,13 @@ import com.example.BackendMIIT.model.domain.Semester;
 import com.example.BackendMIIT.parser.util.ParserUtil;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class SemesterParser {
 
     private final DisciplineParser disciplineParser;
