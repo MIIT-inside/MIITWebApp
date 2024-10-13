@@ -1,7 +1,6 @@
 package com.example.BackendMIIT.parser;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import com.example.BackendMIIT.parser.util.ParserUtil;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
@@ -22,22 +21,22 @@ public class AnnotationProgramsParser {
         Map<String, String> latestAnnotations = new HashMap<>();
 
         try {
-            Elements rows = getRows();
+            Elements rows = ParserUtil.getRows(educationProgramsUrl, "tr[itemprop='eduOp']");
 
             for (Element row : rows) {
-                String educationLevel = getStringFromElement(row, "td[itemprop='eduLevel']");
-                String educationForm = getStringFromElement(row, "td[itemprop='eduForm']");
-                String profile = getStringFromElement(row, "td[itemprop='eduProf']");
+                String educationLevel = ParserUtil.getStringFromElement(row, "td[itemprop='eduLevel']");
+                String educationForm = ParserUtil.getStringFromElement(row, "td[itemprop='eduForm']");
+                String profile = ParserUtil.getStringFromElement(row, "td[itemprop='eduProf']");
 
                 if (!isValidEducationLevel(educationLevel) ||
                         !isValidEducationForm(educationForm) ||
-                        isNullOrEmpty(profile)) {
+                        ParserUtil.isNullOrEmpty(profile)) {
                     continue;
                 }
 
                 String annotationLink = extractAnnotationLink(row);
 
-                if (isNotNull(annotationLink)) {
+                if (ParserUtil.isNotNull(annotationLink)) {
                     int year = extractYearFromLink(annotationLink);
 
                     if (year >= 2024) {
@@ -57,23 +56,6 @@ public class AnnotationProgramsParser {
         }
 
         return new ArrayList<>(latestAnnotations.values());
-    }
-
-    private Document getDocumentByUrl() throws IOException {
-        return Jsoup.connect(educationProgramsUrl).get();
-    }
-
-    private Elements getRows() throws IOException {
-        Document document = getDocumentByUrl();
-        return document.select("tr[itemprop='eduOp']");
-    }
-
-    private static String getStringFromElement(Element element, String prop) {
-        return element.select(prop).text().trim();
-    }
-
-    private boolean isNullOrEmpty(String s) {
-        return s == null || s.trim().isEmpty();
     }
 
     private boolean isValidEducationLevel(String educationLevel) {
@@ -96,10 +78,6 @@ public class AnnotationProgramsParser {
 
     private String extractAnnotationLink(Element row) {
         Element annotationElement = row.select("td[itemprop='educationAnnotation'] a").first();
-        return isNotNull(annotationElement) ? annotationElement.attr("href") : null;
-    }
-
-    private boolean isNotNull(Object arg) {
-        return arg != null;
+        return ParserUtil.isNotNull(annotationElement) ? annotationElement.attr("href") : null;
     }
 }
