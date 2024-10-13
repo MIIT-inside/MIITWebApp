@@ -23,8 +23,6 @@ public class EducationPlanServiceImpl implements EducationPlanService {
     @Override
     @Transactional
     public void parseAndSaveEducationPlans() {
-        List<Profile> profiles = profileRepository.findAll();
-        List<Profile> updatedProfiles = parser.parseEducationPlan(profiles);
-        profileRepository.saveAll(updatedProfiles);
+        // TODO
     }
 }
