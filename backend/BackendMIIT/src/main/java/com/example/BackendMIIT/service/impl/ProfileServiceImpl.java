@@ -52,7 +52,6 @@ public class ProfileServiceImpl implements ProfileService {
                 .getJSONArray("concourseGroups");
 
         for (int i = 0; i < jsonArray.length(); i++) {
-
             directionLinks.add(jsonArray.getJSONObject(i).getString("planReceptionUrl"));
         }
 
