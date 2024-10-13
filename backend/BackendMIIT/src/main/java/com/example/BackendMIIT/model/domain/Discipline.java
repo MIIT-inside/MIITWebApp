@@ -1,8 +1,6 @@
 package com.example.BackendMIIT.model.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,4 +17,8 @@ public class Discipline extends BaseEntity {
 
     @OneToMany(mappedBy = "discipline")
     private List<Lesson> lessons;
+
+    @ManyToOne
+    @JoinColumn(name = "semester_id")
+    private Semester semester;
 }
