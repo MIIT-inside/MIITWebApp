@@ -13,7 +13,7 @@ public class ParserUtil {
         return Jsoup.connect(url).get();
     }
 
-    public static Elements getRows(String url, String cssQuery) throws IOException {
+    public static Elements getElements(String url, String cssQuery) throws IOException {
         Document document = getDocumentByUrl(url);
         return document.select(cssQuery);
     }

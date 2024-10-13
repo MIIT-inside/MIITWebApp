@@ -21,7 +21,7 @@ public class AnnotationProgramsParser {
         Map<String, String> latestAnnotations = new HashMap<>();
 
         try {
-            Elements rows = ParserUtil.getRows(educationProgramsUrl, "tr[itemprop='eduOp']");
+            Elements rows = ParserUtil.getElements(educationProgramsUrl, "tr[itemprop='eduOp']");
 
             for (Element row : rows) {
                 String educationLevel = ParserUtil.getStringFromElement(row, "td[itemprop='eduLevel']");
