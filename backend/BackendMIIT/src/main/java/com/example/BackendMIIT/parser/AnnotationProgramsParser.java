@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class EducationPlanParser {
+public class AnnotationProgramsParser {
 
     //TODO: delegate url init to the url config after merging feature/ii/parse-ia branch
     private static final String educationProgramsUrl = "https://www.miit.ru/sveden/education/programs";
