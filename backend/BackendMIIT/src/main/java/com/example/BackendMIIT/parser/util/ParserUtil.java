@@ -9,11 +9,11 @@ import java.io.IOException;
 
 public class ParserUtil {
 
-    public Document getDocumentByUrl(String url) throws IOException {
+    public static Document getDocumentByUrl(String url) throws IOException {
         return Jsoup.connect(url).get();
     }
 
-    public Elements getRows(String url, String cssQuery) throws IOException {
+    public static Elements getRows(String url, String cssQuery) throws IOException {
         Document document = getDocumentByUrl(url);
         return document.select(cssQuery);
     }
@@ -22,12 +22,12 @@ public class ParserUtil {
         return element.select(prop).text().trim();
     }
 
-    public boolean isNullOrEmpty(String s) {
+    public static boolean isNullOrEmpty(String s) {
         return s == null || s.trim().isEmpty();
     }
 
 
-    public boolean isNotNull(Object arg) {
+    public static boolean isNotNull(Object arg) {
         return arg != null;
     }
 }
