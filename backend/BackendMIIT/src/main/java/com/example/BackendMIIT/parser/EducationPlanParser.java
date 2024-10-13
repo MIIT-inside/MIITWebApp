@@ -1,6 +1,5 @@
 package com.example.BackendMIIT.parser;
 
-import com.example.BackendMIIT.model.domain.Profile;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class EducationPlanParser {
@@ -17,32 +18,45 @@ public class EducationPlanParser {
     //TODO: delegate url init to the url config after merging feature/ii/parse-ia branch
     private static final String educationProgramsUrl = "https://www.miit.ru/sveden/education/programs";
 
-    public List<Profile> parseEducationPlan(List<Profile> profiles) {
-        List<Profile> updatedProfiles = new ArrayList<>();
+    public List<String> parseAnnotations() {
+        Map<String, String> latestAnnotations = new HashMap<>();
 
         try {
             Elements rows = getRows();
 
             for (Element row : rows) {
-                String specialty = getStringFromElement(row, "td[itemprop='eduName']");
                 String educationLevel = getStringFromElement(row, "td[itemprop='eduLevel']");
+                String educationForm = getStringFromElement(row, "td[itemprop='eduForm']");
+                String profile = getStringFromElement(row, "td[itemprop='eduProf']");
 
-                if (!isValidSpecialty(specialty) || !isValidEducationLevel(educationLevel)) { continue; }
+                if (!isValidEducationLevel(educationLevel) ||
+                        !isValidEducationForm(educationForm) ||
+                        isNullOrEmpty(profile)) {
+                    continue;
+                }
 
-                String pdfLink = extractPdfLink(row);
+                String annotationLink = extractAnnotationLink(row);
 
-                Profile profile = findProfileByName(profiles, specialty);
+                if (isNotNull(annotationLink)) {
+                    int year = extractYearFromLink(annotationLink);
 
-                if (isNotNull(profile) && isNotNull(pdfLink)) {
-                    profile.setEducationPlan(pdfLink);
-                    updatedProfiles.add(profile);
+                    if (year >= 2024) {
+                        if (!latestAnnotations.containsKey(profile)) {
+                            latestAnnotations.put(profile, annotationLink);
+                        } else {
+                            int existingYear = extractYearFromLink(latestAnnotations.get(profile));
+                            if (year > existingYear) {
+                                latestAnnotations.put(profile, annotationLink);
+                            }
+                        }
+                    }
                 }
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
 
-        return updatedProfiles;
+        return new ArrayList<>(latestAnnotations.values());
     }
 
     private Document getDocumentByUrl() throws IOException {
@@ -58,8 +72,8 @@ public class EducationPlanParser {
         return element.select(prop).text().trim();
     }
 
-    private boolean isValidSpecialty(String specialty) {
-        return specialty.contains(". ") && specialty.split("\\. ").length == 2;
+    private boolean isNullOrEmpty(String s) {
+        return s == null || s.trim().isEmpty();
     }
 
     private boolean isValidEducationLevel(String educationLevel) {
@@ -71,21 +85,21 @@ public class EducationPlanParser {
         return educationForm.equalsIgnoreCase("очная");
     }
 
-    private String extractPdfLink(Element row) {
-        Element pdfElement = row.select("td[itemprop='EducationPlan'] a").first();
-        return isNotNull(pdfElement) ? pdfElement.attr("href") : null;
+    private int extractYearFromLink(String link) {
+        if (link.contains("2025")) {
+            return 2025;
+        } else if (link.contains("2024")) {
+            return 2024;
+        }
+        return 0;
     }
 
-    private Profile findProfileByName(List<Profile> profiles, String specialty) {
-        String[] parts = specialty.split("\\. ");
-        if (parts.length < 2) { return null; }
-
-        String profileName = parts[1].trim();
-        return profiles.stream()
-                .filter(profile -> profile.getName().equalsIgnoreCase(profileName))
-                .findFirst()
-                .orElse(null);
+    private String extractAnnotationLink(Element row) {
+        Element annotationElement = row.select("td[itemprop='educationAnnotation'] a").first();
+        return isNotNull(annotationElement) ? annotationElement.attr("href") : null;
     }
 
-    private boolean isNotNull(Object arg) { return arg != null; }
+    private boolean isNotNull(Object arg) {
+        return arg != null;
+    }
 }
