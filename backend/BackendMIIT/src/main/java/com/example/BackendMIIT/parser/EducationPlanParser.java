@@ -67,6 +67,10 @@ public class EducationPlanParser {
                 educationLevel.equalsIgnoreCase("специалитет");
     }
 
+    private boolean isValidEducationForm(String educationForm) {
+        return educationForm.equalsIgnoreCase("очная");
+    }
+
     private String extractPdfLink(Element row) {
         Element pdfElement = row.select("td[itemprop='EducationPlan'] a").first();
         return isNotNull(pdfElement) ? pdfElement.attr("href") : null;
