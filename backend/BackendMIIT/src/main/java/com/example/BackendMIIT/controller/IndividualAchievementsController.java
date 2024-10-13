@@ -18,7 +18,7 @@ public class IndividualAchievementsController {
         this.individualAchievementsService = individualAchievementsService;
     }
 
-    @PostMapping("/parse-and-save")
+    @PostMapping("/parse")
     public ResponseEntity<String> parseAndSaveIndividualAchievements() {
         Set<IndividualAchievements> achievements = individualAchievementsService.parseAchievements();
         individualAchievementsService.saveAchievements(achievements);
