@@ -29,7 +29,14 @@ public class IndividualAchievementsParser {
 
         try {
             Document document = Jsoup.connect(iaUrl).get();
-            Elements achievementsElements  = document.select("tr");
+            Element table = document.selectFirst("table.mytable.lastcenter.table.table-striped");
+
+            if (table == null) {
+                System.err.println("Table not found");
+                return achievements;
+            }
+
+            Elements achievementsElements  = table.select("tbody tr");
 
             for (Element achievement: achievementsElements) {
                 IndividualAchievements individualAchievement = extractAchievement(achievement);
@@ -38,7 +45,7 @@ public class IndividualAchievementsParser {
                     achievements.add(individualAchievement);
                 }
             }
-        } catch (IOException | NumberFormatException ioException) {
+        } catch (IOException ioException) {
             System.err.println(ioException.getMessage());
         }
 
@@ -54,9 +61,11 @@ public class IndividualAchievementsParser {
             String description = getStringFromElement(columns, 1);
             String pointsText = getStringFromElement(columns, 2);
 
-            Integer countPoints = parseCountPoints(pointsText);
+            if (description.length() > 255) {
+                return null;
+            }
 
-            return achievementWithParams(description, countPoints);
+            return achievementWithParams(description, pointsText);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
@@ -64,7 +73,7 @@ public class IndividualAchievementsParser {
     }
 
     private static boolean isValidSize(Elements elements) {
-        if (elements.size() < 3) {
+        if (elements.size() != 3) {
             System.err.println("Invalid number of columns in achievement row");
             return false;
         }
@@ -76,24 +85,13 @@ public class IndividualAchievementsParser {
         return elements.get(index).text().trim();
     }
 
-    private static Integer parseCountPoints(String points) {
-        Integer countPoints = null;
+    private static IndividualAchievements achievementWithParams(String description, String countPoints) {
+        description = description.replace("\"", "").trim();
+        countPoints = countPoints.trim();
 
-        try {
-            countPoints = Integer.parseInt(points);
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid count points format:" + e.getMessage());
-        }
-        return countPoints;
-    }
-
-    private static IndividualAchievements achievementWithParams(String description, Integer countPoints) {
         IndividualAchievements achievement = new IndividualAchievements();
-
-        if (areAllNotNull(description, countPoints)) {
-            achievement.setDescription(description);
-            achievement.setCountPoints(countPoints);
-        }
+        achievement.setDescription(description);
+        achievement.setCountPoints(countPoints);
 
         return achievement;
     }
