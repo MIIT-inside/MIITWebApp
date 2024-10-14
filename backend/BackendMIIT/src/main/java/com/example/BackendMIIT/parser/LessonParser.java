@@ -16,9 +16,9 @@ public class LessonParser {
         String lessonCSS = "div.eduplan_discipline-content-header:contains(Виды занятий) + ul li";
         Elements lessonElements = disciplineElement.parent().select(lessonCSS);
 
-        Lesson lesson = new Lesson();
-
         for (Element lessonElement : lessonElements) {
+            Lesson lesson = new Lesson();
+
             String lessonText = lessonElement.text().trim();
             if (lessonText.startsWith("Лекция")) {
                 lesson.setLecture(lessonText.replace("Лекция:", "").trim());
@@ -27,9 +27,9 @@ public class LessonParser {
             } else if (lessonText.startsWith("Лабораторная работа")) {
                 lesson.setLaboratoryWork(lessonText.replace("Лабораторная работа:", "").trim());
             }
+            lessons.add(lesson);
         }
 
-        lessons.add(lesson);
         return lessons;
     }
 }
