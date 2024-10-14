@@ -1,36 +1,29 @@
 import React from 'react';
-import '../styles/InformationBlock.css';
 
+import '../styles/InformationBlock.css';
+import Item from './informationBlockComponents/Item';
+import SmallItem from './informationBlockComponents/SmallItem';
 
 const InformationBlock = () => {
-    return (<div className="container">
+    return (
+        <div className="container">
             <div className="TopRow">
-                <div className="item">
-                    <span className="number">60</span>
-                    <span>Направлений подготовки</span>
-                </div>
+                <Item number="60" description="Направлений подготовки" />
                 <hr />
-                <div className="item">
-                    <span className="number">00</span>
-                    <span>Бюджетных мест</span>
-                </div>
+                <Item number="00" description="Бюджетных мест" />
                 <hr />
-                <div className="item">
-                    <span className="number">300</span>
-                    <span>Проходной балл в 2023 году</span>
-                </div>
+                <Item number="300" description="Проходной балл в 2023 году" />
             </div>
             <div className="BottomRow">
-                <div className="small-item">форма обучения<br/>нестабильная</div>
-                <div className="small-item">срок обучения<br/>вся жизнь</div>
-                <div className="small-item">стоимость обучения<br/>миллион денег</div>
-                <div className="small-item">язык обучения<br/>узбекский</div>
-                <div className="small-item">общежития<br/>в подземке живём</div>
-                <div className="small-item">скидка<br/>какая?</div>
+                <SmallItem text="форма обучения<br/>нестабильная" />
+                <SmallItem text="срок обучения<br/>вся жизнь" />
+                <SmallItem text="стоимость обучения<br/>миллион денег" />
+                <SmallItem text="язык обучения<br/>узбекский" />
+                <SmallItem text="общежития<br/>в подземке живём" />
+                <SmallItem text="скидка<br/>какая?" />
             </div>
         </div>
     );
 };
-
 
 export default InformationBlock;
