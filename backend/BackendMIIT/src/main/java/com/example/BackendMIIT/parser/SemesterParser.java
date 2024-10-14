@@ -28,6 +28,7 @@ public class SemesterParser {
             for (Element semesterElement : semesterElements) {
                 String semesterName = semesterElement.select("span.info-block_header-text").text();
                 Semester semester = new Semester();
+                semester.setName(semesterName);
                 semester.setDisciplines(disciplineParser.parseDisciplines(semesterElement));
                 semesters.add(semester);
             }
