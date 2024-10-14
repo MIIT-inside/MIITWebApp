@@ -6,7 +6,7 @@ import SmallItem from './informationBlockComponents/SmallItem';
 
 const InformationBlock = () => {
     return (
-        <div className="container">
+        <div className="containerInformationBlock">
             <div className="TopRow">
                 <Item number="60" description="Направлений подготовки" />
                 <hr />

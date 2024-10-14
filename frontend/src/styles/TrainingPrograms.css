@@ -1,0 +1,31 @@
+.containerTrainingPrograms {
+    max-width: 1082px;
+    margin: 100px auto 0 auto;
+}
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.item {
+    background-color: #2563EB;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left;
+    max-height: 1000px;
+}
+
+.text {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.hr, h1{
+    color: #1C54B2;
+    font-size: 2em;
+}
