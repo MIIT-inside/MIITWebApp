@@ -6,6 +6,7 @@ import com.example.BackendMIIT.repositories.IndividualAchievementsRepository;
 import com.example.BackendMIIT.service.IndividualAchievementsService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -28,5 +29,10 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
     @Override
     public void saveAchievements(Set<IndividualAchievements> individualAchievements) {
         individualAchievementsRepository.saveAll(individualAchievements);
+    }
+
+    @Override
+    public List<IndividualAchievements> getAllIndividualAchievements() {
+        return individualAchievementsRepository.findAll();
     }
 }
