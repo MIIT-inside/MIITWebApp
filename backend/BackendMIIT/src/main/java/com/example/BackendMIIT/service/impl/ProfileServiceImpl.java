@@ -85,14 +85,16 @@ public class ProfileServiceImpl implements ProfileService {
             Document profilePage = Jsoup.connect(BASE_URL + link).maxBodySize(0).get();
 
             String profileHeader = profilePage.select("h2").text();
-            properties.add(profileHeader.substring(0, profileHeader.indexOf(" "))); //Direction code
-            properties.add(profileHeader.substring(profileHeader.indexOf(". ") + 1, profileHeader.indexOf("("))); //Profile
+            if (profileHeader.contains("набор")) continue;
+            properties.add(profileHeader.substring(0, profileHeader.indexOf(" ")).trim()); //Direction code
+            properties.add(profileHeader.substring(profileHeader.indexOf(". ") + 1, profileHeader.indexOf("(")).trim()); //Profile
 
             Elements elements = profilePage.select("li[class=text-form__item]");
 
             properties.add(getInstitute(elements)); //Institute
             properties.add(getGroup(profileHeader)); //Abbreviation
             saveProfile(properties);
+            properties.clear();
         }
     }
 
@@ -137,15 +139,19 @@ public class ProfileServiceImpl implements ProfileService {
             Profile profile = new Profile();
             Direction direction = directionRepository.findByCode(properties.get(i++).trim());
 
-            profile.setName(properties.get(i++).trim());
-            profile.setLevel(direction.getLevel());
-            profile.setForm(direction.getForm());
-            profile.setInstitute(properties.get(i++).trim());
-            profile.setAbbreviation(properties.get(i++).trim());
-            profile.setDirection(direction);
+            if (profileRepository.findByName(properties.get(i)) == null) {
+                profile.setName(properties.get(i++).trim());
+                profile.setLevel(direction.getLevel());
+                profile.setForm(direction.getForm());
+                profile.setInstitute(properties.get(i++).trim());
+                profile.setAbbreviation(properties.get(i++).trim());
+                profile.setDirection(direction);
 
-            profileRepository.save(profile);
-            properties.clear();
+                profileRepository.save(profile);
+            }
+            else {
+                break;
+            }
         }
     }
 }
