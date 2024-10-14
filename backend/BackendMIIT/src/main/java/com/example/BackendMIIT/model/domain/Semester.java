@@ -12,6 +12,8 @@ import java.util.List;
 @Data
 public class Semester extends BaseEntity {
 
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "profile_id")
     private Profile profile;
