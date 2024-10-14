@@ -1,0 +1,57 @@
+.container {
+    background-color: #1e3a8a;
+    padding: 20px;
+    border-radius: 8px;
+    color: white;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.TopRow {
+    background-color: #2563EB;
+    position: relative;
+    top: -80px;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 700px;
+    margin: 0 auto;
+
+}
+
+.BottomRow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 30px;
+    margin-top: -50px;
+}
+
+.small-item {
+    background-color: #2563EB;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    flex: 1 1 calc(33.333% - 20px);
+    box-sizing: border-box;
+
+}
+
+.item{
+    background-color: #2563EB;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.number {
+    font-size: 2.55em;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+.hr{
+    color: #ffffff;
+    rotate: -90deg;
+}
