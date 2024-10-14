@@ -18,6 +18,6 @@ public class Semester extends BaseEntity {
     @JoinColumn(name = "profile_id")
     private Profile profile;
 
-    @OneToMany(mappedBy = "semester")
+    @OneToMany(mappedBy = "semester", cascade = CascadeType.ALL)
     private List<Discipline> disciplines;
 }

@@ -15,7 +15,7 @@ public class Discipline extends BaseEntity {
     private String name;
     private String attestation;
 
-    @OneToMany(mappedBy = "discipline")
+    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL)
     private List<Lesson> lessons;
 
     @ManyToOne
