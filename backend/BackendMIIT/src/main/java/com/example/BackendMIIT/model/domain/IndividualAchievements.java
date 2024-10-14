@@ -11,6 +11,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class IndividualAchievements extends BaseEntity {
 
-    private int countPoints;
     private String description;
+    private String countPoints;
 }
