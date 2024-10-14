@@ -2,7 +2,7 @@ import React from 'react';
 
 const SmallItem = ({ text }) => (
     <div className="small-item">
-        {text}
+        <span dangerouslySetInnerHTML={{ __html: text }}></span>
     </div>
 );
 
