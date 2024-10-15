@@ -30,7 +30,7 @@ public class IndividualAchievementsParser {
         Set<IndividualAchievements> achievements = new HashSet<>();
 
         try {
-            Document document = Jsoup.connect(iaUrl).get();
+            Document document = Jsoup.connect(iaUrl).maxBodySize(0).get();
             Element table = document.selectFirst("table.mytable.lastcenter.table.table-striped");
 
             if (table == null) {
