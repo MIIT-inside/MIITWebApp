@@ -3,6 +3,7 @@ package com.example.BackendMIIT.parser;
 import com.example.BackendMIIT.configuration.UrlsConfig;
 import com.example.BackendMIIT.model.domain.IndividualAchievements;
 
+import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,6 +23,7 @@ public class IndividualAchievementsParser {
         this.urlsConfig = urlsConfig;
     }
 
+    @SneakyThrows
     public Set<IndividualAchievements> parse() {
         String iaUrl = urlsConfig.getIa();
 
