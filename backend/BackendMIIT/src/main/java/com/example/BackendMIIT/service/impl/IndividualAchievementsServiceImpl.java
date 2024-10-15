@@ -20,9 +20,11 @@ import java.util.Set;
 public class IndividualAchievementsServiceImpl implements IndividualAchievementsService {
 
     private final IndividualAchievementsRepository individualAchievementsRepository;
+    private final UrlsConfig urlsConfig;
 
-    public IndividualAchievementsServiceImpl(IndividualAchievementsRepository individualAchievementsRepository) {
+    public IndividualAchievementsServiceImpl(IndividualAchievementsRepository individualAchievementsRepository, UrlsConfig urlsConfig) {
         this.individualAchievementsRepository = individualAchievementsRepository;
+        this.urlsConfig = urlsConfig;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
 
     @SneakyThrows
     public Set<IndividualAchievements> parse() {
-        String iaUrl = new UrlsConfig().getIa();
+        String iaUrl = urlsConfig.getIa();
 
         Set<IndividualAchievements> achievements = new HashSet<>();
 
