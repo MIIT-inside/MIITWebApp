@@ -1,6 +1,6 @@
 package com.example.BackendMIIT.parser;
 
-import com.example.BackendMIIT.config.UrlsConfig;
+import com.example.BackendMIIT.configuration.UrlsConfig;
 import com.example.BackendMIIT.model.domain.IndividualAchievements;
 
 import org.jsoup.Jsoup;

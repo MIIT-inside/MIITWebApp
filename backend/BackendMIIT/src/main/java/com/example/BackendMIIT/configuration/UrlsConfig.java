@@ -1,4 +1,4 @@
-package com.example.BackendMIIT.config;
+package com.example.BackendMIIT.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
