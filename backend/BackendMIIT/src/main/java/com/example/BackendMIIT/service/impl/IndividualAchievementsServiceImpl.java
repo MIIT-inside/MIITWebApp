@@ -29,7 +29,22 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
 
     @Override
     public void parseAndSaveAchievements() {
-         individualAchievementsRepository.saveAll(parse());
+        Set<IndividualAchievements> parsedAchievements = parse();
+
+        parsedAchievements.add(new IndividualAchievements(
+                "Статус чемпиона или призера Олимпийских, Паралимпийских, " +
+                        "Сурдлимпийских игр, чемпионатов мира и Европы.", "10"));
+        parsedAchievements.add(new IndividualAchievements(
+                "Наличие документа об образовании с отличием " +
+                        "(аттестат или диплом).", "10"));
+        parsedAchievements.add(new IndividualAchievements(
+                "Наличие золотого, серебряного или бронзового знака отличия ГТО." +
+                        "Начисление баллов за наличие знака ГТО осуществляется однократно.", "2"));
+        parsedAchievements.add(new IndividualAchievements(
+                "Участие в добровольческих формированиях в рамках " +
+                        "специальной военной операции.", "10"));
+
+        individualAchievementsRepository.saveAll(parsedAchievements);
     }
 
     @Override
@@ -52,9 +67,9 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
                 return achievements;
             }
 
-            Elements achievementsElements  = table.select("tbody tr");
+            Elements achievementsElements = table.select("tbody tr");
 
-            for (Element achievement: achievementsElements) {
+            for (Element achievement : achievementsElements) {
                 IndividualAchievements individualAchievement = extractAchievement(achievement);
 
                 if (areAllNotNull(individualAchievement)) {
@@ -72,7 +87,9 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
         try {
 
             Elements columns = achievement.select("td");
-            if (!isValidSize(columns)) { return null; }
+            if (!isValidSize(columns)) {
+                return null;
+            }
 
             String description = getStringFromElement(columns, 1);
             String pointsText = getStringFromElement(columns, 2);
@@ -114,7 +131,9 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
 
     private static boolean areAllNotNull(Object... args) {
         for (Object arg : args) {
-            if (arg == null) { return false; }
+            if (arg == null) {
+                return false;
+            }
         }
         return true;
     }
