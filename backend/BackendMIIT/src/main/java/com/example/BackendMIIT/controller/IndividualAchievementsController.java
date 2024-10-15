@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(path = "api/miit/achievements")
@@ -22,9 +21,7 @@ public class IndividualAchievementsController {
 
     @PostMapping("/parse")
     public ResponseEntity<String> parseAndSaveIndividualAchievements() {
-        Set<IndividualAchievements> achievements = individualAchievementsService.parseAchievements();
-        individualAchievementsService.saveAchievements(achievements);
-
+        individualAchievementsService.parseAndSaveAchievements();
         return ResponseEntity.ok("Individual achievements parsed and saved successfully!");
     }
 
