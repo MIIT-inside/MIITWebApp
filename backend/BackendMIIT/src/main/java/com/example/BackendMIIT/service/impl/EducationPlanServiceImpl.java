@@ -1,18 +1,21 @@
 package com.example.BackendMIIT.service.impl;
 
-import com.example.BackendMIIT.model.domain.Discipline;
-import com.example.BackendMIIT.model.domain.Lesson;
-import com.example.BackendMIIT.model.domain.Semester;
+import com.example.BackendMIIT.model.domain.*;
 import com.example.BackendMIIT.parser.AnnotationProgramsParser;
 import com.example.BackendMIIT.parser.SemesterParser;
+import com.example.BackendMIIT.parser.util.ParserUtil;
 import com.example.BackendMIIT.repositories.DisciplineRepository;
 import com.example.BackendMIIT.repositories.LessonRepository;
+import com.example.BackendMIIT.repositories.ProfileRepository;
 import com.example.BackendMIIT.repositories.SemesterRepository;
 import com.example.BackendMIIT.service.EducationPlanService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class EducationPlanServiceImpl implements EducationPlanService {
@@ -22,17 +25,20 @@ public class EducationPlanServiceImpl implements EducationPlanService {
     private final SemesterRepository semesterRepository;
     private final DisciplineRepository disciplineRepository;
     private final LessonRepository lessonRepository;
+    private final ProfileRepository profileRepository;
 
     public EducationPlanServiceImpl(AnnotationProgramsParser annotationProgramsParser,
                                     SemesterParser semesterParser,
                                     SemesterRepository semesterRepository,
                                     DisciplineRepository disciplineRepository,
-                                    LessonRepository lessonRepository) {
+                                    LessonRepository lessonRepository,
+                                    ProfileRepository profileRepository) {
         this.annotationProgramsParser = annotationProgramsParser;
         this.semesterParser = semesterParser;
         this.semesterRepository = semesterRepository;
         this.disciplineRepository = disciplineRepository;
         this.lessonRepository = lessonRepository;
+        this.profileRepository = profileRepository;
     }
 
     @Override
@@ -41,22 +47,48 @@ public class EducationPlanServiceImpl implements EducationPlanService {
         List<String> annotationUrls = annotationProgramsParser.parseAnnotations();
 
         for (String url : annotationUrls) {
-            List<Semester> semesters = semesterParser.parseSemesters(url);
+            String profileName = parseProfileNameFromUrl(url);
 
-            for (Semester semester : semesters) {
-                Semester savedSemester = semesterRepository.save(semester);
+            Optional<Profile> optionalProfile = profileRepository.findByName(profileName);
 
-                for (Discipline discipline : savedSemester.getDisciplines()) {
-                    discipline.setSemester(savedSemester);
-                    Discipline savedDiscipline = disciplineRepository.save(discipline);
+            if (optionalProfile.isPresent()) {
+                Profile profile = optionalProfile.get();
 
-                    for (Lesson lesson : savedDiscipline.getLessons()) {
-                        lesson.setDiscipline(savedDiscipline);
-                        lessonRepository.save(lesson);
+                List<Semester> semesters = semesterParser.parseSemesters(url, profile);
+
+                for (Semester semester : semesters) {
+                    Semester savedSemester = semesterRepository.save(semester);
+
+                    for (Discipline discipline : savedSemester.getDisciplines()) {
+                        discipline.setSemester(savedSemester);
+                        Discipline savedDiscipline = disciplineRepository.save(discipline);
+
+                        for (Lesson lesson : savedDiscipline.getLessons()) {
+                            lesson.setDiscipline(savedDiscipline);
+                            lessonRepository.save(lesson);
+                        }
                     }
                 }
+            } else {
+                System.out.println("Skip profile: " + profileName);
             }
         }
     }
+
+    private String parseProfileNameFromUrl(String url) {
+        try {
+            String fullText = Objects
+                    .requireNonNull(ParserUtil
+                            .getElements(url, "div.info-block .info-block__header-text")
+                            .first())
+                    .text()
+                    .trim();
+
+            return fullText.replaceAll(".*\\.\\s*", "").trim();
+        } catch (IOException ioException) {
+            return null;
+        }
+    }
 }
+
 
