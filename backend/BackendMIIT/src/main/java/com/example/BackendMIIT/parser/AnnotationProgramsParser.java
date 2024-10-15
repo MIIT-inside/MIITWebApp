@@ -35,13 +35,9 @@ public class AnnotationProgramsParser {
                     continue;
                 }
 
-                System.out.println("Level: " + educationLevel + ", Form: " + educationForm + ", Profile: " + profile);
-
                 String annotationLink = "https://www.miit.ru" + extractAnnotationLink(row);
                 String annotationText = extractAnnotationText(row);
                 int year = extractYearFromText(annotationText);
-
-                System.out.println("Annotation Link: " + annotationLink + ", Year: " + year);
 
                 if (year >= 2024) {
                     if (!latestAnnotations.containsKey(profile)) {
