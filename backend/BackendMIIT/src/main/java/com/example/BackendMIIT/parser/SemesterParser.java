@@ -23,14 +23,17 @@ public class SemesterParser {
         List<Semester> semesters = new ArrayList<>();
 
         try {
-            Elements semesterElements = ParserUtil.getElements(url, "div.info-block");
+            Elements semesterElements = ParserUtil.getElements(url, "div.info-block.info-block_collapse");
 
             for (Element semesterElement : semesterElements) {
-                String semesterName = semesterElement.select("span.info-block_header-text").text();
-                Semester semester = new Semester();
-                semester.setName(semesterName);
-                semester.setDisciplines(disciplineParser.parseDisciplines(semesterElement));
-                semesters.add(semester);
+                String semesterName = semesterElement.select("span.info-block__header-text").text().trim();
+
+                if (semesterName.matches(".*\\d+-й семестр.*")) {
+                    Semester semester = new Semester();
+                    semester.setName(semesterName);
+                    semester.setDisciplines(disciplineParser.parseDisciplines(semesterElement));
+                    semesters.add(semester);
+                }
             }
         } catch (IOException e) {
             System.err.println("Semester parse exception: " + e.getMessage());
@@ -39,4 +42,3 @@ public class SemesterParser {
         return semesters;
     }
 }
-
