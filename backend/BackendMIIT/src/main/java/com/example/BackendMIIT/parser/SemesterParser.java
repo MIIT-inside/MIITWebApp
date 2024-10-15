@@ -1,5 +1,6 @@
 package com.example.BackendMIIT.parser;
 
+import com.example.BackendMIIT.model.domain.Profile;
 import com.example.BackendMIIT.model.domain.Semester;
 import com.example.BackendMIIT.parser.util.ParserUtil;
 import org.jsoup.nodes.Element;
@@ -19,7 +20,7 @@ public class SemesterParser {
         this.disciplineParser = disciplineParser;
     }
 
-    public List<Semester> parseSemesters(String url) {
+    public List<Semester> parseSemesters(String url, Profile profile) {
         List<Semester> semesters = new ArrayList<>();
 
         try {
@@ -31,6 +32,7 @@ public class SemesterParser {
                 if (semesterName.matches(".*\\d+-й семестр.*")) {
                     Semester semester = new Semester();
                     semester.setName(semesterName);
+                    semester.setProfile(profile);
                     semester.setDisciplines(disciplineParser.parseDisciplines(semesterElement));
                     semesters.add(semester);
                 }
