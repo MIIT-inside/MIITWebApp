@@ -55,7 +55,9 @@ public class AnnotationProgramsParser {
             System.err.println(e.getMessage());
         }
 
-        return latestAnnotations.values().stream()
+        return latestAnnotations
+                .values()
+                .stream()
                 .map(AnnotationData::link)
                 .collect(Collectors.toList());
     }
@@ -69,6 +71,16 @@ public class AnnotationProgramsParser {
         return educationForm.equalsIgnoreCase("очная");
     }
 
+    private String extractAnnotationLink(Element row) {
+        Element annotationElement = row.select("td[itemprop='educationAnnotation'] a").first();
+        return ParserUtil.isNotNull(annotationElement) ? annotationElement.attr("href") : null;
+    }
+
+    private String extractAnnotationText(Element row) {
+        Element annotationElement = row.select("td[itemprop='educationAnnotation'] a span.link-text").first();
+        return ParserUtil.isNotNull(annotationElement) ? annotationElement.text() : "";
+    }
+
     private int extractYearFromText(String annotationText) {
         if (annotationText.contains("2025")) {
             return 2025;
@@ -77,15 +89,4 @@ public class AnnotationProgramsParser {
         }
         return 0;
     }
-
-    private String extractAnnotationText(Element row) {
-        Element annotationElement = row.select("td[itemprop='educationAnnotation'] a span.link-text").first();
-        return ParserUtil.isNotNull(annotationElement) ? annotationElement.text() : "";
-    }
-
-    private String extractAnnotationLink(Element row) {
-        Element annotationElement = row.select("td[itemprop='educationAnnotation'] a").first();
-        return ParserUtil.isNotNull(annotationElement) ? annotationElement.attr("href") : null;
-    }
 }
-

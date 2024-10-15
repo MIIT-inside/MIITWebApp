@@ -23,6 +23,7 @@ public class DisciplineParser {
 
         for (Element disciplineElement : disciplineElements) {
             String disciplineName = disciplineElement.text();
+
             Discipline discipline = new Discipline();
             discipline.setName(disciplineName);
             discipline.setLessons(lessonParser.parseLessons(disciplineElement));
@@ -40,4 +41,3 @@ public class DisciplineParser {
         return disciplines;
     }
 }
-

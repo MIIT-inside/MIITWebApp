@@ -17,6 +17,7 @@ public class LessonParser {
         Elements lessonElements = disciplineElement.parent().select(lessonCSS);
 
         Lesson lesson = new Lesson();
+
         for (Element lessonElement : lessonElements) {
             String lessonText = lessonElement.text().trim();
             if (lessonText.startsWith("Лекция")) {
@@ -27,9 +28,9 @@ public class LessonParser {
                 lesson.setLaboratoryWork(lessonText.replace("Лабораторная работа:", "").trim());
             }
         }
+
         lessons.add(lesson);
 
         return lessons;
     }
 }
-
