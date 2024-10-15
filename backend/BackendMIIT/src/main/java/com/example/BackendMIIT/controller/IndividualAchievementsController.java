@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping(path = "api/miit/individual-achievements")
+@RequestMapping(path = "api/miit/achievements")
 public class IndividualAchievementsController {
     private final IndividualAchievementsService individualAchievementsService;
 
