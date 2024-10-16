@@ -76,17 +76,13 @@ public class EducationPlanServiceImpl implements EducationPlanService {
     }
 
     private String parseProfileNameFromUrl(String url) {
-        try {
-            String fullText = Objects
-                    .requireNonNull(ParserUtil
-                            .getElements(url, "div.info-block .info-block__header-text")
-                            .first())
-                    .text()
-                    .trim();
+        String fullText = Objects
+                .requireNonNull(ParserUtil
+                        .getElements(url, "div.info-block .info-block__header-text")
+                        .first())
+                .text()
+                .trim();
 
-            return fullText.replaceAll(".*\\.\\s*", "").trim();
-        } catch (IOException ioException) {
-            return null;
-        }
+        return fullText.replaceAll(".*\\.\\s*", "").trim();
     }
 }
