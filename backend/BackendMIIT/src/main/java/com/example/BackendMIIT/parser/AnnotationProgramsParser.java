@@ -19,7 +19,9 @@ public class AnnotationProgramsParser {
 
     @Value("${miit.baseurl}")
     private static String miitBaseUrl;
-    private static final String educationProgramsUrl = "https://www.miit.ru/sveden/education/programs";
+
+    @Value("${url.edu-programs}")
+    private static String educationProgramsUrl;
 
 
     public List<String> parseAnnotations() {
