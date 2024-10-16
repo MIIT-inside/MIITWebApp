@@ -10,7 +10,7 @@ import java.io.IOException;
 public class ParserUtil {
 
     public static Document getDocumentByUrl(String url) throws IOException {
-        return Jsoup.connect(url).get();
+        return Jsoup.connect(url).maxBodySize(0).get();
     }
 
     public static Elements getElements(String url, String cssQuery) throws IOException {
