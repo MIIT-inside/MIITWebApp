@@ -1,19 +1,19 @@
 package com.example.BackendMIIT.parser.util;
 
+import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
-
 public class ParserUtil {
 
-    public static Document getDocumentByUrl(String url) throws IOException {
+    @SneakyThrows
+    public static Document getDocumentByUrl(String url) {
         return Jsoup.connect(url).maxBodySize(0).get();
     }
 
-    public static Elements getElements(String url, String cssQuery) throws IOException {
+    public static Elements getElements(String url, String cssQuery) {
         Document document = getDocumentByUrl(url);
         return document.select(cssQuery);
     }

@@ -7,8 +7,6 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,38 +24,34 @@ public class AnnotationProgramsParser {
     public List<String> parseAnnotations() {
         Map<String, AnnotationData> latestAnnotations = new HashMap<>();
 
-        try {
-            Elements rows = ParserUtil.getElements(educationProgramsUrl, "tr[itemprop='eduOp']");
+        Elements rows = ParserUtil.getElements(educationProgramsUrl, "tr[itemprop='eduOp']");
 
-            for (Element row : rows) {
-                String educationForm = ParserUtil.getStringFromElement(row, "td[itemprop='eduForm']");
-                String educationLevel = ParserUtil.getStringFromElement(row, "td[itemprop='eduLevel']");
-                String profile = ParserUtil.getStringFromElement(row, "td[itemprop='eduProf']");
+        for (Element row : rows) {
+            String educationForm = ParserUtil.getStringFromElement(row, "td[itemprop='eduForm']");
+            String educationLevel = ParserUtil.getStringFromElement(row, "td[itemprop='eduLevel']");
+            String profile = ParserUtil.getStringFromElement(row, "td[itemprop='eduProf']");
 
-                if (!isValidEducationLevel(educationLevel) ||
-                        !isValidEducationForm(educationForm) ||
-                        ParserUtil.isNullOrEmpty(profile)) {
-                    continue;
-                }
+            if (!isValidEducationLevel(educationLevel) ||
+                    !isValidEducationForm(educationForm) ||
+                    ParserUtil.isNullOrEmpty(profile)) {
+                continue;
+            }
 
-                String annotationLink = miitBaseUrl + extractAnnotationLink(row);
-                String annotationText = extractAnnotationText(row);
-                int year = extractYearFromText(annotationText);
+            String annotationLink = miitBaseUrl + extractAnnotationLink(row);
+            String annotationText = extractAnnotationText(row);
+            int year = extractYearFromText(annotationText);
 
-                if (year >= 2024) {
-                    if (!latestAnnotations.containsKey(profile)) {
+            if (year >= 2024) {
+                if (!latestAnnotations.containsKey(profile)) {
+                    latestAnnotations.put(profile, new AnnotationData(annotationLink, year));
+                } else {
+                    int existingYear = latestAnnotations.get(profile).year();
+
+                    if (year > existingYear) {
                         latestAnnotations.put(profile, new AnnotationData(annotationLink, year));
-                    } else {
-                        int existingYear = latestAnnotations.get(profile).year();
-
-                        if (year > existingYear) {
-                            latestAnnotations.put(profile, new AnnotationData(annotationLink, year));
-                        }
                     }
                 }
             }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
         }
 
         return latestAnnotations
