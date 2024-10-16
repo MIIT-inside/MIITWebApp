@@ -26,7 +26,6 @@ public class ParserUtil {
         return s == null || s.trim().isEmpty();
     }
 
-
     public static boolean isNotNull(Object arg) {
         return arg != null;
     }
