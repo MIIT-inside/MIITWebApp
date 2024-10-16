@@ -23,7 +23,6 @@ public class AnnotationProgramsParser {
     @Value("${url.edu-programs}")
     private static String educationProgramsUrl;
 
-
     public List<String> parseAnnotations() {
         Map<String, AnnotationData> latestAnnotations = new HashMap<>();
 
