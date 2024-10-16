@@ -58,26 +58,22 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
 
         Set<IndividualAchievements> achievements = new HashSet<>();
 
-        try {
-            Document document = Jsoup.connect(iaUrl).maxBodySize(0).get();
-            Element table = document.selectFirst("table.mytable.lastcenter.table.table-striped");
+        Document document = Jsoup.connect(iaUrl).maxBodySize(0).get();
+        Element table = document.selectFirst("table.mytable.lastcenter.table.table-striped");
 
-            if (table == null) {
-                System.err.println("Table not found");
-                return achievements;
+        if (table == null) {
+            System.err.println("Table not found");
+            return achievements;
+        }
+
+        Elements achievementsElements = table.select("tbody tr");
+
+        for (Element achievement : achievementsElements) {
+            IndividualAchievements individualAchievement = extractAchievement(achievement);
+
+            if (areAllNotNull(individualAchievement)) {
+                achievements.add(individualAchievement);
             }
-
-            Elements achievementsElements = table.select("tbody tr");
-
-            for (Element achievement : achievementsElements) {
-                IndividualAchievements individualAchievement = extractAchievement(achievement);
-
-                if (areAllNotNull(individualAchievement)) {
-                    achievements.add(individualAchievement);
-                }
-            }
-        } catch (IOException ioException) {
-            System.err.println(ioException.getMessage());
         }
 
         return achievements;
