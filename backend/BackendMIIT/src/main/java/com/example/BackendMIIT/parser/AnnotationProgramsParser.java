@@ -4,6 +4,7 @@ import com.example.BackendMIIT.model.domain.AnnotationData;
 import com.example.BackendMIIT.parser.util.ParserUtil;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,7 +17,10 @@ import java.util.stream.Collectors;
 @Component
 public class AnnotationProgramsParser {
 
+    @Value("${miit.baseurl}")
+    private static String miitBaseUrl;
     private static final String educationProgramsUrl = "https://www.miit.ru/sveden/education/programs";
+
 
     public List<String> parseAnnotations() {
         Map<String, AnnotationData> latestAnnotations = new HashMap<>();
@@ -35,7 +39,7 @@ public class AnnotationProgramsParser {
                     continue;
                 }
 
-                String annotationLink = "https://www.miit.ru" + extractAnnotationLink(row);
+                String annotationLink = miitBaseUrl + extractAnnotationLink(row);
                 String annotationText = extractAnnotationText(row);
                 int year = extractYearFromText(annotationText);
 
