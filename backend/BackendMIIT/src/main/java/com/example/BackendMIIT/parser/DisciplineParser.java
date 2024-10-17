@@ -52,14 +52,12 @@ public class DisciplineParser {
                 if (finalAttestationElement != null) {
                     Discipline discipline = new Discipline();
                     discipline.setName(disciplineName);
-                    discipline.setLessons(new ArrayList<>());
                     String finalAttestationText = finalAttestationElement.text().replace("\"", "").trim();
                     discipline.setAttestation(finalAttestationText);
                     disciplines.add(discipline);
                 } else if (!hasAttestation) {
                     Discipline discipline = new Discipline();
                     discipline.setName(disciplineName);
-                    discipline.setLessons(lessonParser.parseLessons(disciplineElement));
                     discipline.setAttestation("Не указана");
                     disciplines.add(discipline);
                 }
@@ -77,4 +75,3 @@ public class DisciplineParser {
         return disciplines;
     }
 }
-
