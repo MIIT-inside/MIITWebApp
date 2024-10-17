@@ -28,13 +28,21 @@ public class DisciplineParser {
             discipline.setName(disciplineName);
             discipline.setLessons(lessonParser.parseLessons(disciplineElement));
 
-            String attestationCSS = "div.eduplan_discipline-content-header:contains(Форма промежуточной аттестации) + ul li";
-            Element attestationElement = disciplineElement.parent().selectFirst(attestationCSS);
+            Element disciplineContent = disciplineElement.nextElementSibling();
 
-            if (attestationElement != null) {
-                discipline.setAttestation(attestationElement.text().trim());
+            if (disciplineContent != null) {
+                String attestationCSS = "div.eduplan_discipline-content-header:contains(Форма промежуточной аттестации) + ul li";
+                Element attestationElement = disciplineContent.selectFirst(attestationCSS);
+
+                if (attestationElement != null) {
+                    String attestationText = attestationElement.text().replace("\"", "").trim();
+                    discipline.setAttestation(attestationText);
+                } else {
+                    discipline.setAttestation("Не указана");
+                }
+            } else {
+                discipline.setAttestation("Не указана");
             }
-
             disciplines.add(discipline);
         }
 
