@@ -139,7 +139,7 @@ public class ProfileServiceImpl implements ProfileService {
             Profile profile = new Profile();
             Direction direction = directionRepository.findByCode(properties.get(i++).trim());
 
-            if (profileRepository.findByName(properties.get(i)) == null) {
+            if (profileRepository.findByName(properties.get(i)).isEmpty()) {
                 profile.setName(properties.get(i++).trim());
                 profile.setLevel(direction.getLevel());
                 profile.setForm(direction.getForm());
