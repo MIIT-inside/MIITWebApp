@@ -1,6 +1,7 @@
 package com.example.BackendMIIT.parser;
 
 import com.example.BackendMIIT.model.domain.Discipline;
+import com.example.BackendMIIT.model.domain.Lesson;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,8 @@ public class DisciplineParser {
             Element disciplineContent = disciplineElement.nextElementSibling();
 
             if (disciplineContent != null) {
+                List<Lesson> lessons = lessonParser.parseLessons(disciplineContent);
+
                 String attestationCSS = "div.eduplan_discipline-content-header:contains(Форма промежуточной аттестации) + ul li";
                 Elements attestationElements = disciplineContent.select(attestationCSS);
 
@@ -36,7 +39,7 @@ public class DisciplineParser {
                     for (Element attestationElement : attestationElements) {
                         Discipline discipline = new Discipline();
                         discipline.setName(disciplineName);
-                        discipline.setLessons(lessonParser.parseLessons(disciplineElement));
+                        discipline.setLessons(lessons);
 
                         String attestationText = attestationElement.text().replace("\"", "").trim();
                         discipline.setAttestation(attestationText);
@@ -52,16 +55,20 @@ public class DisciplineParser {
                 if (finalAttestationElement != null) {
                     Discipline discipline = new Discipline();
                     discipline.setName(disciplineName);
+                    discipline.setLessons(lessons);
+
                     String finalAttestationText = finalAttestationElement.text().replace("\"", "").trim();
                     discipline.setAttestation(finalAttestationText);
+
                     disciplines.add(discipline);
                 } else if (!hasAttestation) {
                     Discipline discipline = new Discipline();
                     discipline.setName(disciplineName);
+                    discipline.setLessons(lessons);
                     discipline.setAttestation("Не указана");
+
                     disciplines.add(discipline);
                 }
-
             } else {
                 Discipline discipline = new Discipline();
                 discipline.setName(disciplineName);
