@@ -1,10 +1,10 @@
 package com.example.BackendMIIT.parser;
 
+import com.example.BackendMIIT.configuration.UrlsConfig;
 import com.example.BackendMIIT.model.domain.AnnotationData;
 import com.example.BackendMIIT.parser.util.ParserUtil;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -15,11 +15,13 @@ import java.util.stream.Collectors;
 @Component
 public class AnnotationProgramsParser {
 
-    @Value("${miit.baseurl}")
-    private static String miitBaseUrl;
+    private final String miitBaseUrl;
+    private final String educationProgramsUrl;
 
-    @Value("${url.edu-programs}")
-    private static String educationProgramsUrl;
+    public AnnotationProgramsParser(UrlsConfig urlsConfig) {
+        this.miitBaseUrl = urlsConfig.getMiitBaseUrl();
+        this.educationProgramsUrl = urlsConfig.getEduPrograms();
+    }
 
     public List<String> parseAnnotations() {
         Map<String, AnnotationData> latestAnnotations = new HashMap<>();
