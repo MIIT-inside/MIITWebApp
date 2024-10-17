@@ -24,28 +24,57 @@ public class DisciplineParser {
         for (Element disciplineElement : disciplineElements) {
             String disciplineName = disciplineElement.text();
 
-            Discipline discipline = new Discipline();
-            discipline.setName(disciplineName);
-            discipline.setLessons(lessonParser.parseLessons(disciplineElement));
-
             Element disciplineContent = disciplineElement.nextElementSibling();
 
             if (disciplineContent != null) {
                 String attestationCSS = "div.eduplan_discipline-content-header:contains(Форма промежуточной аттестации) + ul li";
-                Element attestationElement = disciplineContent.selectFirst(attestationCSS);
+                Elements attestationElements = disciplineContent.select(attestationCSS);
 
-                if (attestationElement != null) {
-                    String attestationText = attestationElement.text().replace("\"", "").trim();
-                    discipline.setAttestation(attestationText);
-                } else {
-                    discipline.setAttestation("Не указана");
+                boolean hasAttestation = false;
+
+                if (!attestationElements.isEmpty()) {
+                    for (Element attestationElement : attestationElements) {
+                        Discipline discipline = new Discipline();
+                        discipline.setName(disciplineName);
+                        discipline.setLessons(lessonParser.parseLessons(disciplineElement));
+
+                        String attestationText = attestationElement.text().replace("\"", "").trim();
+                        discipline.setAttestation(attestationText);
+
+                        disciplines.add(discipline);
+                        hasAttestation = true;
+                    }
                 }
+
+                String finalAttestationCSS = "div.eduplan_discipline-content-header:contains(Форма итоговой аттестации) + ul li";
+                Element finalAttestationElement = disciplineContent.selectFirst(finalAttestationCSS);
+
+                if (finalAttestationElement != null) {
+                    Discipline discipline = new Discipline();
+                    discipline.setName(disciplineName);
+                    discipline.setLessons(new ArrayList<>());
+                    String finalAttestationText = finalAttestationElement.text().replace("\"", "").trim();
+                    discipline.setAttestation(finalAttestationText);
+                    disciplines.add(discipline);
+                } else if (!hasAttestation) {
+                    Discipline discipline = new Discipline();
+                    discipline.setName(disciplineName);
+                    discipline.setLessons(lessonParser.parseLessons(disciplineElement));
+                    discipline.setAttestation("Не указана");
+                    disciplines.add(discipline);
+                }
+
             } else {
+                Discipline discipline = new Discipline();
+                discipline.setName(disciplineName);
+                discipline.setLessons(lessonParser.parseLessons(disciplineElement));
                 discipline.setAttestation("Не указана");
+
+                disciplines.add(discipline);
             }
-            disciplines.add(discipline);
         }
 
         return disciplines;
     }
 }
+
