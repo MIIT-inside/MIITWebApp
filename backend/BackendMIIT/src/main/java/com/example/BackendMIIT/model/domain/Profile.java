@@ -1,10 +1,9 @@
 package com.example.BackendMIIT.model.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Table(name = "profiles")
@@ -21,4 +20,7 @@ public class Profile extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "direction_id")
     private Direction direction;
+
+    @OneToMany(mappedBy = "profile")
+    private List<Semester> semesters;
 }
