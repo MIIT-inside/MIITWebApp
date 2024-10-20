@@ -3,7 +3,8 @@ package com.example.BackendMIIT.mapper;
 import com.example.BackendMIIT.model.domain.Category;
 import com.example.BackendMIIT.model.domain.PassPoint;
 import com.example.BackendMIIT.model.dto.PassPointDto;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 

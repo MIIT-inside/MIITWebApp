@@ -1,7 +1,5 @@
 package com.example.BackendMIIT.model.dto;
 
-import com.example.BackendMIIT.model.domain.Discipline;
-import com.example.BackendMIIT.model.domain.Semester;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

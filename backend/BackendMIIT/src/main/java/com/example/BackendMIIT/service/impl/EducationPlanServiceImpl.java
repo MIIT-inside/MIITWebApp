@@ -1,8 +1,10 @@
 package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.mapper.SemesterMapper;
-import com.example.BackendMIIT.model.domain.*;
-import com.example.BackendMIIT.model.dto.DisciplineDto;
+import com.example.BackendMIIT.model.domain.Discipline;
+import com.example.BackendMIIT.model.domain.Lesson;
+import com.example.BackendMIIT.model.domain.Profile;
+import com.example.BackendMIIT.model.domain.Semester;
 import com.example.BackendMIIT.model.dto.EducationPlanDto;
 import com.example.BackendMIIT.model.dto.SemesterDto;
 import com.example.BackendMIIT.parser.AnnotationProgramsParser;
