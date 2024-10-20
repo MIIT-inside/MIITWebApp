@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/miit/plans")
 public class EducationPlanController {
+
     private final EducationPlanService educationPlanService;
 
     public EducationPlanController(EducationPlanService educationPlanService) {
@@ -18,8 +19,8 @@ public class EducationPlanController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<EducationPlanDto>> getPlansByProfile(@RequestParam String name) {
-        return ResponseEntity.ok(new ArrayList<>());
+    public ResponseEntity<EducationPlanDto> getPlansByProfile(@RequestParam String name) {
+        return ResponseEntity.ok(educationPlanService.getPlansByProfile(name));
     }
 
     @PostMapping("/parse")

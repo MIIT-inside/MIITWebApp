@@ -1,6 +1,10 @@
 package com.example.BackendMIIT.service.impl;
 
+import com.example.BackendMIIT.mapper.SemesterMapper;
 import com.example.BackendMIIT.model.domain.*;
+import com.example.BackendMIIT.model.dto.DisciplineDto;
+import com.example.BackendMIIT.model.dto.EducationPlanDto;
+import com.example.BackendMIIT.model.dto.SemesterDto;
 import com.example.BackendMIIT.parser.AnnotationProgramsParser;
 import com.example.BackendMIIT.parser.SemesterParser;
 import com.example.BackendMIIT.parser.util.ParserUtil;
@@ -9,6 +13,7 @@ import com.example.BackendMIIT.repositories.LessonRepository;
 import com.example.BackendMIIT.repositories.ProfileRepository;
 import com.example.BackendMIIT.repositories.SemesterRepository;
 import com.example.BackendMIIT.service.EducationPlanService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +30,39 @@ public class EducationPlanServiceImpl implements EducationPlanService {
     private final DisciplineRepository disciplineRepository;
     private final LessonRepository lessonRepository;
     private final ProfileRepository profileRepository;
+    private final SemesterMapper semesterMapper;
 
     public EducationPlanServiceImpl(AnnotationProgramsParser annotationProgramsParser,
                                     SemesterParser semesterParser,
                                     SemesterRepository semesterRepository,
                                     DisciplineRepository disciplineRepository,
                                     LessonRepository lessonRepository,
-                                    ProfileRepository profileRepository) {
+                                    ProfileRepository profileRepository,
+                                    SemesterMapper semesterMapper) {
         this.annotationProgramsParser = annotationProgramsParser;
         this.semesterParser = semesterParser;
         this.semesterRepository = semesterRepository;
         this.disciplineRepository = disciplineRepository;
         this.lessonRepository = lessonRepository;
         this.profileRepository = profileRepository;
+        this.semesterMapper = semesterMapper;
+    }
+
+    @Override
+    public EducationPlanDto getPlansByProfile(String name) {
+        Profile profile = profileRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
+        List<Semester> semesters = profile.getSemesters();
+
+        EducationPlanDto planDto = new EducationPlanDto();
+        planDto.setProfileName(name);
+        planDto.setSemesters(semesterConverter(semesters));
+        return planDto;
+    }
+
+
+    private List<SemesterDto> semesterConverter(List<Semester> semesters) {
+        return semesterMapper.semestersToDto(semesters);
     }
 
     @Override
