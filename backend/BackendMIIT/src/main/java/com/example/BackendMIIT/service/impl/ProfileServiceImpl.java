@@ -2,6 +2,7 @@ package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.domain.Profile;
+import com.example.BackendMIIT.model.dto.ProfileDto;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.repositories.ProfileRepository;
 import com.example.BackendMIIT.service.ProfileService;
@@ -30,6 +31,10 @@ public class ProfileServiceImpl implements ProfileService {
         this.profileRepository = profileRepository;
         this.directionRepository = directionRepository;
         this.webClient = webClient;
+    }
+
+    public List<ProfileDto> getProfilesByInstitute(String institute) {
+        return profileRepository.findByInstitute(institute).orElseThrow();
     }
 
     @Override
