@@ -44,12 +44,14 @@ public class ProfileServiceImpl implements ProfileService {
     public List<ProfileDto> getProfilesByInstitute(String institute) {
         List<Profile> profiles = profileRepository.findByInstitute(institute)
                 .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
+
         return profileMapper.profilesToDtoList(profiles);
     }
 
     @Override
     public List<ProfileDto> getAllProfiles() {
         List<Profile> profiles = profileRepository.findAll();
+
         return profileMapper.profilesToDtoList(profiles);
     }
 
@@ -176,8 +178,7 @@ public class ProfileServiceImpl implements ProfileService {
                 profile.setDirection(direction);
 
                 profileRepository.save(profile);
-            }
-            else {
+            } else {
                 break;
             }
         }

@@ -1,6 +1,8 @@
 package com.example.BackendMIIT.service.impl;
 
+import com.example.BackendMIIT.mapper.DirectionMapper;
 import com.example.BackendMIIT.model.domain.Direction;
+import com.example.BackendMIIT.model.dto.DirectionDto;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.service.DirectionService;
 import lombok.SneakyThrows;
@@ -17,9 +19,32 @@ import java.util.List;
 public class DirectionServiceImpl implements DirectionService {
 
     private final DirectionRepository directionRepository;
+    private final DirectionMapper directionMapper;
 
-    public DirectionServiceImpl(DirectionRepository directionRepository) {
+    public DirectionServiceImpl(DirectionRepository directionRepository, DirectionMapper directionMapper) {
         this.directionRepository = directionRepository;
+        this.directionMapper = directionMapper;
+    }
+
+    @Override
+    public DirectionDto getDirectionByName(String name) {
+        Direction direction = directionRepository.findByName(name);
+
+        return directionMapper.directionToDto(direction);
+    }
+
+    @Override
+    public DirectionDto getDirectionByCode(String code) {
+        Direction direction = directionRepository.findByCode(code);
+
+        return directionMapper.directionToDto(direction);
+    }
+
+    @Override
+    public List<DirectionDto> getDirections() {
+        List<Direction> directions = directionRepository.findAll();
+
+        return directionMapper.directionsToDirectionDto(directions);
     }
 
     @Override

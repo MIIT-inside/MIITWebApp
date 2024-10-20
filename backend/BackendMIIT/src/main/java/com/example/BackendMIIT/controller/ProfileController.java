@@ -35,11 +35,6 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.getAllProfiles());
     }
 
-    @GetMapping("/pass")
-    public ResponseEntity<List<ProfileDto>> getProfilesByPassPoint(@PathVariable int passPoint) {
-        return ResponseEntity.ok(new ArrayList<>());
-    }
-
     @GetMapping("/profile")
     public ResponseEntity<ProfileDto> getProfileByName(@RequestParam String name) {
         return ResponseEntity.ok(profileService.getProfileByName(name));
