@@ -26,8 +26,13 @@ public class ProfileController {
     }
 
     @GetMapping("/")
+    public ResponseEntity<List<ProfileDto>> getProfilesByInstitute(@RequestParam String institute) {
+        return ResponseEntity.ok(profileService.getProfilesByInstitute(institute));
+    }
+
+    @GetMapping("/")
     public ResponseEntity<List<ProfileDto>> getAllProfiles() {
-        return ResponseEntity.ok(new ArrayList<>());
+        return ResponseEntity.ok(profileService.getAllProfiles());
     }
 
     @GetMapping("/pass")
@@ -36,7 +41,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<ProfileDto> getProfileByName(@PathVariable String name) {
-        return ResponseEntity.ok(new ProfileDto());
+    public ResponseEntity<ProfileDto> getProfileByName(@RequestParam String name) {
+        return ResponseEntity.ok(profileService.getProfileByName(name));
     }
 }
