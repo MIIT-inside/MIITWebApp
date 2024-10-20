@@ -17,4 +17,6 @@ public interface ProfileService {
     List<ProfileDto> getAllProfiles();
 
     ProfileDto getProfileByName(String name);
+
+    List<ProfileDto> getProfilesByDirection(String code);
 }

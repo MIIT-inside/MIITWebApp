@@ -25,9 +25,14 @@ public class ProfileController {
         return ResponseEntity.ok("Profiles successfully parsed");
     }
 
-    @GetMapping("/")
+    @GetMapping("/institute")
     public ResponseEntity<List<ProfileDto>> getProfilesByInstitute(@RequestParam String institute) {
         return ResponseEntity.ok(profileService.getProfilesByInstitute(institute));
+    }
+
+    @GetMapping("/direction")
+    public ResponseEntity<List<ProfileDto>> getProfilesByDirection(@RequestParam String code) {
+        return ResponseEntity.ok(profileService.getProfilesByDirection(code));
     }
 
     @GetMapping("/")
