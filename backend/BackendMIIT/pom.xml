@@ -36,7 +36,7 @@
 		<jsoup.verison>1.18.1</jsoup.verison>
 		<webflux.version>6.1.12</webflux.version>
 		<org-json.version>20240303</org-json.version>
-		<swagger.version>1.8.0</swagger.version>
+		<swagger.version>2.6.0</swagger.version>
 	</properties>
 
 	<dependencies>
@@ -121,10 +121,9 @@
 
 		<dependency>
 			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${swagger.version}</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -143,5 +142,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
