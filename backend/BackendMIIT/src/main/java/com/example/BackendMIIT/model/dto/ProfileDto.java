@@ -22,5 +22,5 @@ public class ProfileDto {
     private String institute;
 
     @JsonProperty("abbreviation")
-    private int abbreviation;
+    private String abbreviation;
 }

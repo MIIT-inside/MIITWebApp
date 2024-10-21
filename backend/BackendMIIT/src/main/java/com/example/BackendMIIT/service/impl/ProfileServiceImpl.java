@@ -50,10 +50,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public List<ProfileDto> getProfilesByDirection(String code) {
-        List<Profile> profiles = profileRepository.findByInstitute(code)
+        Direction direction = directionRepository.findByCode(code)
                 .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
 
-        return profileMapper.profilesToDtoList(profiles);
+        return profileMapper.profilesToDtoList(direction.getProfiles());
     }
 
     @Override
@@ -175,7 +175,8 @@ public class ProfileServiceImpl implements ProfileService {
         while (i < properties.size()) {
 
             Profile profile = new Profile();
-            Direction direction = directionRepository.findByCode(properties.get(i++).trim());
+            Direction direction = directionRepository.findByCode(properties.get(i++).trim())
+                    .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
 
             if (profileRepository.findByName(properties.get(i)).isEmpty()) {
                 profile.setName(properties.get(i++).trim());

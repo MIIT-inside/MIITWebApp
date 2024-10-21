@@ -5,6 +5,7 @@ import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.dto.DirectionDto;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.service.DirectionService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,14 +29,16 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     public DirectionDto getDirectionByName(String name) {
-        Direction direction = directionRepository.findByName(name);
+        Direction direction = directionRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
 
         return directionMapper.directionToDto(direction);
     }
 
     @Override
     public DirectionDto getDirectionByCode(String code) {
-        Direction direction = directionRepository.findByCode(code);
+        Direction direction = directionRepository.findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
 
         return directionMapper.directionToDto(direction);
     }
@@ -44,7 +47,7 @@ public class DirectionServiceImpl implements DirectionService {
     public List<DirectionDto> getDirections() {
         List<Direction> directions = directionRepository.findAll();
 
-        return directionMapper.directionsToDirectionDto(directions);
+        return directionMapper.directionToDirectionDto(directions);
     }
 
     @Override
