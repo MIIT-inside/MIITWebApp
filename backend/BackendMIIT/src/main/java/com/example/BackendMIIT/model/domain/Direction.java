@@ -12,12 +12,17 @@ import java.util.List;
 @Data
 public class Direction extends BaseEntity {
 
+    private String code;
     private String name;
-    private int passPoint;
+    private String level;
+    private String form;
 
     @OneToMany(mappedBy = "direction")
     private List<Profile> profiles;
 
     @OneToMany(mappedBy = "direction")
     private List<Exam> exams;
+
+    @OneToMany(mappedBy = "direction")
+    private List<PassPoint> passPoints;
 }
