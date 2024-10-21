@@ -22,19 +22,18 @@ export default function App() {
     }, []);
 
     return (<div className="App">
-            <MainSection/>
-            <TitleWithLine title="Как поступить"/>
-            <InstructionSteps/>
-            <TitleWithLine title="Баллы за индивидуальные достижения"/>
-            <Carousel>
-                {achievements.map((achievement, index) => (<div key={index} className="center-achievement-card">
-                        <AchievementCard
-                            title={achievement.title}
-                            description={achievement.description}
-                            score={achievement.score}
-                        />
-                    </div>))}
-            </Carousel>
-        </div>);
-
-export default App;
+        <MainSection/>
+        <TitleWithLine title="Как поступить"/>
+        <InstructionSteps/>
+        <TitleWithLine title="Баллы за индивидуальные достижения"/>
+        <Carousel>
+            {achievements.map((achievement, index) => (<div key={index} className="center-achievement-card">
+                <AchievementCard
+                    title={achievement.title}
+                    description={achievement.description}
+                    score={achievement.score}
+                />
+            </div>))}
+        </Carousel>
+    </div>);
+}
