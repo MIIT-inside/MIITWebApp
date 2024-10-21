@@ -36,6 +36,7 @@
 		<jsoup.verison>1.18.1</jsoup.verison>
 		<webflux.version>6.1.12</webflux.version>
 		<org-json.version>20240303</org-json.version>
+		<swagger.version>1.8.0</swagger.version>
 	</properties>
 
 	<dependencies>
@@ -117,6 +118,13 @@
 			<artifactId>json</artifactId>
 			<version>${org-json.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${swagger.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
