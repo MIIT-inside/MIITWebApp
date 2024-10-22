@@ -1,4 +1,4 @@
-package com.example.BackendMIIT.repositories;
+package com.example.BackendMIIT.repository;
 
 import com.example.BackendMIIT.model.domain.PassPoint;
 import org.springframework.stereotype.Repository;
