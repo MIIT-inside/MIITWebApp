@@ -18,6 +18,11 @@ public class DirectionController {
         this.directionService = directionService;
     }
 
+    @GetMapping("/direction/{code}")
+    public ResponseEntity<DirectionDto> getDirectionByCode(@PathVariable String code) {
+        return ResponseEntity.ok(directionService.getDirectionByCode(code));
+    }
+
     @PostMapping("/parse")
     public ResponseEntity<String> parseDirections(@RequestParam String url) {
         directionService.parseDirections(url);
@@ -27,7 +32,7 @@ public class DirectionController {
 
     @GetMapping("/")
     public ResponseEntity<List<DirectionDto>> getAllDirections() {
-        return ResponseEntity.ok(new ArrayList<>());
+        return ResponseEntity.ok(directionService.getDirections());
     }
 
     @GetMapping("/{passPoint}")
@@ -36,7 +41,7 @@ public class DirectionController {
     }
 
     @GetMapping("/direction")
-    public ResponseEntity<DirectionDto> getDirectionByName(@RequestParam String directionName) {
-        return ResponseEntity.ok(new DirectionDto());
+    public ResponseEntity<DirectionDto> getDirectionByName(@RequestParam String name) {
+        return ResponseEntity.ok(directionService.getDirectionByName(name));
     }
 }

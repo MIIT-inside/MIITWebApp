@@ -1,8 +1,11 @@
 package com.example.BackendMIIT.service.impl;
 
+import com.example.BackendMIIT.mapper.DirectionMapper;
 import com.example.BackendMIIT.model.domain.Direction;
+import com.example.BackendMIIT.model.dto.DirectionDto;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.service.DirectionService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,9 +20,34 @@ import java.util.List;
 public class DirectionServiceImpl implements DirectionService {
 
     private final DirectionRepository directionRepository;
+    private final DirectionMapper directionMapper;
 
-    public DirectionServiceImpl(DirectionRepository directionRepository) {
+    public DirectionServiceImpl(DirectionRepository directionRepository, DirectionMapper directionMapper) {
         this.directionRepository = directionRepository;
+        this.directionMapper = directionMapper;
+    }
+
+    @Override
+    public DirectionDto getDirectionByName(String name) {
+        Direction direction = directionRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
+
+        return directionMapper.directionToDto(direction);
+    }
+
+    @Override
+    public DirectionDto getDirectionByCode(String code) {
+        Direction direction = directionRepository.findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
+
+        return directionMapper.directionToDto(direction);
+    }
+
+    @Override
+    public List<DirectionDto> getDirections() {
+        List<Direction> directions = directionRepository.findAll();
+
+        return directionMapper.directionToDirectionDto(directions);
     }
 
     @Override

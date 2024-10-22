@@ -9,9 +9,18 @@ public class ProfileDto {
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("pass_point")
-    private int passPoint;
+    @JsonProperty("form")
+    private String form;
+
+    @JsonProperty("level")
+    private String level;
 
     @JsonProperty("description")
     private String description;
+
+    @JsonProperty("institute")
+    private String institute;
+
+    @JsonProperty("abbreviation")
+    private String abbreviation;
 }

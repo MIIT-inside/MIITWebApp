@@ -11,7 +11,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +24,60 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
     public IndividualAchievementsServiceImpl(IndividualAchievementsRepository individualAchievementsRepository, UrlsConfig urlsConfig) {
         this.individualAchievementsRepository = individualAchievementsRepository;
         this.urlsConfig = urlsConfig;
+    }
+
+    private static IndividualAchievements extractAchievement(Element achievement) {
+        try {
+
+            Elements columns = achievement.select("td");
+            if (!isValidSize(columns)) {
+                return null;
+            }
+
+            String description = getStringFromElement(columns, 1);
+            String pointsText = getStringFromElement(columns, 2);
+
+            if (description.length() > 255) {
+                return null;
+            }
+
+            return achievementWithParams(description, pointsText);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private static boolean isValidSize(Elements elements) {
+        if (elements.size() != 3) {
+            System.err.println("Invalid number of columns in achievement row");
+            return false;
+        }
+        return true;
+    }
+
+    private static String getStringFromElement(Elements elements, int index) {
+        return elements.get(index).text().trim();
+    }
+
+    private static IndividualAchievements achievementWithParams(String description, String countPoints) {
+        description = description.replace("\"", "").trim();
+        countPoints = countPoints.trim();
+
+        IndividualAchievements achievement = new IndividualAchievements();
+        achievement.setDescription(description);
+        achievement.setCountPoints(countPoints);
+
+        return achievement;
+    }
+
+    private static boolean areAllNotNull(Object... args) {
+        for (Object arg : args) {
+            if (arg == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -77,60 +130,5 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
         }
 
         return achievements;
-    }
-
-    private static IndividualAchievements extractAchievement(Element achievement) {
-        try {
-
-            Elements columns = achievement.select("td");
-            if (!isValidSize(columns)) {
-                return null;
-            }
-
-            String description = getStringFromElement(columns, 1);
-            String pointsText = getStringFromElement(columns, 2);
-
-            if (description.length() > 255) {
-                return null;
-            }
-
-            return achievementWithParams(description, pointsText);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return null;
-        }
-    }
-
-    private static boolean isValidSize(Elements elements) {
-        if (elements.size() != 3) {
-            System.err.println("Invalid number of columns in achievement row");
-            return false;
-        }
-        return true;
-    }
-
-
-    private static String getStringFromElement(Elements elements, int index) {
-        return elements.get(index).text().trim();
-    }
-
-    private static IndividualAchievements achievementWithParams(String description, String countPoints) {
-        description = description.replace("\"", "").trim();
-        countPoints = countPoints.trim();
-
-        IndividualAchievements achievement = new IndividualAchievements();
-        achievement.setDescription(description);
-        achievement.setCountPoints(countPoints);
-
-        return achievement;
-    }
-
-    private static boolean areAllNotNull(Object... args) {
-        for (Object arg : args) {
-            if (arg == null) {
-                return false;
-            }
-        }
-        return true;
     }
 }

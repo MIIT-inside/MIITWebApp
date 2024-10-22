@@ -6,6 +6,7 @@ import com.example.BackendMIIT.model.domain.PassPoint;
 import com.example.BackendMIIT.repositories.DirectionRepository;
 import com.example.BackendMIIT.repositories.PassPointRepository;
 import com.example.BackendMIIT.service.PassPointService;
+import jakarta.persistence.EntityNotFoundException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -73,7 +74,8 @@ public class PassPointServiceImpl implements PassPointService {
         for (int i = 0; i < doublesValues.size(); i++) {
 
             PassPoint passPoint = new PassPoint();
-            Direction direction = directionRepository.findByName(groups.getString("specName"));
+            Direction direction = directionRepository.findByName(groups.getString("specName"))
+                    .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
 
             int avg = (int) doublesValues.get(i).optDouble("AVERAGE_SCORE");
             int min = (int) doublesValues.get(i).optDouble("MIN_SCORE");

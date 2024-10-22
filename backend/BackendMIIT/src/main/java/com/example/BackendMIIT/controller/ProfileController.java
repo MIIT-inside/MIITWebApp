@@ -5,7 +5,6 @@ import com.example.BackendMIIT.service.ProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,18 +24,23 @@ public class ProfileController {
         return ResponseEntity.ok("Profiles successfully parsed");
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<ProfileDto>> getAllProfiles() {
-        return ResponseEntity.ok(new ArrayList<>());
+    @GetMapping("/institute")
+    public ResponseEntity<List<ProfileDto>> getProfilesByInstitute(@RequestParam String institute) {
+        return ResponseEntity.ok(profileService.getProfilesByInstitute(institute));
     }
 
-    @GetMapping("/pass")
-    public ResponseEntity<List<ProfileDto>> getProfilesByPassPoint(@PathVariable int passPoint) {
-        return ResponseEntity.ok(new ArrayList<>());
+    @GetMapping("/direction")
+    public ResponseEntity<List<ProfileDto>> getProfilesByDirection(@RequestParam String code) {
+        return ResponseEntity.ok(profileService.getProfilesByDirection(code));
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<ProfileDto>> getAllProfiles() {
+        return ResponseEntity.ok(profileService.getAllProfiles());
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<ProfileDto> getProfileByName(@PathVariable String name) {
-        return ResponseEntity.ok(new ProfileDto());
+    public ResponseEntity<ProfileDto> getProfileByName(@RequestParam String name) {
+        return ResponseEntity.ok(profileService.getProfileByName(name));
     }
 }
