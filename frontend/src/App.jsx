@@ -1,12 +1,10 @@
 import './App.css';
 import React, {useEffect, useState} from "react";
-import Header from "./components/Header";
-import MainContent from "./components/MainContent";
+import MainPage from "./pages/MainPage";
 
 
 export default function App() {
     return (<div>
-        <Header/>
-        <MainContent/>
+        <MainPage/>
     </div>);
 }
