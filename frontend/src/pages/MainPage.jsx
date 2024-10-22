@@ -17,6 +17,15 @@ export default function MainPage() {
                     </div>
                 </div>
             </div>
+            <div className="flex justify-between mt-16 mx-16">
+                <span className="text-4xl font-bold">Обзор наших курсов</span>
+                <div className="flex flex-col w-[50%]">
+                    <span className="text-xl text-[#1E1E1E]">Наши курсы предлагают уникальные возможности для студентов, стремящихся к успешной карьере. Узнайте больше о каждом курсе, его учебной программе и карьерных перспективах.</span>
+                    <div className="flex">
+
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
