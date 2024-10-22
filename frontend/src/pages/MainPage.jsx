@@ -18,7 +18,7 @@ export default function MainPage() {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-between mt-16 mx-16">
+            <div className="flex justify-between mt-16 mx-16 items-center">
                 <span className="text-4xl font-bold">Обзор наших курсов</span>
                 <div className="flex flex-col w-[50%] space-y-7">
                     <span className="text-xl text-[#1E1E1E]">Наши курсы предлагают уникальные возможности для студентов, стремящихся к успешной карьере. Узнайте больше о каждом курсе, его учебной программе и карьерных перспективах.</span>
@@ -26,6 +26,13 @@ export default function MainPage() {
                         <InfoBlock title="Карьера" description="Персонализированные консультации и доступ к детальной информации о различных специальностях."/>
                         <InfoBlock title="Учебная программа" description="Подробные описания курсов и их значимость на рынке труда."/>
                     </div>
+                </div>
+            </div>
+            <div className="flex flex-col mt-20 justify-center items-center space-y-5">
+                <span className="text-4xl font-bold">Навигация по курсам</span>
+                <span className="text-xl text-[#1E1E1E]">Выберите факультет, чтобы увидеть доступные курсы.</span>
+                <div>
+
                 </div>
             </div>
         </div>
