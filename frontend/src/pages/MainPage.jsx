@@ -1,6 +1,8 @@
 import React from 'react';
 import Header from "../components/Header";
 import InfoBlock from "../components/InfoBlock";
+import Dropdown from "../components/Accordion";
+import Accordion from "../components/Accordion";
 
 export default function MainPage() {
     return (
@@ -23,17 +25,19 @@ export default function MainPage() {
                 <div className="flex flex-col w-[50%] space-y-7">
                     <span className="text-xl text-[#1E1E1E]">Наши курсы предлагают уникальные возможности для студентов, стремящихся к успешной карьере. Узнайте больше о каждом курсе, его учебной программе и карьерных перспективах.</span>
                     <div className="flex space-x-4">
-                        <InfoBlock title="Карьера" description="Персонализированные консультации и доступ к детальной информации о различных специальностях."/>
-                        <InfoBlock title="Учебная программа" description="Подробные описания курсов и их значимость на рынке труда."/>
+                        <InfoBlock title="Карьера"
+                                   description="Персонализированные консультации и доступ к детальной информации о различных специальностях."/>
+                        <InfoBlock title="Учебная программа"
+                                   description="Подробные описания курсов и их значимость на рынке труда."/>
                     </div>
                 </div>
             </div>
             <div className="flex flex-col mt-20 justify-center items-center space-y-5">
                 <span className="text-4xl font-bold">Навигация по курсам</span>
                 <span className="text-xl text-[#1E1E1E]">Выберите факультет, чтобы увидеть доступные курсы.</span>
-                <div>
-
-                </div>
+            </div>
+            <div className="mx-16 mt-12">
+                <Accordion/>
             </div>
         </div>
     )
