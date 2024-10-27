@@ -41,7 +41,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public List<ProfileDto> getProfilesByInstitute(String institute) {
+    public List<ProfileDto> getProfilesByInstituteName(String institute) {
         List<Profile> profiles = profileRepository.findByInstitute(institute)
                 .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
 
@@ -49,7 +49,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public List<ProfileDto> getProfilesByDirection(String code) {
+    public List<ProfileDto> getProfilesByDirectionCode(String code) {
         Direction direction = directionRepository.findByCode(code)
                 .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
 

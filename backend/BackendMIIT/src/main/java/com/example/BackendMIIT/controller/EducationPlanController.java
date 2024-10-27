@@ -17,7 +17,7 @@ public class EducationPlanController {
 
     @GetMapping("/")
     public ResponseEntity<EducationPlanDto> getPlansByProfile(@RequestParam String name) {
-        return ResponseEntity.ok(educationPlanService.getPlansByProfile(name));
+        return ResponseEntity.ok(educationPlanService.getPlansByProfileName(name));
     }
 
     @PostMapping("/parse")

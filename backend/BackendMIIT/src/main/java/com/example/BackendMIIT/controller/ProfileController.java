@@ -25,13 +25,13 @@ public class ProfileController {
     }
 
     @GetMapping("/institute")
-    public ResponseEntity<List<ProfileDto>> getProfilesByInstitute(@RequestParam String institute) {
-        return ResponseEntity.ok(profileService.getProfilesByInstitute(institute));
+    public ResponseEntity<List<ProfileDto>> getProfilesByInstituteName(@RequestParam String instituteName) {
+        return ResponseEntity.ok(profileService.getProfilesByInstituteName(instituteName));
     }
 
     @GetMapping("/direction")
-    public ResponseEntity<List<ProfileDto>> getProfilesByDirectionName(@RequestParam String code) {
-        return ResponseEntity.ok(profileService.getProfilesByDirection(code));
+    public ResponseEntity<List<ProfileDto>> getProfilesByDirectionCode(@RequestParam String code) {
+        return ResponseEntity.ok(profileService.getProfilesByDirectionCode(code));
     }
 
     @GetMapping("/")

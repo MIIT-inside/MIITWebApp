@@ -10,11 +10,11 @@ public interface ProfileService {
 
     void saveProfile(List<String> properties);
 
-    List<ProfileDto> getProfilesByInstitute(String institute);
+    List<ProfileDto> getProfilesByInstituteName(String institute);
 
     List<ProfileDto> getAllProfiles();
 
     ProfileDto getProfileByName(String name);
 
-    List<ProfileDto> getProfilesByDirection(String code);
+    List<ProfileDto> getProfilesByDirectionCode(String code);
 }

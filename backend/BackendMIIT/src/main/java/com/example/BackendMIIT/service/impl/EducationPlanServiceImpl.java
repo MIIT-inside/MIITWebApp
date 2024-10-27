@@ -51,7 +51,7 @@ public class EducationPlanServiceImpl implements EducationPlanService {
     }
 
     @Override
-    public EducationPlanDto getPlansByProfile(String name) {
+    public EducationPlanDto getPlansByProfileName(String name) {
         Profile profile = profileRepository.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
         List<Semester> semesters = profile.getSemesters();

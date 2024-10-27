@@ -6,5 +6,5 @@ public interface EducationPlanService {
 
     void parseAndSaveEducationPlans();
 
-    EducationPlanDto getPlansByProfile(String name);
+    EducationPlanDto getPlansByProfileName(String name);
 }
