@@ -30,7 +30,7 @@ public class ProfileController {
     }
 
     @GetMapping("/direction")
-    public ResponseEntity<List<ProfileDto>> getProfilesByDirection(@RequestParam String code) {
+    public ResponseEntity<List<ProfileDto>> getProfilesByDirectionName(@RequestParam String code) {
         return ResponseEntity.ok(profileService.getProfilesByDirection(code));
     }
 

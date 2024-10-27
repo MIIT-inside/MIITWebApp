@@ -2,7 +2,7 @@ package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.configuration.UrlsConfig;
 import com.example.BackendMIIT.model.domain.IndividualAchievements;
-import com.example.BackendMIIT.repositories.IndividualAchievementsRepository;
+import com.example.BackendMIIT.repository.IndividualAchievementsRepository;
 import com.example.BackendMIIT.service.IndividualAchievementsService;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
