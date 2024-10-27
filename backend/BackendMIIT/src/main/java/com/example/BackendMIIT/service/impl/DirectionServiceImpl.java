@@ -1,7 +1,7 @@
 package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.model.domain.Direction;
-import com.example.BackendMIIT.repositories.DirectionRepository;
+import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.service.DirectionService;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;

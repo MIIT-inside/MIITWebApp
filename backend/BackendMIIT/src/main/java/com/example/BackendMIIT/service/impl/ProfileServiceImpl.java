@@ -2,8 +2,8 @@ package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.domain.Profile;
-import com.example.BackendMIIT.repositories.DirectionRepository;
-import com.example.BackendMIIT.repositories.ProfileRepository;
+import com.example.BackendMIIT.repository.DirectionRepository;
+import com.example.BackendMIIT.repository.ProfileRepository;
 import com.example.BackendMIIT.service.ProfileService;
 import lombok.SneakyThrows;
 import org.json.JSONArray;

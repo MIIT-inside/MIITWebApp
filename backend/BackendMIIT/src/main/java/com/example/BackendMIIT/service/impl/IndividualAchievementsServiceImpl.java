@@ -2,7 +2,7 @@ package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.configuration.UrlsConfig;
 import com.example.BackendMIIT.model.domain.IndividualAchievements;
-import com.example.BackendMIIT.repositories.IndividualAchievementsRepository;
+import com.example.BackendMIIT.repository.IndividualAchievementsRepository;
 import com.example.BackendMIIT.service.IndividualAchievementsService;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
@@ -11,7 +11,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
