@@ -44,4 +44,9 @@ public class DirectionController {
     public ResponseEntity<DirectionDto> getDirectionByName(@RequestParam String name) {
         return ResponseEntity.ok(directionService.getDirectionByName(name));
     }
+
+    @GetMapping("/sorted")
+    public List<DirectionDto> getSortedDirections(@RequestParam String typeOfPassPoints) {
+        return directionService.getSortedDirections(typeOfPassPoints);
+    }
 }
