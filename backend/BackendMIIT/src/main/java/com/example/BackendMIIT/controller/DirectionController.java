@@ -1,6 +1,7 @@
 package com.example.BackendMIIT.controller;
 
 import com.example.BackendMIIT.model.dto.DirectionDto;
+import com.example.BackendMIIT.model.dto.DirectionWithProfilesDto;
 import com.example.BackendMIIT.service.DirectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class DirectionController {
     }
 
     @GetMapping("/sorted")
-    public List<DirectionDto> getSortedDirections(@RequestParam String typeOfPassPoints) {
+    public List<DirectionWithProfilesDto> getSortedDirections(@RequestParam String typeOfPassPoints) {
         return directionService.getSortedDirections(typeOfPassPoints);
     }
 }
