@@ -1,6 +1,7 @@
 package com.example.BackendMIIT.service;
 
 import com.example.BackendMIIT.model.dto.DirectionDto;
+import com.example.BackendMIIT.model.dto.DirectionWithProfilesDto;
 import org.jsoup.nodes.Element;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface DirectionService {
 
     List<DirectionDto> getDirections();
 
-    List<DirectionDto> getSortedDirections(String typeOfPassPoints);
+    List<DirectionWithProfilesDto> getSortedDirections(String typeOfPassPoints);
 }
