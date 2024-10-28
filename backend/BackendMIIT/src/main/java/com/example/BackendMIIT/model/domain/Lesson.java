@@ -7,11 +7,13 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "lessons")
 @Data
-public class Lesson extends BaseEntity {
+public class Lesson extends BaseEntity implements Serializable {
 
     private String laboratoryWork;
     private String lecture;

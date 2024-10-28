@@ -5,12 +5,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "directions")
 @Data
-public class Direction extends BaseEntity {
+public class Direction extends BaseEntity implements Serializable {
 
     private String code;
     private String name;
