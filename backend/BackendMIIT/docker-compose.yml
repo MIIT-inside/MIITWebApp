@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  app:
+    image: inside-view:latest
+    container_name: inside-view
+    build:
+      context: .
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/MiitInside
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    ports:
+      - '8080:8080'
+
+  db:
+    image: postgres:16.4-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES-DB=MiitInside
