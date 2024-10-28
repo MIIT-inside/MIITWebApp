@@ -12,6 +12,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -100,17 +103,18 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    public List<DirectionWithProfilesDto> getSortedDirections(String typeOfPassPoints) {
-        List<Direction> directions;
+    public Page<DirectionWithProfilesDto> getSortedDirections(String typeOfPassPoints, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Direction> directions;
 
         if ("min".equalsIgnoreCase(typeOfPassPoints)) {
-            directions = directionRepository.findAllOrderByMinPassPointAndName();
+            directions = directionRepository.findAllOrderByMinPassPointAndName(pageable);
         } else if ("avg".equalsIgnoreCase(typeOfPassPoints)) {
-            directions = directionRepository.findAllOrderByAvgPassPointAndName();
+            directions = directionRepository.findAllOrderByAvgPassPointAndName(pageable);
         } else {
-            directions = directionRepository.findAllOrderByName();
+            directions = directionRepository.findAllOrderByName(pageable);
         }
 
-        return directionMapper.directionsToWithProfilesDto(directions);
+        return directions.map(directionMapper::directionToWithProfilesDto);
     }
 }
