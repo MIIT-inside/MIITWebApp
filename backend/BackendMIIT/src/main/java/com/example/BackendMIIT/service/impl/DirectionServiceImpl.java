@@ -97,4 +97,19 @@ public class DirectionServiceImpl implements DirectionService {
             }
         }
     }
+
+    @Override
+    public List<DirectionDto> getSortedDirections(String typeOfPassPoints) {
+        List<Direction> directions;
+
+        if ("min".equalsIgnoreCase(typeOfPassPoints)) {
+            directions = directionRepository.findAllOrderByMinPassPointAndName();
+        } else if ("avg".equalsIgnoreCase(typeOfPassPoints)) {
+            directions = directionRepository.findAllOrderByAvgPassPointAndName();
+        } else {
+            directions = directionRepository.findAllOrderByName();
+        }
+
+        return directionMapper.directionToDirectionDto(directions);
+    }
 }
