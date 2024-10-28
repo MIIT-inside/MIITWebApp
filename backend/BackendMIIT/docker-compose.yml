@@ -27,7 +27,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES-DB=MiitInside
+      - POSTGRES_DB=MiitInside
     volumes:
       - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
       - db-data:/var/lib/postgresql/data
@@ -38,7 +38,6 @@ services:
     container_name: redis
     ports:
       - '6379:6379'
-    command:
-      - redis-server --save 20 1 --loglevel warning --requirepass TUlJVCBpbnNpZGV2aWV3
+    command: redis-server --save 20 1 --loglevel warning --requirepass TUlJVCBpbnNpZGV2aWV3
     volumes:
       - cache:/data
