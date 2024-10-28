@@ -19,4 +19,7 @@ public interface DirectionRepository extends BaseRepository<Direction> {
 
     @Query("SELECT d FROM Direction d LEFT JOIN d.passPoints p GROUP BY d ORDER BY p.min DESC, d.name ASC")
     List<Direction> findAllOrderByMinPassPointAndName();
+
+    @Query("SELECT d FROM Direction d ORDER BY d.name ASC")
+    List<Direction> findAllOrderByName();
 }
