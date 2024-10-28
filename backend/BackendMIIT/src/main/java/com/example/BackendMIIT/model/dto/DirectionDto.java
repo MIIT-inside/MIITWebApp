@@ -1,6 +1,5 @@
 package com.example.BackendMIIT.model.dto;
 
-import com.example.BackendMIIT.model.domain.PassPoint;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -22,5 +21,5 @@ public class DirectionDto {
     private String form;
 
     @JsonProperty("pass_points")
-    private List<PassPoint> passPoints;
+    private List<PassPointDto> passPoints;
 }
