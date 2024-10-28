@@ -84,7 +84,7 @@ public class DirectionServiceImpl implements DirectionService {
             String level = props.get(2).text().trim();
             String form = props.get(3).text().trim();
 
-            if (directionRepository.findByCode(code) == null && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+            if (directionRepository.findByCode(code).isEmpty() && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
 
                 Direction direction = new Direction();
 
