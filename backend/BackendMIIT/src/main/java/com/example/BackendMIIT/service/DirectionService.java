@@ -15,6 +15,5 @@ public interface DirectionService {
 
     DirectionDto getDirectionByCode(String code);
 
-
     List<DirectionDto> getDirections();
 }
