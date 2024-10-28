@@ -16,4 +16,6 @@ public interface DirectionService {
     DirectionDto getDirectionByCode(String code);
 
     List<DirectionDto> getDirections();
+
+    List<DirectionDto> getSortedDirections(String typeOfPassPoints);
 }
