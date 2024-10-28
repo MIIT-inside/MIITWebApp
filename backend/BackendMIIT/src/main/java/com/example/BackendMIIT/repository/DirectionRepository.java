@@ -14,10 +14,10 @@ public interface DirectionRepository extends BaseRepository<Direction> {
 
     Optional<Direction> findByCode(String code);
 
-    @Query("SELECT d FROM Direction d LEFT JOIN d.passPoints p GROUP BY d ORDER BY p.avg DESC, d.name ASC")
+    @Query("SELECT d FROM Direction d LEFT JOIN d.passPoints p ORDER BY p.avg DESC, d.name ASC")
     List<Direction> findAllOrderByAvgPassPointAndName();
 
-    @Query("SELECT d FROM Direction d LEFT JOIN d.passPoints p GROUP BY d ORDER BY p.min DESC, d.name ASC")
+    @Query("SELECT d FROM Direction d LEFT JOIN d.passPoints p ORDER BY p.min DESC, d.name ASC")
     List<Direction> findAllOrderByMinPassPointAndName();
 
     @Query("SELECT d FROM Direction d ORDER BY d.name ASC")
