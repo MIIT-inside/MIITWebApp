@@ -3,7 +3,7 @@ spring:
     name: BackendMIIT
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   datasource:
     url: jdbc:postgresql://localhost:5432/MiitInside
     username: postgres
