@@ -11,11 +11,6 @@ CREATE TABLE directions (
     name VARCHAR(255)
 );
 
-CREATE TABLE directions_pass_point (
-    direction_id BIGINT,
-    pass_point_id BIGINT
-);
-
 CREATE TABLE disciplines (
     id UUID PRIMARY KEY,
     semester_id UUID,
