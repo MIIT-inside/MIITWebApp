@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from "../components/Header";
 import InfoBlock from "../components/InfoBlock";
 import Accordion from "../components/Accordion";
@@ -24,6 +24,20 @@ const FadeInSection = ({children, threshold = 0.8, duration = 1}) => {
 export default function MainPage() {
     const {scrollY} = useScroll();
     const scale = useTransform(scrollY, [0, 500], [1, 1.1]);
+    const [achievements, setAchievements] = useState([]);
+    useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/posts')
+            .then(response => response.json())
+            .then(data => {
+                const mappedData = data.slice(0, 5).map(item => ({
+                    title: item.title,
+                    description: item.body,
+                    score: Math.floor(Math.random() * 5) + 1,  // Рандомное число от 1 до 5
+                }));
+                setAchievements(mappedData);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
 
     return (<div>
         <Header/>
@@ -118,14 +132,16 @@ export default function MainPage() {
         </div>
         </FadeInSection>
         <FadeInSection threshold={0.4}>
-        <div className="mx-auto max-w-[1280px] mt-14 grid grid-cols-3 gap-6">
-            <BlueCard/>
-            <BlueCard/>
-            <BlueCard/>
-            <BlueCard/>
-            <BlueCard/>
-            <BlueCard/>
-        </div>
+            <div className="mx-auto max-w-[1280px] mt-14 grid grid-cols-3 gap-6">
+                {achievements.map((achievement, index) => (
+                    <BlueCard
+                        key={index}
+                        score={achievement.score}
+                        title={achievement.title}
+                        description={achievement.description}
+                    />
+                ))}
+            </div>
         </FadeInSection>
     </div>)
 }
