@@ -1,5 +1,6 @@
 package com.example.BackendMIIT.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class PassPoint extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "direction_id")
     private Direction direction;

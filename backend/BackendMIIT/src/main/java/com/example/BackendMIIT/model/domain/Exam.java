@@ -1,5 +1,6 @@
 package com.example.BackendMIIT.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,6 +16,7 @@ public class Exam extends BaseEntity implements Serializable {
 
     private String name;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "direction_id")
     private Direction direction;

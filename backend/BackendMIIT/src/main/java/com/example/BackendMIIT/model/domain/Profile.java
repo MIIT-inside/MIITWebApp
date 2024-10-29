@@ -1,5 +1,7 @@
 package com.example.BackendMIIT.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,10 +20,12 @@ public class Profile extends BaseEntity implements Serializable {
     private String institute;
     private String abbreviation;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "direction_id")
     private Direction direction;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "profile")
     private List<Semester> semesters;
 }

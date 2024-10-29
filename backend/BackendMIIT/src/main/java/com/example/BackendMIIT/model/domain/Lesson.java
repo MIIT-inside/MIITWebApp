@@ -1,5 +1,6 @@
 package com.example.BackendMIIT.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -19,6 +20,7 @@ public class Lesson extends BaseEntity implements Serializable {
     private String lecture;
     private String practice;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "discipline_id")
     private Discipline discipline;
