@@ -8,9 +8,9 @@ volumes:
 
 services:
   app:
-    image: inside-view:latest
     container_name: inside-view
     build:
+      dockerfile: Dockerfile
       context: .
     depends_on:
       - db
