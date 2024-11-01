@@ -38,6 +38,7 @@
 		<org-json.version>20240303</org-json.version>
 		<swagger.version>2.6.0</swagger.version>
 		<flyway.version>10.20.1</flyway.version>
+		<minio.version>8.5.13</minio.version>
 	</properties>
 
 	<dependencies>
@@ -153,6 +154,12 @@
 			<artifactId>flyway-database-postgresql</artifactId>
 			<version>${flyway.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>${minio.version}</version>
 		</dependency>
 	</dependencies>
 

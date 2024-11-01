@@ -26,6 +26,13 @@ spring:
     user: postgres
     password: postgres
 
+minio:
+  bucket: images
+  url: http://db:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+
+
 webclient:
   baseurl: https://localhost:8080
 url:
