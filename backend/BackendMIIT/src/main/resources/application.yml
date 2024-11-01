@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: BackendMIIT
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://db:5432/MiitInside
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: redis
+      port: 6379
+      password: TUlJVCBpbnNpZGV2aWV3
+  cache:
+    type: redis
+    cache-names: redis-cache
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    url: jdbc:postgresql://db:5432/MiitInside
+    user: postgres
+    password: postgres
+
+webclient:
+  baseurl: https://localhost:8080
+url:
+  miit-base-url: https://www.miit.ru
+  ia: https://miit.ru/page/136668
+  edu-programs: https://www.miit.ru/sveden/education/programs

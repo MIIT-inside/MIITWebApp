@@ -11,6 +11,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
+    @Cacheable(value = "DirectionService::getDirectionByName", key = "#name")
     public DirectionDto getDirectionByName(String name) {
         Direction direction = directionRepository.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
@@ -36,6 +38,7 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
+    @Cacheable(value = "DirectionService::getDirectionByCode", key = "#code")
     public DirectionDto getDirectionByCode(String code) {
         Direction direction = directionRepository.findByCode(code)
                 .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
@@ -44,6 +47,7 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
+    @Cacheable(value = "DirectionService::getDirections", key = "'directions'")
     public List<DirectionDto> getDirections() {
         List<Direction> directions = directionRepository.findAll();
 
@@ -80,7 +84,7 @@ public class DirectionServiceImpl implements DirectionService {
             String level = props.get(2).text().trim();
             String form = props.get(3).text().trim();
 
-            if (directionRepository.findByCode(code) == null && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+            if (directionRepository.findByCode(code).isEmpty() && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
 
                 Direction direction = new Direction();
 

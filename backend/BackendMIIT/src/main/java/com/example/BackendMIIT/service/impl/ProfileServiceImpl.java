@@ -15,6 +15,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -41,14 +42,16 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public List<ProfileDto> getProfilesByInstituteName(String institute) {
-        List<Profile> profiles = profileRepository.findByInstitute(institute)
+    @Cacheable(value = "ProfileService::getProfilesByInstitute", key = "#name")
+    public List<ProfileDto> getProfilesByInstituteName(String name) {
+        List<Profile> profiles = profileRepository.findByInstitute(name)
                 .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
 
         return profileMapper.profilesToDtoList(profiles);
     }
 
     @Override
+    @Cacheable(value = "ProfileService::getProfilesByDirection", key = "#code")
     public List<ProfileDto> getProfilesByDirectionCode(String code) {
         Direction direction = directionRepository.findByCode(code)
                 .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
@@ -57,6 +60,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    @Cacheable(value = "ProfileService::getAllProfiles", key = "'profiles'")
     public List<ProfileDto> getAllProfiles() {
         List<Profile> profiles = profileRepository.findAll();
 
@@ -64,6 +68,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    @Cacheable(value = "ProfileService::getProfileByName", key = "#name")
     public ProfileDto getProfileByName(String name) {
         Profile profile = profileRepository.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
