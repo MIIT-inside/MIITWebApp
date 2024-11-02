@@ -7,6 +7,7 @@ import com.example.BackendMIIT.model.dto.ProfileDto;
 import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.repository.ProfileRepository;
 import com.example.BackendMIIT.service.ProfileService;
+import io.minio.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
 import org.json.JSONArray;
@@ -15,12 +16,16 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -30,15 +35,21 @@ public class ProfileServiceImpl implements ProfileService {
     private final WebClient webClient;
     private final String BASE_URL = "https://www.miit.ru";
     private final ProfileMapper profileMapper;
+    private final MinioClient minioClient;
+
+    @Value("${minio.bucket}")
+    private String bucketName;
 
     public ProfileServiceImpl(ProfileRepository profileRepository,
                               DirectionRepository directionRepository,
                               WebClient webClient,
-                              ProfileMapper profileMapper) {
+                              ProfileMapper profileMapper,
+                              MinioClient minioClient) {
         this.profileRepository = profileRepository;
         this.directionRepository = directionRepository;
         this.webClient = webClient;
         this.profileMapper = profileMapper;
+        this.minioClient = minioClient;
     }
 
     @Override
@@ -73,6 +84,51 @@ public class ProfileServiceImpl implements ProfileService {
         Profile profile = profileRepository.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
         return profileMapper.profileToDto(profile);
+    }
+
+    public void uploadImage(MultipartFile file) {
+        try {
+            createBucket();
+        }
+        catch (Exception e) {
+        }
+
+        String fileName = generateFileName(file);
+        InputStream inputStream = file.getInputStream()
+
+    }
+
+    @SneakyThrows
+    private void saveImage(InputStream inputStream, String fileName) {
+        minioClient.putObject(
+                PutObjectArgs.builder()
+                        .stream(inputStream, inputStream.available(), -1)
+                        .bucket(bucketName)
+                        .object(fileName)
+                        .build()
+        );
+    }
+
+    private String generateFileName(MultipartFile file) {
+        String extension = getExtension(file);
+        return UUID.randomUUID() + "." + extension;
+    }
+
+    private String getExtension(MultipartFile file) {
+        return file.getOriginalFilename().
+                substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+    }
+
+    @SneakyThrows
+    private void createBucket() {
+        boolean found = minioClient.bucketExists(BucketExistsArgs.builder()
+                .bucket(bucketName)
+                .build());
+        if (!found) {
+            minioClient.makeBucket(MakeBucketArgs.builder()
+                    .bucket(bucketName)
+                    .build());
+        }
     }
 
     @Override

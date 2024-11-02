@@ -27,7 +27,7 @@ spring:
     password: postgres
 
 minio:
-  bucket: images
+  bucket: profileImages
   url: http://db:9000
   access:
     key: minioadmin
