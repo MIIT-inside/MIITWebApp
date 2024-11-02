@@ -23,7 +23,7 @@ export default function SpecializationPage() {
                 <span className="text-3xl font-bold">Профили подготовки</span>
                 <span className="w-1/2">На этой странице представлены образовательные программы университета, каждая из которых открывает возможности для профессионального роста. Изучите доступные направления, чтобы понять, какие знания и навыки можно получить, и сделать уверенный шаг к успешной карьере.</span>
             </div>
-            <div className="grid my-20 grid-cols-3 gap-5">
+            <div className="grid my-20 grid-cols-3 gap-6">
                 {profiles.map((profile, index) => (
                     <ProfileComponent
                         key={index}
