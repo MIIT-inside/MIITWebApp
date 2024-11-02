@@ -2,16 +2,16 @@ package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.configuration.UrlsConfig;
 import com.example.BackendMIIT.model.domain.IndividualAchievements;
-import com.example.BackendMIIT.repositories.IndividualAchievementsRepository;
+import com.example.BackendMIIT.repository.IndividualAchievementsRepository;
 import com.example.BackendMIIT.service.IndividualAchievementsService;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,58 +25,6 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
     public IndividualAchievementsServiceImpl(IndividualAchievementsRepository individualAchievementsRepository, UrlsConfig urlsConfig) {
         this.individualAchievementsRepository = individualAchievementsRepository;
         this.urlsConfig = urlsConfig;
-    }
-
-    @Override
-    public void parseAndSaveAchievements() {
-        Set<IndividualAchievements> parsedAchievements = parse();
-
-        parsedAchievements.add(new IndividualAchievements(
-                "Статус чемпиона или призера Олимпийских, Паралимпийских, " +
-                        "Сурдлимпийских игр, чемпионатов мира и Европы.", "10"));
-        parsedAchievements.add(new IndividualAchievements(
-                "Наличие документа об образовании с отличием " +
-                        "(аттестат или диплом).", "10"));
-        parsedAchievements.add(new IndividualAchievements(
-                "Наличие золотого, серебряного или бронзового знака отличия ГТО." +
-                        "Начисление баллов за наличие знака ГТО осуществляется однократно.", "2"));
-        parsedAchievements.add(new IndividualAchievements(
-                "Участие в добровольческих формированиях в рамках " +
-                        "специальной военной операции.", "10"));
-
-        individualAchievementsRepository.saveAll(parsedAchievements);
-    }
-
-    @Override
-    public List<IndividualAchievements> getAllIndividualAchievements() {
-        return individualAchievementsRepository.findAll();
-    }
-
-    @SneakyThrows
-    public Set<IndividualAchievements> parse() {
-        String iaUrl = urlsConfig.getIa();
-
-        Set<IndividualAchievements> achievements = new HashSet<>();
-
-        Document document = Jsoup.connect(iaUrl).maxBodySize(0).get();
-        Element table = document.selectFirst("table.mytable.lastcenter.table.table-striped");
-
-        if (table == null) {
-            System.err.println("Table not found");
-            return achievements;
-        }
-
-        Elements achievementsElements = table.select("tbody tr");
-
-        for (Element achievement : achievementsElements) {
-            IndividualAchievements individualAchievement = extractAchievement(achievement);
-
-            if (areAllNotNull(individualAchievement)) {
-                achievements.add(individualAchievement);
-            }
-        }
-
-        return achievements;
     }
 
     private static IndividualAchievements extractAchievement(Element achievement) {
@@ -109,7 +57,6 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
         return true;
     }
 
-
     private static String getStringFromElement(Elements elements, int index) {
         return elements.get(index).text().trim();
     }
@@ -132,5 +79,58 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
             }
         }
         return true;
+    }
+
+    @Override
+    public void parseAndSaveAchievements() {
+        Set<IndividualAchievements> parsedAchievements = parse();
+
+        parsedAchievements.add(new IndividualAchievements(
+                "Статус чемпиона или призера Олимпийских, Паралимпийских, " +
+                        "Сурдлимпийских игр, чемпионатов мира и Европы.", "10"));
+        parsedAchievements.add(new IndividualAchievements(
+                "Наличие документа об образовании с отличием " +
+                        "(аттестат или диплом).", "10"));
+        parsedAchievements.add(new IndividualAchievements(
+                "Наличие золотого, серебряного или бронзового знака отличия ГТО." +
+                        "Начисление баллов за наличие знака ГТО осуществляется однократно.", "2"));
+        parsedAchievements.add(new IndividualAchievements(
+                "Участие в добровольческих формированиях в рамках " +
+                        "специальной военной операции.", "10"));
+
+        individualAchievementsRepository.saveAll(parsedAchievements);
+    }
+
+    @Override
+    @Cacheable(value = "IndividualAchievementsService::getAchievements", key = "'achievements'")
+    public List<IndividualAchievements> getAllIndividualAchievements() {
+        return individualAchievementsRepository.findAll();
+    }
+
+    @SneakyThrows
+    public Set<IndividualAchievements> parse() {
+        String iaUrl = urlsConfig.getIa();
+
+        Set<IndividualAchievements> achievements = new HashSet<>();
+
+        Document document = Jsoup.connect(iaUrl).maxBodySize(0).get();
+        Element table = document.selectFirst("table.mytable.lastcenter.table.table-striped");
+
+        if (table == null) {
+            System.err.println("Table not found");
+            return achievements;
+        }
+
+        Elements achievementsElements = table.select("tbody tr");
+
+        for (Element achievement : achievementsElements) {
+            IndividualAchievements individualAchievement = extractAchievement(achievement);
+
+            if (areAllNotNull(individualAchievement)) {
+                achievements.add(individualAchievement);
+            }
+        }
+
+        return achievements;
     }
 }

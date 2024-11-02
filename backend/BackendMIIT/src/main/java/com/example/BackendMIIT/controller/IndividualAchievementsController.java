@@ -25,7 +25,7 @@ public class IndividualAchievementsController {
         return ResponseEntity.ok("Individual achievements parsed and saved successfully!");
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<IndividualAchievements> getAllIndividualAchievements() {
         return individualAchievementsService.getAllIndividualAchievements();
     }

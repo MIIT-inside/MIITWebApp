@@ -7,13 +7,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "individual_achievements")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IndividualAchievements extends BaseEntity {
+public class IndividualAchievements extends BaseEntity implements Serializable {
 
     private String description;
     private String countPoints;
