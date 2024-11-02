@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react';
 import Header from "../components/Header";
 import InfoBlock from "../components/InfoBlock";
 import Accordion from "../components/Accordion";
-import image1 from "../assets/tenweb_media_zhurFxyM.webp"
+import image1 from "../assets/inostr.jpg"
 import BlueCard from "../components/BlueCard";
-import {motion, useScroll, useTransform} from "framer-motion";
+import {AnimatePresence, motion, useScroll, useTransform} from "framer-motion";
 import {useInView} from "react-intersection-observer";
+import axios from "axios";
 
 const FadeInSection = ({children, threshold = 0.8, duration = 1}) => {
     const {ref, inView} = useInView({
@@ -25,19 +26,23 @@ export default function MainPage() {
     const {scrollY} = useScroll();
     const scale = useTransform(scrollY, [0, 500], [1, 1.1]);
     const [achievements, setAchievements] = useState([]);
+    const [visibleCount, setVisibleCount] = useState(6);
+
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/posts')
-            .then(response => response.json())
-            .then(data => {
-                const mappedData = data.slice(0, 5).map(item => ({
-                    title: item.title,
-                    description: item.body,
-                    score: Math.floor(Math.random() * 5) + 1,  // Рандомное число от 1 до 5
+        axios.get('http://localhost:8080/api/miit/achievements/')
+            .then(response => {
+                const mappedData = response.data.map(item => ({
+                    description: item.description,
+                    countPoints: item.countPoints
                 }));
                 setAchievements(mappedData);
             })
             .catch(error => console.error('Error fetching data:', error));
     }, []);
+
+    const showMore = () => setVisibleCount(prevCount => prevCount + 6);
+
+    const showLess = () => setVisibleCount(6);
 
     return (<div>
         <Header/>
@@ -59,22 +64,22 @@ export default function MainPage() {
             </motion.div>
         <FadeInSection>
             <div className="flex justify-between mt-20 mx-auto max-w-[1280px]">
-                <span className="text-4xl font-bold">Обзор наших курсов</span>
+                <span className="text-4xl font-bold">Российский университет транспорта (МИИТ)</span>
                 <div className="flex flex-col w-[50%] space-y-7">
-                    <span className="text-xl text-[#1E1E1E]">Наши курсы предлагают уникальные возможности для студентов, стремящихся к успешной карьере. Узнайте больше о каждом курсе, его учебной программе и карьерных перспективах.</span>
+                    <span className="text-xl text-[#1E1E1E]">Миссия Российского университета транспорта – быть интеллектуальным драйвером транспортной отрасли.</span>
                     <div className="flex space-x-4">
-                        <InfoBlock title="Карьера"
-                                   description="Персонализированные консультации и доступ к детальной информации о различных специальностях."/>
+                        <InfoBlock title="Профили подготовки"
+                                   description="Подробная информация о профилях подготовки"/>
                         <InfoBlock title="Учебная программа"
-                                   description="Подробные описания курсов и их значимость на рынке труда."/>
+                                   description="Подробные описания курсов на каждый семестр"/>
                     </div>
                 </div>
             </div>
         </FadeInSection>
         <FadeInSection>
             <div className="flex flex-col mt-20 justify-center items-center space-y-5 mx-auto max-w-[1280px]">
-                <span className="text-4xl font-bold">Навигация по курсам</span>
-                <span className="text-xl text-[#1E1E1E]">Выберите факультет, чтобы увидеть доступные курсы.</span>
+                <span className="text-4xl font-bold">Навигация по университету</span>
+                <span className="text-xl text-[#1E1E1E]">Выберите блок, чтобы увидеть доступную информацию.</span>
             </div>
             <div className=" mt-12 mx-auto max-w-[1280px]">
                 <Accordion/>
@@ -85,25 +90,25 @@ export default function MainPage() {
                 <div className="flex-col w-[50%]">
                     <FadeInSection>
                     <div className="flex flex-col space-y-14">
-                            <div className="text-4xl font-bold">About РУТ(МИИТ)</div>
-                            <div className="text-xl text-[#1E1E1E]">РУТ(МИИТ) is dedicated to enhancing the navigation experience for prospective students. Our goal is to provide comprehensive information about courses and career paths, ensuring students make informed decisions about their future.</div>
+                            <div className="text-4xl font-bold">Об университете</div>
+                            <div className="text-xl text-[#1E1E1E]">Российский университет транспорта (МИИТ) — ведущий национальный транспортный вуз, крупнейший отраслевой университет России, базовая площадка для кадрового обеспечения и научного сопровождения развития транспортной отрасли.</div>
                     </div>
                     </FadeInSection>
                     <FadeInSection>
                         <div className="grid grid-cols-2 gap-5 mt-14">
-                            <InfoBlock title="100%"
-                                       description="We aim to increase the navigation level of our website by 100%, making it easier for students to find the information they need about their chosen specialties."/>
-                            <InfoBlock title="5000 students"
-                                       description="Over 5000 students have successfully navigated our courses, benefiting from tailored guidance and support throughout their educational journey."/>
-                            <InfoBlock title="200 courses"
-                                       description="We offer more than 200 specialized courses, each designed to equip students with the knowledge and skills necessary for their future careers."/>
-                            <InfoBlock title="150 facilities"
-                                       description="Our state-of-the-art facilities support over 150 practical training sessions annually, ensuring students gain hands-on experience in their fields."/>
+                            <InfoBlock title="> 29000"
+                                       description="студентов по программам высшего образования"/>
+                            <InfoBlock title="> 440"
+                                       description="образовательных программ высшего и среднего профессионального образования"/>
+                            <InfoBlock title="1923"
+                                       description="педагогических работника"/>
+                            <InfoBlock title="> 2000"
+                                       description="иностранных студентов из 57 стран"/>
                         </div>
                     </FadeInSection>
                 </div>
 
-                <div className="w-[50%] ml-12">
+                <div className="flex w-[60%] ml-12">
                     <FadeInSection threshold={0.2}>
                         <img src={image1} alt="" className="w-full h-auto"/>
                     </FadeInSection>
@@ -114,12 +119,10 @@ export default function MainPage() {
             <div className="flex justify-between mt-28 mx-auto max-w-[1280px] pb-16">
                 <span className="text-4xl font-bold">Обзор наших курсов</span>
                 <div className="flex flex-col w-[50%] space-y-7">
-                    <span className="text-xl text-[#1E1E1E]">Наши курсы предлагают уникальные возможности для студентов, стремящихся к успешной карьере. Узнайте больше о каждом курсе, его учебной программе и карьерных перспективах.</span>
+                    <span className="text-xl text-[#1E1E1E]">Профили подготовки предлагают уникальные возможности для студентов, стремящихся к успешной карьере. Узнайте больше о каждом курсе, его учебной программе и карьерных перспективах.</span>
                     <div className="flex space-x-4">
                         <InfoBlock title="Карьера"
-                                   description="Персонализированные консультации и доступ к детальной информации о различных специальностях."/>
-                        <InfoBlock title="Учебная программа"
-                                   description="Подробные описания курсов и их значимость на рынке труда."/>
+                                   description="Доступ к детальной информации о различных специальностях."/>
                     </div>
                 </div>
             </div>
@@ -133,14 +136,34 @@ export default function MainPage() {
         </FadeInSection>
         <FadeInSection threshold={0.4}>
             <div className="mx-auto max-w-[1280px] mt-14 grid grid-cols-3 gap-6">
-                {achievements.map((achievement, index) => (
+                <AnimatePresence>
+                {achievements.slice(0, visibleCount).map((achievement, index) => (
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: -30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}>
                     <BlueCard
                         key={index}
-                        score={achievement.score}
-                        title={achievement.title}
+                        countPoints={achievement.countPoints}
                         description={achievement.description}
                     />
+                    </motion.div>
                 ))}
+                </AnimatePresence>
+            </div>
+            <div className="flex justify-center mt-8 mb-11">
+                {visibleCount < achievements.length && (
+                    <button onClick={showMore} className="bg-[#3A5BCC] text-white px-6 py-3">
+                        Показать еще
+                    </button>
+                )}
+                {visibleCount > 6 && (
+                    <button onClick={showLess} className="text-black bg-none px-6 py-3 ml-4 border border-black">
+                        Скрыть
+                    </button>
+                )}
             </div>
         </FadeInSection>
     </div>)
