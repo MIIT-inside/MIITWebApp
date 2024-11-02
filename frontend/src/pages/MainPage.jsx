@@ -5,22 +5,9 @@ import Accordion from "../components/Accordion";
 import image1 from "../assets/inostr.jpg"
 import BlueCard from "../components/BlueCard";
 import {AnimatePresence, motion, useScroll, useTransform} from "framer-motion";
-import {useInView} from "react-intersection-observer";
 import axios from "axios";
-
-const FadeInSection = ({children, threshold = 0.8, duration = 1}) => {
-    const {ref, inView} = useInView({
-        triggerOnce: true, threshold: threshold,
-    });
-
-    return (<motion.div
-            ref={ref}
-            initial={{opacity: 0, y: 50}}
-            animate={inView ? {opacity: 1, y: 0} : {}}
-            transition={{duration: duration, ease: "easeOut"}}>
-            {children}
-        </motion.div>);
-};
+import FooterBlock from "../components/FooterBlock";
+import {FadeInSection} from "../components/FadeInSection";
 
 export default function MainPage() {
     const {scrollY} = useScroll();
@@ -45,7 +32,6 @@ export default function MainPage() {
     const showLess = () => setVisibleCount(6);
 
     return (<div>
-        <Header/>
             <motion.div
                 style={{scale}}
                 className="h-screen relative bg-[url('./src/assets/image_2024-10-22_12-22-33.png')] bg-fixed bg-cover">

@@ -2,14 +2,11 @@ import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import '/src/index.css';
-import FooterBlock from './components/footerBlock';
-import HelpBlock from './components/HelpBlock';
+import {BrowserRouter as Router} from "react-router-dom";
 
 
 createRoot(document.getElementById('root')).render(
-    <StrictMode>
+    <Router>
         <App />
-        <HelpBlock/>
-        <FooterBlock />
-    </StrictMode>
+    </Router>
 );
