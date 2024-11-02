@@ -7,6 +7,7 @@ import com.example.BackendMIIT.model.dto.ProfileDto;
 import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.repository.ProfileRepository;
 import com.example.BackendMIIT.service.ProfileService;
+import com.example.BackendMIIT.util.exceptions.ImageUploadException;
 import io.minio.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
@@ -39,6 +40,9 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Value("${minio.bucket}")
     private String bucketName;
+
+    @Value("${minio.url}")
+    private String url;
 
     public ProfileServiceImpl(ProfileRepository profileRepository,
                               DirectionRepository directionRepository,
@@ -86,20 +90,32 @@ public class ProfileServiceImpl implements ProfileService {
         return profileMapper.profileToDto(profile);
     }
 
-    public void uploadImage(MultipartFile file) {
+    public String uploadImage(MultipartFile file, String profile) {
         try {
             createBucket();
         }
         catch (Exception e) {
+            throw new ImageUploadException("Image upload failed" + e.getMessage());
+        }
+
+        if (file.isEmpty() || file.getOriginalFilename() == null) {
+            throw new ImageUploadException("Image must have name");
         }
 
         String fileName = generateFileName(file);
-        InputStream inputStream = file.getInputStream()
 
+        try (InputStream inputStream = file.getInputStream()) {
+            saveImage(inputStream, fileName, profile);
+        }
+        catch (Exception e) {
+            throw new ImageUploadException(("Image upload failed" + e.getMessage()));
+        }
+
+        return String.format("%s/%s", url, fileName);
     }
 
     @SneakyThrows
-    private void saveImage(InputStream inputStream, String fileName) {
+    private void saveImage(InputStream inputStream, String fileName, String profileName) {
         minioClient.putObject(
                 PutObjectArgs.builder()
                         .stream(inputStream, inputStream.available(), -1)
@@ -107,6 +123,12 @@ public class ProfileServiceImpl implements ProfileService {
                         .object(fileName)
                         .build()
         );
+
+        Profile profile = profileRepository.findByName(profileName)
+                .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
+
+        profile.setImageUrl(url + "/" + fileName);
+        profileRepository.save(profile);
     }
 
     private String generateFileName(MultipartFile file) {
