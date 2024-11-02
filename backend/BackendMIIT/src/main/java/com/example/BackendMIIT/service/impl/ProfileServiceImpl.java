@@ -1,10 +1,13 @@
 package com.example.BackendMIIT.service.impl;
 
+import com.example.BackendMIIT.mapper.ProfileMapper;
 import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.domain.Profile;
-import com.example.BackendMIIT.repositories.DirectionRepository;
-import com.example.BackendMIIT.repositories.ProfileRepository;
+import com.example.BackendMIIT.model.dto.ProfileDto;
+import com.example.BackendMIIT.repository.DirectionRepository;
+import com.example.BackendMIIT.repository.ProfileRepository;
 import com.example.BackendMIIT.service.ProfileService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +15,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -25,11 +29,50 @@ public class ProfileServiceImpl implements ProfileService {
     private final DirectionRepository directionRepository;
     private final WebClient webClient;
     private final String BASE_URL = "https://www.miit.ru";
+    private final ProfileMapper profileMapper;
 
-    public ProfileServiceImpl(ProfileRepository profileRepository, DirectionRepository directionRepository, WebClient webClient) {
+    public ProfileServiceImpl(ProfileRepository profileRepository,
+                              DirectionRepository directionRepository,
+                              WebClient webClient,
+                              ProfileMapper profileMapper) {
         this.profileRepository = profileRepository;
         this.directionRepository = directionRepository;
         this.webClient = webClient;
+        this.profileMapper = profileMapper;
+    }
+
+    @Override
+    @Cacheable(value = "ProfileService::getProfilesByInstitute", key = "#name")
+    public List<ProfileDto> getProfilesByInstituteName(String name) {
+        List<Profile> profiles = profileRepository.findByInstitute(name)
+                .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
+
+        return profileMapper.profilesToDtoList(profiles);
+    }
+
+    @Override
+    @Cacheable(value = "ProfileService::getProfilesByDirection", key = "#code")
+    public List<ProfileDto> getProfilesByDirectionCode(String code) {
+        Direction direction = directionRepository.findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
+
+        return profileMapper.profilesToDtoList(direction.getProfiles());
+    }
+
+    @Override
+    @Cacheable(value = "ProfileService::getAllProfiles", key = "'profiles'")
+    public List<ProfileDto> getAllProfiles() {
+        List<Profile> profiles = profileRepository.findAll();
+
+        return profileMapper.profilesToDtoList(profiles);
+    }
+
+    @Override
+    @Cacheable(value = "ProfileService::getProfileByName", key = "#name")
+    public ProfileDto getProfileByName(String name) {
+        Profile profile = profileRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
+        return profileMapper.profileToDto(profile);
     }
 
     @Override
@@ -137,7 +180,8 @@ public class ProfileServiceImpl implements ProfileService {
         while (i < properties.size()) {
 
             Profile profile = new Profile();
-            Direction direction = directionRepository.findByCode(properties.get(i++).trim());
+            Direction direction = directionRepository.findByCode(properties.get(i++).trim())
+                    .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
 
             if (profileRepository.findByName(properties.get(i)).isEmpty()) {
                 profile.setName(properties.get(i++).trim());
@@ -148,8 +192,7 @@ public class ProfileServiceImpl implements ProfileService {
                 profile.setDirection(direction);
 
                 profileRepository.save(profile);
-            }
-            else {
+            } else {
                 break;
             }
         }
