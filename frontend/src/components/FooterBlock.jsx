@@ -25,11 +25,11 @@ const FooterBlock = () => {
 
                     </div>
                     <div className="flex items-center space-x-5">
-                        <a href="" className="flex items-center space-x-2">
+                        <a href="#" className="flex items-center space-x-2">
                             <img src={vk} alt="vk" className="w-6 h-auto"/>
                             <span>Вконтакте</span>
                         </a>
-                        <a href="" className="flex items-center space-x-2">
+                        <a href="#" className="flex items-center space-x-2">
                             <img src={telegram} alt="telegram" className="w-6 h-auto"/>
                             <span>Телеграм</span>
                         </a>

@@ -1,18 +1,35 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ProfileComponent from "../components/ProfileComponent";
+import axios from "axios";
 
 export default function SpecializationPage() {
+
+    const [profiles, setProfiles] = useState([])
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/miit/profiles/')
+            .then(response => {
+                const mappedData = response.data.map(item => ({
+                    name: item.name,
+                    description: item.description
+                }));
+                setProfiles(mappedData);
+            })
+            .catch(error => console.error('Error fetching data:', error))
+    })
+
     return (
         <div className="mt-40 max-w-[1280px] mx-auto">
-            <div className="flex items-center justify-between">
+            <div className="flex justify-between">
                 <span className="text-3xl font-bold">Профили подготовки</span>
                 <span className="w-1/2">На этой странице представлены образовательные программы университета, каждая из которых открывает возможности для профессионального роста. Изучите доступные направления, чтобы понять, какие знания и навыки можно получить, и сделать уверенный шаг к успешной карьере.</span>
             </div>
-            <div className="flex mt-20 grid-cols-3 space-x-5">
-                <ProfileComponent name="Технологии разработки программного обеспечения" description="empty"/>
-                <ProfileComponent name="Технологии разработки программного обеспечения" description="empty"/>
-                <ProfileComponent name="Технологии разработки программного обеспечения" description="empty"/>
-                <ProfileComponent name="Технологии разработки программного обеспечения" description="empty"/>
+            <div className="grid my-20 grid-cols-3 gap-5">
+                {profiles.map((profile, index) => (
+                    <ProfileComponent
+                        key={index}
+                        name={profile.name}
+                        description={profile.description}/>
+                ))}
             </div>
         </div>
     )
