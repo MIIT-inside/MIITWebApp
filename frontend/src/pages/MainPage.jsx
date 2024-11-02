@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import Header from "../components/Header";
 import InfoBlock from "../components/InfoBlock";
 import Accordion from "../components/Accordion";
 import image1 from "../assets/inostr.jpg"
 import BlueCard from "../components/BlueCard";
 import {AnimatePresence, motion, useScroll, useTransform} from "framer-motion";
 import axios from "axios";
-import FooterBlock from "../components/FooterBlock";
 import {FadeInSection} from "../components/FadeInSection";
 
 export default function MainPage() {

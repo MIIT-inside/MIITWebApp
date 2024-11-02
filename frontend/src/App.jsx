@@ -5,6 +5,7 @@ import MainPage from "./pages/MainPage";
 import Header from "./components/Header";
 import FAQPage from "./pages/FAQPage";
 import FooterBlock from "./components/FooterBlock";
+import SpecializationPage from "./pages/SpecializationPage";
 
 
 export default function App() {
@@ -14,7 +15,7 @@ export default function App() {
             <main className="flex-grow">
                 <Routes>
                     <Route path="/main" element={<MainPage/>}/>
-                    <Route path="/specialties" element={<MainPage/>}/>
+                    <Route path="/specialties" element={<SpecializationPage/>}/>
                     <Route path="/faq" element={<FAQPage/>}/>
                 </Routes>
             </main>
