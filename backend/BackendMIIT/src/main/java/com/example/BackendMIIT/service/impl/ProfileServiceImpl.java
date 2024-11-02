@@ -90,6 +90,7 @@ public class ProfileServiceImpl implements ProfileService {
         return profileMapper.profileToDto(profile);
     }
 
+    @Override
     public String uploadImage(MultipartFile file, String profile) {
         try {
             createBucket();
@@ -103,19 +104,19 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         String fileName = generateFileName(file);
-
+        String imageUrl;
         try (InputStream inputStream = file.getInputStream()) {
-            saveImage(inputStream, fileName, profile);
+            imageUrl = saveImage(inputStream, fileName, profile);
         }
         catch (Exception e) {
             throw new ImageUploadException(("Image upload failed" + e.getMessage()));
         }
 
-        return String.format("%s/%s", url, fileName);
+        return imageUrl;
     }
 
     @SneakyThrows
-    private void saveImage(InputStream inputStream, String fileName, String profileName) {
+    private String saveImage(InputStream inputStream, String fileName, String profileName) {
         minioClient.putObject(
                 PutObjectArgs.builder()
                         .stream(inputStream, inputStream.available(), -1)
@@ -126,9 +127,12 @@ public class ProfileServiceImpl implements ProfileService {
 
         Profile profile = profileRepository.findByName(profileName)
                 .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
+        String imageUrl = url + "/" + fileName;
 
-        profile.setImageUrl(url + "/" + fileName);
+        profile.setImageUrl(imageUrl);
         profileRepository.save(profile);
+
+        return imageUrl;
     }
 
     private String generateFileName(MultipartFile file) {
