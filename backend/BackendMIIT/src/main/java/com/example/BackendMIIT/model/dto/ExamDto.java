@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class ExamDto {
 
-    @JsonProperty("name")
-    private String name;
+	@JsonProperty("name")
+	private String name;
 }

@@ -14,12 +14,12 @@ import java.io.Serializable;
 @Data
 public class Educator extends BaseEntity implements Serializable {
 
-    private String name;
-    private String surname;
-    private String patronymic;
+	private String name;
+	private String surname;
+	private String patronymic;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "department_id")
-    public Department department;
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name = "department_id")
+	public Department department;
 }

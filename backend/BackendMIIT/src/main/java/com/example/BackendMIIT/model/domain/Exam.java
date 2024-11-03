@@ -14,10 +14,10 @@ import java.io.Serializable;
 @Data
 public class Exam extends BaseEntity implements Serializable {
 
-    private String name;
+	private String name;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "direction_id")
-    private Direction direction;
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name = "direction_id")
+	private Direction direction;
 }

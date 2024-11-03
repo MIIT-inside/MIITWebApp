@@ -4,7 +4,7 @@ import com.example.BackendMIIT.model.dto.EducationPlanDto;
 
 public interface EducationPlanService {
 
-    void parseAndSaveEducationPlans();
+	void parseAndSaveEducationPlans();
 
-    EducationPlanDto getPlansByProfileName(String name);
+	EducationPlanDto getPlansByProfileName(String name);
 }

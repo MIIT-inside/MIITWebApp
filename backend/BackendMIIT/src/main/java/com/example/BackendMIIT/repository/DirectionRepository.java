@@ -7,7 +7,7 @@ import java.util.Optional;
 
 @Repository
 public interface DirectionRepository extends BaseRepository<Direction> {
-    Optional<Direction> findByName(String name);
+	Optional<Direction> findByName(String name);
 
-    Optional<Direction> findByCode(String code);
+	Optional<Direction> findByCode(String code);
 }

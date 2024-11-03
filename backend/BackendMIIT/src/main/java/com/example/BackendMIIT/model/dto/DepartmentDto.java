@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class DepartmentDto {
 
-    @JsonProperty("name")
-    private String name;
+	@JsonProperty("name")
+	private String name;
 
-    @JsonProperty("teacher")
-    private String teacher;
+	@JsonProperty("teacher")
+	private String teacher;
 }

@@ -5,7 +5,7 @@ import com.example.BackendMIIT.model.domain.IndividualAchievements;
 import java.util.List;
 
 public interface IndividualAchievementsService {
-    void parseAndSaveAchievements();
+	void parseAndSaveAchievements();
 
-    List<IndividualAchievements> getAllIndividualAchievements();
+	List<IndividualAchievements> getAllIndividualAchievements();
 }

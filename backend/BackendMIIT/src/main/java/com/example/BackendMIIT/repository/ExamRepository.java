@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface ExamRepository extends BaseRepository<Exam> {
-    List<Exam> findByDirectionName(String directionName);
+	List<Exam> findByDirectionName(String directionName);
 }

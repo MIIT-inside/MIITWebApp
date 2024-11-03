@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface DirectionMapper {
 
-    Direction dtoToDirection(DirectionDto directionDto);
+	Direction dtoToDirection(DirectionDto directionDto);
 
-    DirectionDto directionToDto(Direction direction);
+	DirectionDto directionToDto(Direction direction);
 
-    List<DirectionDto> directionToDirectionDto(List<Direction> directions);
+	List<DirectionDto> directionToDirectionDto(List<Direction> directions);
 }

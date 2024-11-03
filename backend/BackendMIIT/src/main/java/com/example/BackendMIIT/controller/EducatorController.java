@@ -14,13 +14,13 @@ import java.util.List;
 @RequestMapping(path = "api/miit/educators")
 public class EducatorController {
 
-    @GetMapping("/")
-    public ResponseEntity<List<Educator>> getAllEducators() {
-        return ResponseEntity.ok(new ArrayList<>());
-    }
+	@GetMapping("/")
+	public ResponseEntity<List<Educator>> getAllEducators() {
+		return ResponseEntity.ok(new ArrayList<>());
+	}
 
-    @GetMapping("/department")
-    public ResponseEntity<List<Educator>> getEducatorsByDepartment(@RequestParam String departmentName) {
-        return ResponseEntity.ok(new ArrayList<>());
-    }
+	@GetMapping("/department")
+	public ResponseEntity<List<Educator>> getEducatorsByDepartment(@RequestParam String departmentName) {
+		return ResponseEntity.ok(new ArrayList<>());
+	}
 }

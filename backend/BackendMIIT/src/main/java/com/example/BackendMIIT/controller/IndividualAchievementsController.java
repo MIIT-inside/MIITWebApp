@@ -13,20 +13,20 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/miit/achievements")
 public class IndividualAchievementsController {
-    private final IndividualAchievementsService individualAchievementsService;
+	private final IndividualAchievementsService individualAchievementsService;
 
-    public IndividualAchievementsController(IndividualAchievementsService individualAchievementsService) {
-        this.individualAchievementsService = individualAchievementsService;
-    }
+	public IndividualAchievementsController(IndividualAchievementsService individualAchievementsService) {
+		this.individualAchievementsService = individualAchievementsService;
+	}
 
-    @PostMapping("/parse")
-    public ResponseEntity<String> parseAndSaveIndividualAchievements() {
-        individualAchievementsService.parseAndSaveAchievements();
-        return ResponseEntity.ok("Individual achievements parsed and saved successfully!");
-    }
+	@PostMapping("/parse")
+	public ResponseEntity<String> parseAndSaveIndividualAchievements() {
+		individualAchievementsService.parseAndSaveAchievements();
+		return ResponseEntity.ok("Individual achievements parsed and saved successfully!");
+	}
 
-    @GetMapping("/")
-    public List<IndividualAchievements> getAllIndividualAchievements() {
-        return individualAchievementsService.getAllIndividualAchievements();
-    }
+	@GetMapping("/")
+	public List<IndividualAchievements> getAllIndividualAchievements() {
+		return individualAchievementsService.getAllIndividualAchievements();
+	}
 }

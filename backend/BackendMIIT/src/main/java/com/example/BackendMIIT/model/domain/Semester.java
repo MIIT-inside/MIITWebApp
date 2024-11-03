@@ -15,14 +15,14 @@ import java.util.List;
 @Data
 public class Semester extends BaseEntity implements Serializable {
 
-    private String name;
+	private String name;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name = "profile_id")
+	private Profile profile;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "semester", cascade = CascadeType.ALL)
-    private List<Discipline> disciplines;
+	@JsonManagedReference
+	@OneToMany(mappedBy = "semester", cascade = CascadeType.ALL)
+	private List<Discipline> disciplines;
 }

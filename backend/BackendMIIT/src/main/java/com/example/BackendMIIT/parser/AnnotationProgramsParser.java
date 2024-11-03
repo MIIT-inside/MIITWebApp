@@ -15,79 +15,79 @@ import java.util.stream.Collectors;
 @Component
 public class AnnotationProgramsParser {
 
-    private final String miitBaseUrl;
-    private final String educationProgramsUrl;
+	private final String miitBaseUrl;
+	private final String educationProgramsUrl;
 
-    public AnnotationProgramsParser(UrlsConfig urlsConfig) {
-        this.miitBaseUrl = urlsConfig.getMiitBaseUrl();
-        this.educationProgramsUrl = urlsConfig.getEduPrograms();
-    }
+	public AnnotationProgramsParser(UrlsConfig urlsConfig) {
+		this.miitBaseUrl = urlsConfig.getMiitBaseUrl();
+		this.educationProgramsUrl = urlsConfig.getEduPrograms();
+	}
 
-    public List<String> parseAnnotations() {
-        Map<String, AnnotationData> latestAnnotations = new HashMap<>();
+	public List<String> parseAnnotations() {
+		Map<String, AnnotationData> latestAnnotations = new HashMap<>();
 
-        Elements rows = ParserUtil.getElements(educationProgramsUrl, "tr[itemprop='eduOp']");
+		Elements rows = ParserUtil.getElements(educationProgramsUrl, "tr[itemprop='eduOp']");
 
-        for (Element row : rows) {
-            String educationForm = ParserUtil.getStringFromElement(row, "td[itemprop='eduForm']");
-            String educationLevel = ParserUtil.getStringFromElement(row, "td[itemprop='eduLevel']");
-            String profile = ParserUtil.getStringFromElement(row, "td[itemprop='eduProf']");
+		for (Element row : rows) {
+			String educationForm = ParserUtil.getStringFromElement(row, "td[itemprop='eduForm']");
+			String educationLevel = ParserUtil.getStringFromElement(row, "td[itemprop='eduLevel']");
+			String profile = ParserUtil.getStringFromElement(row, "td[itemprop='eduProf']");
 
-            if (!isValidEducationLevel(educationLevel) ||
-                    !isValidEducationForm(educationForm) ||
-                    ParserUtil.isNullOrEmpty(profile)) {
-                continue;
-            }
+			if (!isValidEducationLevel(educationLevel) ||
+					!isValidEducationForm(educationForm) ||
+					ParserUtil.isNullOrEmpty(profile)) {
+				continue;
+			}
 
-            String annotationLink = miitBaseUrl + extractAnnotationLink(row);
-            String annotationText = extractAnnotationText(row);
-            int year = extractYearFromText(annotationText);
+			String annotationLink = miitBaseUrl + extractAnnotationLink(row);
+			String annotationText = extractAnnotationText(row);
+			int year = extractYearFromText(annotationText);
 
-            if (year >= 2024) {
-                if (!latestAnnotations.containsKey(profile)) {
-                    latestAnnotations.put(profile, new AnnotationData(annotationLink, year));
-                } else {
-                    int existingYear = latestAnnotations.get(profile).year();
+			if (year >= 2024) {
+				if (!latestAnnotations.containsKey(profile)) {
+					latestAnnotations.put(profile, new AnnotationData(annotationLink, year));
+				} else {
+					int existingYear = latestAnnotations.get(profile).year();
 
-                    if (year > existingYear) {
-                        latestAnnotations.put(profile, new AnnotationData(annotationLink, year));
-                    }
-                }
-            }
-        }
+					if (year > existingYear) {
+						latestAnnotations.put(profile, new AnnotationData(annotationLink, year));
+					}
+				}
+			}
+		}
 
-        return latestAnnotations
-                .values()
-                .stream()
-                .map(AnnotationData::link)
-                .collect(Collectors.toList());
-    }
+		return latestAnnotations
+				.values()
+				.stream()
+				.map(AnnotationData::link)
+				.collect(Collectors.toList());
+	}
 
-    private boolean isValidEducationLevel(String educationLevel) {
-        return educationLevel.equalsIgnoreCase("бакалавриат") ||
-                educationLevel.equalsIgnoreCase("специалитет");
-    }
+	private boolean isValidEducationLevel(String educationLevel) {
+		return educationLevel.equalsIgnoreCase("бакалавриат") ||
+				educationLevel.equalsIgnoreCase("специалитет");
+	}
 
-    private boolean isValidEducationForm(String educationForm) {
-        return educationForm.equalsIgnoreCase("очная");
-    }
+	private boolean isValidEducationForm(String educationForm) {
+		return educationForm.equalsIgnoreCase("очная");
+	}
 
-    private String extractAnnotationLink(Element row) {
-        Element annotationElement = row.select("td[itemprop='educationAnnotation'] a").first();
-        return ParserUtil.isNotNull(annotationElement) ? annotationElement.attr("href") : null;
-    }
+	private String extractAnnotationLink(Element row) {
+		Element annotationElement = row.select("td[itemprop='educationAnnotation'] a").first();
+		return ParserUtil.isNotNull(annotationElement) ? annotationElement.attr("href") : null;
+	}
 
-    private String extractAnnotationText(Element row) {
-        Element annotationElement = row.select("td[itemprop='educationAnnotation'] a span.link-text").first();
-        return ParserUtil.isNotNull(annotationElement) ? annotationElement.text() : "";
-    }
+	private String extractAnnotationText(Element row) {
+		Element annotationElement = row.select("td[itemprop='educationAnnotation'] a span.link-text").first();
+		return ParserUtil.isNotNull(annotationElement) ? annotationElement.text() : "";
+	}
 
-    private int extractYearFromText(String annotationText) {
-        if (annotationText.contains("2025")) {
-            return 2025;
-        } else if (annotationText.contains("2024")) {
-            return 2024;
-        }
-        return 0;
-    }
+	private int extractYearFromText(String annotationText) {
+		if (annotationText.contains("2025")) {
+			return 2025;
+		} else if (annotationText.contains("2024")) {
+			return 2024;
+		}
+		return 0;
+	}
 }

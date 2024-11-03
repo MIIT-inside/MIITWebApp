@@ -43,8 +43,7 @@ public class MinioServiceImpl implements MinioService {
 
 		try (InputStream inputStream = file.getInputStream()) {
 			imageUrl = saveDirectionImage(inputStream, fileName, direction);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new ImageUploadException(("Image upload failed" + e.getMessage()));
 		}
 
@@ -54,8 +53,7 @@ public class MinioServiceImpl implements MinioService {
 	private String bucketExists(MultipartFile file) {
 		try {
 			createBucket();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new ImageUploadException("Image upload failed" + e.getMessage());
 		}
 
@@ -85,8 +83,7 @@ public class MinioServiceImpl implements MinioService {
 
 		try (InputStream inputStream = file.getInputStream()) {
 			imageUrl = saveProfileImage(inputStream, fileName, profile);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new ImageUploadException(("Image upload failed" + e.getMessage()));
 		}
 
