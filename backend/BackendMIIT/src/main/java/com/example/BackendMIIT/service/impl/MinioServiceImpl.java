@@ -1,6 +1,8 @@
 package com.example.BackendMIIT.service.impl;
 
+import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.domain.Profile;
+import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.repository.ProfileRepository;
 import com.example.BackendMIIT.service.MinioService;
 import com.example.BackendMIIT.util.exceptions.ImageUploadException;
@@ -21,21 +23,35 @@ import java.util.UUID;
 public class MinioServiceImpl implements MinioService {
 
 	private final ProfileRepository profileRepository;
+	private final DirectionRepository directionRepository;
 	private final MinioClient minioClient;
 
 	@Value("${minio.bucket}")
 	private String bucketName;
 
-	@Value("${minio.url}")
-	private String url;
-
-	public MinioServiceImpl(ProfileRepository profileRepository, MinioClient minioClient) {
+	public MinioServiceImpl(ProfileRepository profileRepository, DirectionRepository directionRepository, MinioClient minioClient) {
 		this.profileRepository = profileRepository;
+		this.directionRepository = directionRepository;
 		this.minioClient = minioClient;
 	}
 
 	@Override
-	public String uploadImage(MultipartFile file, String profile) {
+	public String uploadDirectionImage(MultipartFile file, String direction) {
+
+		String fileName = bucketExists(file);
+		String imageUrl;
+
+		try (InputStream inputStream = file.getInputStream()) {
+			imageUrl = saveDirectionImage(inputStream, fileName, direction);
+		}
+		catch (Exception e) {
+			throw new ImageUploadException(("Image upload failed" + e.getMessage()));
+		}
+
+		return imageUrl;
+	}
+
+	private String bucketExists(MultipartFile file) {
 		try {
 			createBucket();
 		}
@@ -47,10 +63,28 @@ public class MinioServiceImpl implements MinioService {
 			throw new ImageUploadException("Image must have name");
 		}
 
-		String fileName = generateFileName(file);
+		return generateFileName(file);
+	}
+
+	private String saveProfileImage(InputStream inputStream, String fileName, String direction) {
+		Profile profile = profileRepository.findByName(direction)
+				.orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
+		String imageUrl = uploadImage(inputStream, fileName);
+
+		profile.setImageUrl(imageUrl);
+		profileRepository.save(profile);
+
+		return imageUrl;
+	}
+
+	@Override
+	public String uploadProfileImage(MultipartFile file, String profile) {
+
+		String fileName = bucketExists(file);
 		String imageUrl;
+
 		try (InputStream inputStream = file.getInputStream()) {
-			imageUrl = saveImage(inputStream, fileName, profile);
+			imageUrl = saveProfileImage(inputStream, fileName, profile);
 		}
 		catch (Exception e) {
 			throw new ImageUploadException(("Image upload failed" + e.getMessage()));
@@ -60,7 +94,7 @@ public class MinioServiceImpl implements MinioService {
 	}
 
 	@SneakyThrows
-	private String saveImage(InputStream inputStream, String fileName, String profileName) {
+	private String uploadImage(InputStream inputStream, String fileName) {
 		minioClient.putObject(
 				PutObjectArgs.builder()
 						.stream(inputStream, inputStream.available(), -1)
@@ -69,12 +103,19 @@ public class MinioServiceImpl implements MinioService {
 						.build()
 		);
 
-		Profile profile = profileRepository.findByName(profileName)
-				.orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
-		String imageUrl = url + "/" + fileName;
+		return "localhost:9001/" + fileName;
+	}
 
-		profile.setImageUrl(imageUrl);
-		profileRepository.save(profile);
+	@SneakyThrows
+	private String saveDirectionImage(InputStream inputStream, String fileName, String name) {
+
+		Direction direction = directionRepository.findByName(name)
+				.orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
+
+		String imageUrl = uploadImage(inputStream, fileName);
+
+		direction.setImageUrl(imageUrl);
+		directionRepository.save(direction);
 
 		return imageUrl;
 	}

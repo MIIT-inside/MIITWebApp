@@ -49,7 +49,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    @Cacheable(value = "ProfileService::getProfilesByInstitute", key = "#name")
+    @CacheEvict(value = "ProfileService::getProfilesByInstitute", key = "#name")
     public List<ProfileDto> getProfilesByInstituteName(String name) {
         List<Profile> profiles = profileRepository.findByInstitute(name)
                 .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
@@ -58,7 +58,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    @Cacheable(value = "ProfileService::getProfilesByDirection", key = "#code")
+    @CacheEvict(value = "ProfileService::getProfilesByDirection", key = "#code")
     public List<ProfileDto> getProfilesByDirectionCode(String code) {
         Direction direction = directionRepository.findByCode(code)
                 .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));

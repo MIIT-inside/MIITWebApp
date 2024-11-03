@@ -4,5 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface MinioService {
 
-	String uploadImage(MultipartFile file, String profile);
+	String uploadProfileImage(MultipartFile file, String profile);
+
+	String uploadDirectionImage(MultipartFile file, String direction);
 }

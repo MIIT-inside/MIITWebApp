@@ -16,9 +16,16 @@ public class MinioController {
 		this.minioService = minioService;
 	}
 
-	@PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<String> uploadImage(@RequestParam String name, @RequestPart MultipartFile image) {
-		String imageUrl = minioService.uploadImage(image, name);
+	@PostMapping(value = "/upload/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<String> uploadProfileImage(@RequestParam String name, @RequestPart MultipartFile image) {
+		String imageUrl = minioService.uploadProfileImage(image, name);
+
+		return ResponseEntity.ok(imageUrl);
+	}
+
+	@PostMapping(value = "/upload/direction", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<String> uploadDirectionImage(@RequestParam String name, @RequestPart MultipartFile image) {
+		String imageUrl = minioService.uploadDirectionImage(image, name);
 
 		return ResponseEntity.ok(imageUrl);
 	}

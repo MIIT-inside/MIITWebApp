@@ -23,4 +23,7 @@ public class DirectionDto {
 
     @JsonProperty("pass_points")
     private List<PassPoint> passPoints;
+
+    @JsonProperty("image_url")
+    private String imageUrl;
 }
