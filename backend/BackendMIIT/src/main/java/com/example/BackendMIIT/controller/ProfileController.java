@@ -21,13 +21,6 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    @PostMapping(value = "/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> uploadImage(@RequestParam String name, @RequestPart MultipartFile image) {
-        String imageUrl = profileService.uploadImage(image, name);
-
-        return ResponseEntity.ok(imageUrl);
-    }
-
     @PostMapping("/parse")
     public ResponseEntity<String> parseProfiles(@RequestParam String url) {
         profileService.parseProfile(url);

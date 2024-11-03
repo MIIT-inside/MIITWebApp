@@ -18,6 +18,4 @@ public interface ProfileService {
     ProfileDto getProfileByName(String name);
 
     List<ProfileDto> getProfilesByDirectionCode(String code);
-
-    String uploadImage(MultipartFile file, String profile);
 }

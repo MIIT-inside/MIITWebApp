@@ -18,6 +18,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,24 +37,15 @@ public class ProfileServiceImpl implements ProfileService {
     private final WebClient webClient;
     private final String BASE_URL = "https://www.miit.ru";
     private final ProfileMapper profileMapper;
-    private final MinioClient minioClient;
-
-    @Value("${minio.bucket}")
-    private String bucketName;
-
-    @Value("${minio.url}")
-    private String url;
 
     public ProfileServiceImpl(ProfileRepository profileRepository,
                               DirectionRepository directionRepository,
                               WebClient webClient,
-                              ProfileMapper profileMapper,
-                              MinioClient minioClient) {
+                              ProfileMapper profileMapper) {
         this.profileRepository = profileRepository;
         this.directionRepository = directionRepository;
         this.webClient = webClient;
         this.profileMapper = profileMapper;
-        this.minioClient = minioClient;
     }
 
     @Override
@@ -75,7 +67,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    @Cacheable(value = "ProfileService::getAllProfiles", key = "'profiles'")
+    @CacheEvict(value = "ProfileService::getAllProfiles", key = "'profiles'")
     public List<ProfileDto> getAllProfiles() {
         List<Profile> profiles = profileRepository.findAll();
 
@@ -83,78 +75,11 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    @Cacheable(value = "ProfileService::getProfileByName", key = "#name")
+    @CacheEvict(value = "ProfileService::getProfileByName", key = "#name")
     public ProfileDto getProfileByName(String name) {
         Profile profile = profileRepository.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
         return profileMapper.profileToDto(profile);
-    }
-
-    @Override
-    public String uploadImage(MultipartFile file, String profile) {
-        try {
-            createBucket();
-        }
-        catch (Exception e) {
-            throw new ImageUploadException("Image upload failed" + e.getMessage());
-        }
-
-        if (file.isEmpty() || file.getOriginalFilename() == null) {
-            throw new ImageUploadException("Image must have name");
-        }
-
-        String fileName = generateFileName(file);
-        String imageUrl;
-        try (InputStream inputStream = file.getInputStream()) {
-            imageUrl = saveImage(inputStream, fileName, profile);
-        }
-        catch (Exception e) {
-            throw new ImageUploadException(("Image upload failed" + e.getMessage()));
-        }
-
-        return imageUrl;
-    }
-
-    @SneakyThrows
-    private String saveImage(InputStream inputStream, String fileName, String profileName) {
-        minioClient.putObject(
-                PutObjectArgs.builder()
-                        .stream(inputStream, inputStream.available(), -1)
-                        .bucket(bucketName)
-                        .object(fileName)
-                        .build()
-        );
-
-        Profile profile = profileRepository.findByName(profileName)
-                .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
-        String imageUrl = url + "/" + fileName;
-
-        profile.setImageUrl(imageUrl);
-        profileRepository.save(profile);
-
-        return imageUrl;
-    }
-
-    private String generateFileName(MultipartFile file) {
-        String extension = getExtension(file);
-        return UUID.randomUUID() + "." + extension;
-    }
-
-    private String getExtension(MultipartFile file) {
-        return file.getOriginalFilename().
-                substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-    }
-
-    @SneakyThrows
-    private void createBucket() {
-        boolean found = minioClient.bucketExists(BucketExistsArgs.builder()
-                .bucket(bucketName)
-                .build());
-        if (!found) {
-            minioClient.makeBucket(MakeBucketArgs.builder()
-                    .bucket(bucketName)
-                    .build());
-        }
     }
 
     @Override
