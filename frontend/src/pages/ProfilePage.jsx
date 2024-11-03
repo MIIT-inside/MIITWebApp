@@ -43,17 +43,17 @@ export default function ProfilePage() {
                             <h1 className="text-4xl text-center font-bold mb-6 text-white">{profile.name}</h1>
                             <div className="flex justify-between mt-40">
                                 <div
-                                    className="flex flex-col text-white text-xl items-center space-y-4 border border-white py-8 px-16">
+                                    className="flex flex-col text-white text-center text-xl items-center space-y-4 border border-white py-4 px-8">
                                     <span className="text-2xl">Форма обучения</span>
                                     <span>{profile.form}</span>
                                 </div>
                                 <div
-                                    className="flex flex-col text-white text-xl items-center space-y-4 border border-white py-8 px-16">
+                                    className="flex flex-col text-white text-center text-xl items-center space-y-4 border border-white py-4 px-8">
                                     <span className="text-2xl">Уровень образования</span>
                                     <span>{profile.level}</span>
                                 </div>
                                 <div
-                                    className="flex flex-col text-white text-xl items-center space-y-4 border border-white py-8 px-16">
+                                    className="flex flex-col text-white text-center text-xl items-center space-y-4 border border-white py-4 px-8">
                                     <span className="text-2xl">Институт</span>
                                     <span>{profile.institute}</span>
                                 </div>
