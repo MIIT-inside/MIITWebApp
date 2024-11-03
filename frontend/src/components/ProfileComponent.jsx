@@ -1,16 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import test from "../assets/test.jpg"
+import React from 'react';
+import { Link } from 'react-router-dom';
+import test from '../assets/test.jpg';
+import {FadeInSection} from './FadeInSection';
 
-export default function ProfileComponent({image, name, description}) {
-
+export default function ProfileComponent({ name, description }) {
     return (
+        <FadeInSection threshold={0.5}>
         <div className="flex flex-col space-y-3">
-            <img src={test} alt="изображение профиля" className="w-full h-80 object-cover"/>
-            <div className="flex flex-col flex-grow px-1">
-                <span className="text-xl font-bold line-clamp-2">{name}</span>
-                <p>{description}</p>
+            <img src={test} alt="изображение профиля" className="w-full h-80 object-cover" />
+            <div className="flex flex-col flex-grow px-1 space-y-3">
+                <span className="text-xl font-bold line-clamp-1">{name}</span>
+                <p>{description} empty</p>
             </div>
-            <button className="px-5 py-3 bg-none border border-black mt-auto">Узнать больше</button>
+            <Link to={`/profile/${encodeURIComponent(name)}`} className="mt-auto">
+                <button className="px-5 py-3 bg-none border border-black">Узнать больше</button>
+            </Link>
         </div>
-    )
+        </FadeInSection>
+    );
 }
