@@ -6,9 +6,10 @@ export default function SpecializationPage() {
     const [profiles, setProfiles] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/miit/profiles/')
+        axios.get('http://localhost:8080/api/miit/directions/')
             .then(response => {
                 const mappedData = response.data.map(item => ({
+                    code: item.code,
                     name: item.name,
                     description: item.description,
                 }));
@@ -28,7 +29,8 @@ export default function SpecializationPage() {
             <div className="grid my-20 grid-cols-3 gap-6">
                 {profiles.map((profile) => (
                     <ProfileComponent
-                        key={profile.name}
+                        key={profile.code}
+                        code={profile.code}
                         name={profile.name}
                         description={profile.description}
                     />

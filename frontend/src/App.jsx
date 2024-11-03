@@ -18,7 +18,7 @@ export default function App() {
                     <Route path="/main" element={<MainPage/>}/>
                     <Route path="/specialties" element={<SpecializationPage/>}/>
                     <Route path="/faq" element={<FAQPage/>}/>
-                    <Route path="/profile/:name" element={<ProfileDetailPage />} />
+                    <Route path="/profile/:code/:name" element={<ProfileDetailPage />} />
                 </Routes>
             </main>
             <FooterBlock/>
