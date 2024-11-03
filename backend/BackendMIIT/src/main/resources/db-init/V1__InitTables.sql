@@ -12,7 +12,6 @@ SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
@@ -252,7 +251,8 @@ CREATE TABLE public.profiles (
     form character varying(255),
     institute character varying(255),
     level character varying(255),
-    name character varying(255)
+    name character varying(255),
+    image_url character varying(255)
 );
 
 

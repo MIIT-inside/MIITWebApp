@@ -2,6 +2,7 @@ package com.example.BackendMIIT.controller;
 
 import com.example.BackendMIIT.model.dto.ProfileDto;
 import com.example.BackendMIIT.service.ProfileService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(path = "api/miit/profiles")
 public class ProfileController {
@@ -19,9 +21,9 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    @PostMapping("/image")
-    public ResponseEntity<String> uploadImage(@RequestParam String profileName, @RequestPart MultipartFile image) {
-        String imageUrl = profileService.uploadImage(image, profileName);
+    @PostMapping(value = "/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> uploadImage(@RequestParam String name, @RequestPart MultipartFile image) {
+        String imageUrl = profileService.uploadImage(image, name);
 
         return ResponseEntity.ok(imageUrl);
     }

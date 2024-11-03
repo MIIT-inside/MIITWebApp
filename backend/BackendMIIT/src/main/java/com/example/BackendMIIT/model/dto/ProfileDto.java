@@ -23,4 +23,7 @@ public class ProfileDto {
 
     @JsonProperty("abbreviation")
     private String abbreviation;
+
+    @JsonProperty("image_url")
+    private String imageUrl;
 }
