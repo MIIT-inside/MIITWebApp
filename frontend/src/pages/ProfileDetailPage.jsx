@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import axios from 'axios';
 import testImage from "../assets/test.jpg";
 
@@ -68,17 +68,21 @@ export default function ProfileDetailPage() {
                         <span className="text-xl text-gray-600">{directions.level}</span>
                     </div>
                 </div>
-                <div className="py-16 mt-10 bg-fixed bg-cover relative" style={{ backgroundImage: `url(${testImage})` }}>
+                <div className="py-16 mt-10 bg-fixed bg-cover relative" style={{backgroundImage: `url(${testImage})`}}>
                     <div className="absolute inset-0 bg-black opacity-60"></div>
-                    <span
-                        className="flex text-3xl font-bold max-w-[1280px] mx-auto text-white relative">Профили подготовки</span>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 max-w-[1280px] mx-auto relative">
+                    <span className="flex text-3xl font-bold max-w-[1280px] mx-auto text-white relative">Профили подготовки</span>
+                    <div
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 max-w-[1280px] mx-auto relative">
                         {profiles.map((profile, index) => (
-                            <div key={index} className="p-4 border border-white rounded shadow-sm">
-                                <h2 className="text-2xl font-semibold line-clamp-1 text-white">{profile.name}</h2>
+
+                            <div className="p-4 border border-white rounded shadow-sm">
+                                <Link key={index} to={`/profile/${encodeURIComponent(profile.name)}`}>
+                                    <h2 className="text-2xl font-semibold line-clamp-1 text-white">{profile.name}</h2>
+                                </Link>
                                 <p className="mt-2 text-white">{profile.form} - {profile.level}</p>
                                 <p className="mt-2 text-white">{profile.institute} ({profile.abbreviation})</p>
                             </div>
+
                         ))}
                     </div>
                 </div>
