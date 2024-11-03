@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import axios from 'axios';
+import testImage from "../assets/test.jpg";
+
+const categoryNames = {
+    "MAIN": "Основной конкурс",
+    "SPECIAL": "Специальная квота",
+    "TARGET": "Целевой прием",
+    "SEPARATE": "Особое право",
+    "CONTRACT": "Договорная основа"
+};
 
 export default function ProfileDetailPage() {
-    const { code, name } = useParams();
+    const {code, name} = useParams();
     const [profiles, setProfiles] = useState([]);
     const [error, setError] = useState(null);
+    const [directions, setDirections] = useState([]);
 
     useEffect(() => {
         console.log(`Fetching profile data for code: ${code}`);
@@ -16,29 +26,78 @@ export default function ProfileDetailPage() {
             })
             .catch(error => {
                 console.error('Error fetching profile data:', error);
-                if (error.response) {
-                    console.error('Response data:', error.response.data);
-                    console.error('Response status:', error.response.status);
-                    console.error('Response headers:', error.response.headers);
-                }
                 setError('Ошибка при загрузке данных профиля. Пожалуйста, попробуйте снова.');
+            });
+    }, [code]);
+
+    useEffect(() => {
+        axios.get(`http://localhost:8080/api/miit/directions/direction/${code}`)
+            .then(response => {
+                setDirections(response.data);
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching directions data:', error);
+                setError('Ошибка при загрузке данных направления. Пожалуйста, попробуйте снова.');
             });
     }, [code]);
 
     if (error) return <div>{error}</div>;
 
     return (
-        <div className="max-w-[1280px] mx-auto mt-40">
-            <h1 className="text-3xl font-bold">{decodeURIComponent(name)}</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-                {profiles.map((profile, index) => (
-                    <div key={index} className="p-4 border rounded shadow-sm">
-                        <h2 className="text-2xl font-semibold">{profile.name}</h2>
-                        <p className="text-sm mt-2">{profile.form} - {profile.level}</p>
-                        <p className="text-sm mt-2">{profile.institute} ({profile.abbreviation})</p>
-                        <p className="text-gray-700 mt-2">{profile.description || 'Описание отсутствует'}</p>
+        <div>
+            <div className="mt-40">
+                <div className="text-xl space-y-10 max-w-[1280px] mx-auto">
+                    <span className="text-4xl font-bold">{decodeURIComponent(name)}</span>
+                    <p className="text-2xl text-gray-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                        Blanditiis eaque eligendi eum explicabo
+                        id ipsum laboriosam neque omnis quibusdam velit. Aliquid at doloribus libero maiores nisi qui
+                        repudiandae unde voluptate.</p>
+                </div>
+                <div className="flex justify-between max-w-[1280px] mx-auto mt-20">
+                    <div className="flex flex-col items-center space-y-3 border py-5 px-16 border-black">
+                        <span className="text-2xl font-semibold">Код специальности</span>
+                        <span className="text-xl text-gray-600">{directions.code}</span>
                     </div>
-                ))}
+                    <div className="flex flex-col items-center space-y-3 border py-5 px-16 border-black">
+                        <span className="text-2xl font-semibold">Форма обучения</span>
+                        <span className="text-xl text-gray-600">{directions.form}</span>
+                    </div>
+                    <div className="flex flex-col items-center space-y-3 border py-5 px-16 border-black">
+                        <span className="text-2xl font-semibold">Уровень образования</span>
+                        <span className="text-xl text-gray-600">{directions.level}</span>
+                    </div>
+                </div>
+                <div className="py-16 mt-10 bg-fixed bg-cover relative" style={{ backgroundImage: `url(${testImage})` }}>
+                    <div className="absolute inset-0 bg-black opacity-60"></div>
+                    <span
+                        className="flex text-3xl font-bold max-w-[1280px] mx-auto text-white relative">Профили подготовки</span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 max-w-[1280px] mx-auto relative">
+                        {profiles.map((profile, index) => (
+                            <div key={index} className="p-4 border border-white rounded shadow-sm">
+                                <h2 className="text-2xl font-semibold line-clamp-1 text-white">{profile.name}</h2>
+                                <p className="mt-2 text-white">{profile.form} - {profile.level}</p>
+                                <p className="mt-2 text-white">{profile.institute} ({profile.abbreviation})</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div>
+                    <div className="flex flex-col mt-10 space-y-10 max-w-[1280px] mx-auto pb-16">
+                        <span className="text-3xl font-bold">Поступление</span>
+                        <span className="text-2xl text-gray-600">Для успешного поступления в наш вуз важно ориентироваться на проходные и средние баллы прошлых лет, которые помогут вам оценить шансы на зачисление и спланировать подготовку. В этом разделе вы найдете актуальные данные о проходных и средних баллах по каждому направлению. Эти показатели дают общее представление о конкурсной ситуации и помогут вам определиться с выбором направления.</span>
+                        <div>
+                            {directions.pass_points && directions.pass_points.map((point, index) => (
+                                <div key={index}
+                                     className="flex justify-between items-center border-b border-gray-500 p-3">
+                                    <span className="font-semibold w-1/2 text-xl">{categoryNames[point.category]}</span>
+                                    <span className="text-xl">Мин: {point.min}</span>
+                                    <span className="text-xl">Сред: {point.avg}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
