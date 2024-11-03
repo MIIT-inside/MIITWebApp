@@ -1,6 +1,7 @@
 package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.model.domain.Profile;
+import com.example.BackendMIIT.repository.ProfileRepository;
 import com.example.BackendMIIT.service.MinioService;
 import com.example.BackendMIIT.util.exceptions.ImageUploadException;
 import io.minio.BucketExistsArgs;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @Service
 public class MinioServiceImpl implements MinioService {
 
+	private final ProfileRepository profileRepository;
 	private final MinioClient minioClient;
 
 	@Value("${minio.bucket}")
@@ -27,7 +29,8 @@ public class MinioServiceImpl implements MinioService {
 	@Value("${minio.url}")
 	private String url;
 
-	public MinioServiceImpl(MinioClient minioClient) {
+	public MinioServiceImpl(ProfileRepository profileRepository, MinioClient minioClient) {
+		this.profileRepository = profileRepository;
 		this.minioClient = minioClient;
 	}
 
