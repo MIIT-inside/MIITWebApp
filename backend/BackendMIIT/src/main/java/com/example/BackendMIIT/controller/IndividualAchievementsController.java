@@ -3,14 +3,12 @@ package com.example.BackendMIIT.controller;
 import com.example.BackendMIIT.model.domain.IndividualAchievements;
 import com.example.BackendMIIT.service.IndividualAchievementsService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(path = "api/miit/achievements")
 public class IndividualAchievementsController {
 	private final IndividualAchievementsService individualAchievementsService;
