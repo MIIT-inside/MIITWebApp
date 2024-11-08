@@ -12,6 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -102,15 +103,17 @@ public class DirectionServiceImpl implements DirectionService {
     @Override
     public List<DirectionWithProfilesDto> getSortedDirections(String ppType) {
         List<Direction> directions;
+        Sort sort;
 
         if ("min".equalsIgnoreCase(ppType)) {
-            directions = directionRepository.findAllOrderByMinPassPointAndName();
+            sort = Sort.by(Sort.Order.desc("passPoints.min"), Sort.Order.asc("name"));
         } else if ("avg".equalsIgnoreCase(ppType)) {
-            directions = directionRepository.findAllOrderByAvgPassPointAndName();
+            sort = Sort.by(Sort.Order.desc("passPoints.avg"), Sort.Order.asc("name"));
         } else {
-            directions = directionRepository.findAllOrderByName();
+            sort = Sort.by(Sort.Order.asc("name"));
         }
 
+        directions = directionRepository.findAll(sort);
         return directionMapper.directionsToWithProfilesDto(directions);
     }
 }
