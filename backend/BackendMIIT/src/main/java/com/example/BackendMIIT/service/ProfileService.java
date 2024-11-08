@@ -10,7 +10,7 @@ public interface ProfileService {
 
     void saveProfile(List<String> properties);
 
-    List<ProfileDto> getProfilesByInstituteName(String institute);
+    List<ProfileDto> getProfilesByInstituteName(String name);
 
     List<ProfileDto> getAllProfiles();
 
