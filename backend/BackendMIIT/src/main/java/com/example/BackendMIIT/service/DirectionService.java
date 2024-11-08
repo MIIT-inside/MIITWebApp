@@ -18,5 +18,5 @@ public interface DirectionService {
 
     List<DirectionDto> getDirections();
 
-    List<DirectionWithProfilesDto> getSortedDirections(String typeOfPassPoints);
+    List<DirectionWithProfilesDto> getSortedDirections(String ppType);
 }

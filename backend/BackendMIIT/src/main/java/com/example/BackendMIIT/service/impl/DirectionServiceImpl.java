@@ -100,12 +100,12 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    public List<DirectionWithProfilesDto> getSortedDirections(String typeOfPassPoints) {
+    public List<DirectionWithProfilesDto> getSortedDirections(String ppType) {
         List<Direction> directions;
 
-        if ("min".equalsIgnoreCase(typeOfPassPoints)) {
+        if ("min".equalsIgnoreCase(ppType)) {
             directions = directionRepository.findAllOrderByMinPassPointAndName();
-        } else if ("avg".equalsIgnoreCase(typeOfPassPoints)) {
+        } else if ("avg".equalsIgnoreCase(ppType)) {
             directions = directionRepository.findAllOrderByAvgPassPointAndName();
         } else {
             directions = directionRepository.findAllOrderByName();

@@ -47,7 +47,7 @@ public class DirectionController {
     }
 
     @GetMapping("/sorted")
-    public List<DirectionWithProfilesDto> getSortedDirections(@RequestParam String typeOfPassPoints) {
-        return directionService.getSortedDirections(typeOfPassPoints);
+    public List<DirectionWithProfilesDto> getSortedDirections(@RequestParam String ppType) {
+        return directionService.getSortedDirections(ppType);
     }
 }
