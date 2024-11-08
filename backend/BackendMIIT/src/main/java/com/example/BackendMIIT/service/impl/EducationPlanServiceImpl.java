@@ -17,6 +17,7 @@ import com.example.BackendMIIT.repository.SemesterRepository;
 import com.example.BackendMIIT.service.EducationPlanService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,6 +52,7 @@ public class EducationPlanServiceImpl implements EducationPlanService {
     }
 
     @Override
+    @Cacheable(value = "EducationPlanService::getPlansByProfileName", key = "#name")
     public EducationPlanDto getPlansByProfileName(String name) {
         Profile profile = profileRepository.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));

@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -101,6 +102,7 @@ public class IndividualAchievementsServiceImpl implements IndividualAchievements
     }
 
     @Override
+    @Cacheable(value = "IndividualAchievementsService::getAchievements", key = "'achievements'")
     public List<IndividualAchievements> getAllIndividualAchievements() {
         return individualAchievementsRepository.findAll();
     }
