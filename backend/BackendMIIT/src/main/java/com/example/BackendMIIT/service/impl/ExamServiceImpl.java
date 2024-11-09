@@ -28,7 +28,10 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public void parseAndSaveExamSubjects() {
         Set<Exam> exams = parser.parseExams();
-        examRepository.saveAll(exams);
+
+        if (getAllExams().isEmpty()) {
+            examRepository.saveAll(exams);
+        }
     }
 
     @Override
