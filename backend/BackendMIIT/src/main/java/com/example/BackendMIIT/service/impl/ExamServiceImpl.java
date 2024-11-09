@@ -6,11 +6,13 @@ import com.example.BackendMIIT.model.dto.ExamDto;
 import com.example.BackendMIIT.parser.ExamParser;
 import com.example.BackendMIIT.repository.ExamRepository;
 import com.example.BackendMIIT.service.ExamService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
 public class ExamServiceImpl implements ExamService {
 
     private final ExamRepository examRepository;
