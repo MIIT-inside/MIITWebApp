@@ -2,10 +2,10 @@ package com.example.BackendMIIT.service;
 
 import com.example.BackendMIIT.model.domain.Exam;
 
-import java.util.Set;
+import java.util.List;
 
 public interface ExamService {
     void parseAndSaveExamSubjects();
 
-    Set<Exam> getAllExams();
+    List<Exam> getAllExams();
 }
