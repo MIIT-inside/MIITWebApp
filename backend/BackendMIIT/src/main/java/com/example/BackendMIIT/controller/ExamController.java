@@ -18,15 +18,16 @@ public class ExamController {
         this.examService = examService;
     }
 
-    @PostMapping("/subjects/parse")
+    @PostMapping("/exams/parse")
     public ResponseEntity<String> parseSubjects() {
         examService.parseAndSaveExamSubjects();
         return ResponseEntity.ok("Exam subjects parsed successfully");
     }
 
-    @GetMapping("/")
+
+    @GetMapping("/exams")
     public ResponseEntity<List<ExamDto>> getAllExams() {
-        return ResponseEntity.ok(new ArrayList<>());
+        return ResponseEntity.ok(examService.getAllExams());
     }
 
     @GetMapping("/direction")
