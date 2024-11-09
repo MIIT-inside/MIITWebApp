@@ -25,10 +25,10 @@ public class ExamParser {
         Elements subjectElements = ParserUtil.getElements(minPointsUrl, "div.td.col-12.col-md-6.pb-3.pb-md-0");
 
         for (Element element : subjectElements) {
-            Elements subjectNames = element.select("br");
+            String[] records = element.text().split(";");
 
-            for (Element record : subjectNames) {
-                String subjectName = record.text().split(":")[0].trim();
+            for (String record : records) {
+                String subjectName = record.split(":")[0].trim();
 
                 if (!ParserUtil.isNullOrEmpty(subjectName)) {
                     Exam exam = new Exam();
@@ -37,7 +37,6 @@ public class ExamParser {
                 }
             }
         }
-
 
         for (Exam exam : exams) {
             System.out.println(exam.getSubjectName());
