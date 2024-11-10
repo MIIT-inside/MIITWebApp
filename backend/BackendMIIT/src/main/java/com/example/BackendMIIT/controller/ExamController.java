@@ -1,5 +1,6 @@
 package com.example.BackendMIIT.controller;
 
+import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.dto.DirectionExamPointsDto;
 import com.example.BackendMIIT.model.dto.ExamDto;
 import com.example.BackendMIIT.service.ExamService;
@@ -39,5 +40,10 @@ public class ExamController {
     @GetMapping("/direction")
     public ResponseEntity<DirectionExamPointsDto> getExamsByDirection(@RequestParam String directionName) {
         return ResponseEntity.ok(examService.getDirectionExamPoints(directionName));
+    }
+
+    @GetMapping("/all-directions")
+    public ResponseEntity<List<DirectionExamPointsDto>> getExams() {
+        return ResponseEntity.ok(examService.getAllDirectionExamPoints());
     }
 }
