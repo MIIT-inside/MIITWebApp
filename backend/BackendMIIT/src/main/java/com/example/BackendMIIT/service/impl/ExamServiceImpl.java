@@ -4,6 +4,7 @@ import com.example.BackendMIIT.mapper.ExamMapper;
 import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.domain.DirectionExamPoints;
 import com.example.BackendMIIT.model.domain.Exam;
+import com.example.BackendMIIT.model.dto.DirectionExamPointsDto;
 import com.example.BackendMIIT.model.dto.ExamDto;
 import com.example.BackendMIIT.parser.DirectionExamPointsParser;
 import com.example.BackendMIIT.parser.ExamParser;
@@ -11,6 +12,8 @@ import com.example.BackendMIIT.repository.DirectionExamPointsRepository;
 import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.repository.ExamRepository;
 import com.example.BackendMIIT.service.ExamService;
+import com.example.BackendMIIT.util.exceptions.DirectionNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -68,5 +71,26 @@ public class ExamServiceImpl implements ExamService {
                              .stream()
                              .map(examMapper::examToDto)
                              .collect(Collectors.toList());
+    }
+
+    @Override
+    public DirectionExamPointsDto getDirectionExamPoints(String directionName) {
+        Direction direction = directionRepository.findByName(directionName)
+                .orElseThrow(() -> new DirectionNotFoundException("Direction not found"));
+
+        List<DirectionExamPoints> examScores = depRepository.findByDirection(direction);
+
+        DirectionExamPointsDto dto = new DirectionExamPointsDto();
+        dto.setDirection(direction.getCode() + " " + direction.getName());
+        dto.setExams(examScores.stream()
+                .map(points -> {
+                    DirectionExamPointsDto.ExamPointsDto examScoreDto = new DirectionExamPointsDto.ExamPointsDto();
+                    examScoreDto.setSubject(points.getExam().getSubjectName());
+                    examScoreDto.setMinPoints(points.getMinPoints());
+                    return examScoreDto;
+                })
+                .collect(Collectors.toList()));
+
+        return dto;
     }
 }
