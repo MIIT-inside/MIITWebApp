@@ -24,10 +24,15 @@ public class ExamController {
         return ResponseEntity.ok("Exam subjects parsed successfully");
     }
 
-
     @GetMapping("/")
     public ResponseEntity<List<ExamDto>> getAllExams() {
         return ResponseEntity.ok(examService.getAllExams());
+    }
+
+    @PostMapping("/points/parse")
+    public ResponseEntity<String> parseExamsAndPoints() {
+        examService.parseAndSaveMinPoints();
+        return ResponseEntity.ok("Exams and min points parsed successfully");
     }
 
     @GetMapping("/direction")
