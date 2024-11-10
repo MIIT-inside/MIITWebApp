@@ -44,7 +44,7 @@ public class ExamServiceImpl implements ExamService {
     public void parseAndSaveExamSubjects() {
         Set<Exam> exams = examParser.parseExams();
 
-        if (getAllExams().isEmpty()) {
+        if (examRepository.findAll().isEmpty()) {
             examRepository.saveAll(exams);
         }
     }
