@@ -16,6 +16,6 @@ public class Exam extends BaseEntity implements Serializable {
     private String subjectName;
 
     @JsonBackReference
-    @ManyToMany(mappedBy = "exams")
-    private Set<Direction> directions = new HashSet<>();
+    @ManyToMany(mappedBy = "exams", cascade = CascadeType.ALL)
+    private Set<DirectionExamPoints> directionExamPoints = new HashSet<>();
 }

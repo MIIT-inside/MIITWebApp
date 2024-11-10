@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,15 +24,9 @@ public class Direction extends BaseEntity implements Serializable {
     private List<Profile> profiles;
 
     @JsonManagedReference
-    @ManyToMany
-    @JoinTable(
-            name = "direction_exam",
-            joinColumns = @JoinColumn(name = "direction_id"),
-            inverseJoinColumns = @JoinColumn(name = "exam_id")
-    )
-    private Set<Exam> exams;
-
-    @JsonManagedReference
     @OneToMany(mappedBy = "direction")
     private List<PassPoint> passPoints;
+
+    @OneToMany(mappedBy = "direction", cascade = CascadeType.ALL)
+    private Set<DirectionExamPoints> directionExamScores = new HashSet<>();
 }
