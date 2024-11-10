@@ -13,4 +13,6 @@ public interface ExamService {
     List<ExamDto> getAllExams();
 
     DirectionExamPointsDto getDirectionExamPoints(String directionName);
+
+    List<DirectionExamPointsDto> getAllDirectionExamPoints();
 }
