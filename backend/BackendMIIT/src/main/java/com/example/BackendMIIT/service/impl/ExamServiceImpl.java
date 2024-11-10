@@ -13,7 +13,6 @@ import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.repository.ExamRepository;
 import com.example.BackendMIIT.service.ExamService;
 import com.example.BackendMIIT.util.exceptions.DirectionNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -68,9 +67,9 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public List<ExamDto> getAllExams() {
         return examRepository.findAll()
-                             .stream()
-                             .map(examMapper::examToDto)
-                             .collect(Collectors.toList());
+                .stream()
+                .map(examMapper::examToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -92,5 +91,30 @@ public class ExamServiceImpl implements ExamService {
                 .collect(Collectors.toList()));
 
         return dto;
+    }
+
+    @Override
+    public List<DirectionExamPointsDto> getAllDirectionExamPoints() {
+        List<Direction> directions = directionRepository.findAll();
+
+        return directions.stream()
+                .map(direction -> {
+                    DirectionExamPointsDto depDto = new DirectionExamPointsDto();
+                    depDto.setDirection(direction.getCode() + " " + direction.getName());
+
+                    List<DirectionExamPoints> examScores = depRepository.findByDirection(direction);
+                    depDto.setExams(examScores.stream()
+                            .map(score -> {
+                                DirectionExamPointsDto.ExamPointsDto examPointsDto =
+                                        new DirectionExamPointsDto.ExamPointsDto();
+                                examPointsDto.setSubject(score.getExam().getSubjectName());
+                                examPointsDto.setMinPoints(score.getMinPoints());
+                                return examPointsDto;
+                            })
+                            .collect(Collectors.toList()));
+
+                    return depDto;
+                }
+                ).collect(Collectors.toList());
     }
 }
