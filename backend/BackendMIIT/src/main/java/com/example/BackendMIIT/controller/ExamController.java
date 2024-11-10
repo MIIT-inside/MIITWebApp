@@ -1,5 +1,6 @@
 package com.example.BackendMIIT.controller;
 
+import com.example.BackendMIIT.model.dto.DirectionExamPointsDto;
 import com.example.BackendMIIT.model.dto.ExamDto;
 import com.example.BackendMIIT.service.ExamService;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class ExamController {
     }
 
     @GetMapping("/direction")
-    public ResponseEntity<List<ExamDto>> getExamsByDirection(@RequestParam String directionName) {
-        return ResponseEntity.ok(new ArrayList<>());
+    public ResponseEntity<DirectionExamPointsDto> getExamsByDirection(@RequestParam String directionName) {
+        return ResponseEntity.ok(examService.getDirectionExamPoints(directionName));
     }
 }
