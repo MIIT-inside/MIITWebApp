@@ -33,13 +33,13 @@ public class DirectionExamPointsParser {
             String directionName = directionWithCode.substring(directionWithCode.indexOf(' ') + 1).trim();
 
             Direction direction = allDirections.stream()
-                    .filter(d -> d.getName().equalsIgnoreCase(directionName))
+                    .filter(d -> d.getName().trim().equalsIgnoreCase(directionName))
                     .findFirst()
                     .orElse(null);
 
             if (direction == null) { continue; }
 
-            Elements exams = directionElements.select("div.td.col-12.col-md-6.pb-3.pb-md-0 br");
+            Elements exams = directionElement.select("div.td.col-12.col-md-6.pb-3.pb-md-0 br");
 
             for (Element examElement : exams) {
                 String[] parts = examElement.text().split(":");
@@ -50,13 +50,13 @@ public class DirectionExamPointsParser {
                 int minPoints;
 
                 try {
-                    minPoints = Integer.parseInt(parts[1].trim());
+                    minPoints = Integer.parseInt(parts[1].trim().replace(";", ""));
                 } catch (NumberFormatException numberFormatException) {
                     continue;
                 }
 
                 Exam exam = allExams.stream()
-                        .filter(e -> e.getSubjectName().equalsIgnoreCase(subject))
+                        .filter(e -> e.getSubjectName().trim().equalsIgnoreCase(subject))
                         .findFirst()
                         .orElse(null);
 
@@ -66,12 +66,10 @@ public class DirectionExamPointsParser {
                     directionExamPoints.setExam(exam);
                     directionExamPoints.setMinPoints(minPoints);
                     directionExamPointsSet.add(directionExamPoints);
+
+                    System.out.println("Added: " + direction.getName() + " - " + subject + " with " + minPoints);
                 }
             }
-        }
-
-        for (DirectionExamPoints dep : directionExamPointsSet) {
-            System.out.println(dep.getDirection() + " " + dep.getExam() + " " + dep.getMinPoints());
         }
 
         return directionExamPointsSet;
