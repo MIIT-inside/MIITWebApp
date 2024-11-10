@@ -7,5 +7,7 @@ import java.util.List;
 public interface ExamService {
     void parseAndSaveExamSubjects();
 
+    void parseAndSaveMinPoints();
+
     List<ExamDto> getAllExams();
 }
