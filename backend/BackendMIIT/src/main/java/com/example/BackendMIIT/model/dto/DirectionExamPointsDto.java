@@ -14,6 +14,7 @@ public class DirectionExamPointsDto {
     @JsonProperty("exams")
     private List<ExamPointsDto> exams;
 
+    @Data
     public static class ExamPointsDto {
 
         @JsonProperty("subject")
