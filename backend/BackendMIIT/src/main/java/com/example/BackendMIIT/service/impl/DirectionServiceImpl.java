@@ -4,6 +4,7 @@ import com.example.BackendMIIT.mapper.DirectionMapper;
 import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.dto.DirectionDto;
 import com.example.BackendMIIT.model.dto.DirectionWithProfilesDto;
+import com.example.BackendMIIT.model.dto.PassPointDto;
 import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.service.DirectionService;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DirectionServiceImpl implements DirectionService {
@@ -118,6 +120,30 @@ public class DirectionServiceImpl implements DirectionService {
         }
 
         directions = directionRepository.findAll(sort);
-        return directionMapper.directionsToWithProfilesDto(directions);
+        return directions.stream()
+                .map(direction -> {
+                    DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
+                    dto.setPassPoints(filterAndMapPassPoints(dto.getPassPoints(), ppType));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<PassPointDto> filterAndMapPassPoints(List<PassPointDto> passPoints, String ppType) {
+        return passPoints.stream()
+                .filter(pp -> !(pp.getMin() == 0 && pp.getAvg() == 0))
+                .map(pp -> {
+                    PassPointDto filteredPoints = new PassPointDto();
+                    filteredPoints.setCategory(pp.getCategory());
+
+                    if ("avg".equalsIgnoreCase(ppType)) {
+                        filteredPoints.setAvg(pp.getAvg());
+                    } else {
+                        filteredPoints.setMin(pp.getMin());
+                    }
+
+                    return filteredPoints;
+                })
+                .collect(Collectors.toList());
     }
 }
