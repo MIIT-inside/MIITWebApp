@@ -8,6 +8,7 @@ import com.example.BackendMIIT.model.dto.DirectionWithProfilesDto;
 import com.example.BackendMIIT.model.dto.PassPointDto;
 import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.service.DirectionService;
+import com.example.BackendMIIT.util.exceptions.CategoryNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
@@ -125,7 +126,7 @@ public class DirectionServiceImpl implements DirectionService {
     @Override
     public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category) {
         if (!isValidCategory(category)) {
-            // TODO: add category not found exception
+            throw new CategoryNotFoundException(category);
         }
 
         Sort sort = getSortOrder(ppType);
