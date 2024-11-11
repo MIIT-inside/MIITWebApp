@@ -47,7 +47,14 @@ public class DirectionController {
     }
 
     @GetMapping("/sorted")
-    public List<DirectionWithProfilesDto> getSortedDirections(@RequestParam(defaultValue = "min") String ppType) {
-        return directionService.getSortedDirections(ppType);
+    public List<DirectionWithProfilesDto> getSortedDirections(
+            @RequestParam(defaultValue = "min") String ppType,
+            @RequestParam String category
+    ) {
+        if (category.isEmpty()) {
+            return directionService.getSortedDirections(ppType);
+        } else {
+            return directionService.getSortedDirectionsByCategory(ppType, category);
+        }
     }
 }
