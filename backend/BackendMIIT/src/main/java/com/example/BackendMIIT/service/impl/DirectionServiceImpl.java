@@ -16,6 +16,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -111,10 +114,11 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     public List<DirectionWithProfilesDto> getSortedDirections(String ppType, int page, int size) {
-        Sort sort = getSortOrder(ppType);
-        List<Direction> directions = directionRepository.findAll(sort);
+        Pageable pageable = getPageable(ppType, page, size);
+        Page<Direction> directions = directionRepository.findAll(pageable);
 
-        return directions.stream()
+        return directions.getContent()
+                .stream()
                 .map(direction -> {
                     DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
                     dto.setPassPoints(filterAndMapPassPoints(dto.getPassPoints(), ppType));
@@ -124,15 +128,19 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category) {
+    public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType,
+                                                                        String category,
+                                                                        int page,
+                                                                        int size) {
         if (!isValidCategory(category)) {
             throw new CategoryNotFoundException(category);
         }
 
-        Sort sort = getSortOrder(ppType);
-        List<Direction> directions = directionRepository.findAll(sort);
+        Pageable pageable = getPageable(ppType, page, size);
+        Page<Direction> directions = directionRepository.findAll(pageable);
 
-        return directions.stream()
+        return directions.getContent()
+                .stream()
                 .map(direction -> {
                     DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
                     dto.setPassPoints(filterAndMapPassPointsByCategory(dto.getPassPoints(), ppType, category));
@@ -183,5 +191,10 @@ public class DirectionServiceImpl implements DirectionService {
         }
 
         return filteredPoints;
+    }
+
+    private Pageable getPageable(String ppType, int page, int size) {
+        Sort sort = getSortOrder(ppType);
+        return PageRequest.of(page, size, sort);
     }
 }
