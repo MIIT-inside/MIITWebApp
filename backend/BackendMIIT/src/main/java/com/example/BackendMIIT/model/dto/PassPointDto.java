@@ -9,7 +9,7 @@ public class PassPointDto {
     @JsonProperty("min")
     private int min;
 
-    @JsonProperty("max")
+    @JsonProperty("avg")
     private int avg;
 
     @JsonProperty("category")
