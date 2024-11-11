@@ -1,12 +1,14 @@
 package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.mapper.DirectionMapper;
+import com.example.BackendMIIT.model.domain.Category;
 import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.dto.DirectionDto;
 import com.example.BackendMIIT.model.dto.DirectionWithProfilesDto;
 import com.example.BackendMIIT.model.dto.PassPointDto;
 import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.service.DirectionService;
+import com.example.BackendMIIT.util.exceptions.CategoryNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -122,6 +125,10 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category) {
+        if (!isValidCategory(category)) {
+            throw new CategoryNotFoundException(category);
+        }
+
         Sort sort = getSortOrder(ppType);
         List<Direction> directions = directionRepository.findAll(sort);
 
@@ -142,6 +149,11 @@ public class DirectionServiceImpl implements DirectionService {
         } else {
             return Sort.by(Sort.Order.asc("name"));
         }
+    }
+
+    private boolean isValidCategory(String categoryName) {
+        return Arrays.stream(Category.values())
+                .anyMatch(category -> category.getValue().equalsIgnoreCase(categoryName));
     }
 
     private List<PassPointDto> filterAndMapPassPoints(List<PassPointDto> passPoints, String ppType) {
