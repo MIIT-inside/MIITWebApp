@@ -55,7 +55,7 @@ public class DirectionController {
         if (category.isEmpty()) {
             return directionService.getSortedDirections(ppType, page, size);
         } else {
-            return directionService.getSortedDirectionsByCategory(ppType, category);
+            return directionService.getSortedDirectionsByCategory(ppType, category, page, size);
         }
     }
 }
