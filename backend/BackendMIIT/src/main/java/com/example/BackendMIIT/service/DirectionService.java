@@ -19,4 +19,6 @@ public interface DirectionService {
     List<DirectionDto> getDirections();
 
     List<DirectionWithProfilesDto> getSortedDirections(String ppType, int page, int size);
+
+    List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category);
 }
