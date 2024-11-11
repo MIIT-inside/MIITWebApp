@@ -108,18 +108,9 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     public List<DirectionWithProfilesDto> getSortedDirections(String ppType) {
-        List<Direction> directions;
-        Sort sort;
+        Sort sort = getSortOrder(ppType);
+        List<Direction> directions = directionRepository.findAll(sort);
 
-        if ("min".equalsIgnoreCase(ppType)) {
-            sort = Sort.by(Sort.Order.desc("passPoints.min"), Sort.Order.asc("name"));
-        } else if ("avg".equalsIgnoreCase(ppType)) {
-            sort = Sort.by(Sort.Order.desc("passPoints.avg"), Sort.Order.asc("name"));
-        } else {
-            sort = Sort.by(Sort.Order.asc("name"));
-        }
-
-        directions = directionRepository.findAll(sort);
         return directions.stream()
                 .map(direction -> {
                     DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
@@ -129,59 +120,56 @@ public class DirectionServiceImpl implements DirectionService {
                 .collect(Collectors.toList());
     }
 
-    private List<PassPointDto> filterAndMapPassPoints(List<PassPointDto> passPoints, String ppType) {
-        return passPoints.stream()
-                .filter(pp -> !(pp.getMin() == 0 && pp.getAvg() == 0))
-                .map(pp -> {
-                    PassPointDto filteredPoints = new PassPointDto();
-                    filteredPoints.setCategory(pp.getCategory());
+    @Override
+    public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category) {
+        Sort sort = getSortOrder(ppType);
+        List<Direction> directions = directionRepository.findAll(sort);
 
-                    if ("avg".equalsIgnoreCase(ppType)) {
-                        filteredPoints.setAvg(pp.getAvg());
-                    } else {
-                        filteredPoints.setMin(pp.getMin());
-                    }
-
-                    return filteredPoints;
+        return directions.stream()
+                .map(direction -> {
+                    DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
+                    dto.setPassPoints(filterAndMapPassPointsByCategory(dto.getPassPoints(), ppType, category));
+                    return dto;
                 })
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category) {
-        List<Direction> directions;
-        Sort sort;
-
+    private Sort getSortOrder(String ppType) {
         if ("min".equalsIgnoreCase(ppType)) {
-            sort = Sort.by(Sort.Order.desc("passPoints.min"), Sort.Order.asc("name"));
+            return Sort.by(Sort.Order.desc("passPoints.min"), Sort.Order.asc("name"));
         } else if ("avg".equalsIgnoreCase(ppType)) {
-            sort = Sort.by(Sort.Order.desc("passPoints.avg"), Sort.Order.asc("name"));
+            return Sort.by(Sort.Order.desc("passPoints.avg"), Sort.Order.asc("name"));
         } else {
-            sort = Sort.by(Sort.Order.asc("name"));
+            return Sort.by(Sort.Order.asc("name"));
+        }
+    }
+
+    private List<PassPointDto> filterAndMapPassPoints(List<PassPointDto> passPoints, String ppType) {
+        return passPoints.stream()
+                .filter(pp -> !(pp.getMin() == 0 && pp.getAvg() == 0))
+                .map(pp -> mapPassPointDto(pp, ppType))
+                .collect(Collectors.toList());
+    }
+
+    private List<PassPointDto> filterAndMapPassPointsByCategory(List<PassPointDto> passPoints,
+                                                                String ppType,
+                                                                String category) {
+        return passPoints.stream()
+                .filter(pp -> pp.getCategory().equalsIgnoreCase(category) && (pp.getMin() != 0 || pp.getAvg() != 0))
+                .map(pp -> mapPassPointDto(pp, ppType))
+                .collect(Collectors.toList());
+    }
+
+    private PassPointDto mapPassPointDto(PassPointDto pp, String ppType) {
+        PassPointDto filteredPoints = new PassPointDto();
+        filteredPoints.setCategory(pp.getCategory());
+
+        if ("avg".equalsIgnoreCase(ppType)) {
+            filteredPoints.setAvg(pp.getAvg());
+        } else {
+            filteredPoints.setMin(pp.getMin());
         }
 
-        directions = directionRepository.findAll(sort);
-        return directions.stream()
-                .map(direction -> {
-                    DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
-                    dto.setPassPoints(
-                            dto.getPassPoints().stream()
-                                    .filter(pp ->
-                                            pp.getCategory().equalsIgnoreCase(category) && (pp.getMin() != 0 || pp.getAvg() != 0))
-                                    .map(pp -> {
-                                        PassPointDto filtered = new PassPointDto();
-                                        filtered.setCategory(pp.getCategory());
-                                        if ("avg".equalsIgnoreCase(ppType)) {
-                                            filtered.setAvg(pp.getAvg());
-                                        } else {
-                                            filtered.setMin(pp.getMin());
-                                        }
-                                        return filtered;
-                                    })
-                                    .collect(Collectors.toList())
-                    );
-                    return dto;
-                })
-                .collect(Collectors.toList());
+        return filteredPoints;
     }
 }
