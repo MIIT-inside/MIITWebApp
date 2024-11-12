@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "api/miit/plans")
 public class EducationPlanController {
 
-	private final EducationPlanService educationPlanService;
+    private final EducationPlanService educationPlanService;
 
-	public EducationPlanController(EducationPlanService educationPlanService) {
-		this.educationPlanService = educationPlanService;
-	}
+    public EducationPlanController(EducationPlanService educationPlanService) {
+        this.educationPlanService = educationPlanService;
+    }
 
-	@GetMapping("/")
-	public ResponseEntity<EducationPlanDto> getPlansByProfile(@RequestParam String name) {
-		return ResponseEntity.ok(educationPlanService.getPlansByProfileName(name));
-	}
+    @GetMapping("/")
+    public ResponseEntity<EducationPlanDto> getPlansByProfile(@RequestParam String name) {
+        return ResponseEntity.ok(educationPlanService.getPlansByProfileName(name));
+    }
 
-	@PostMapping("/parse")
-	public ResponseEntity<String> parseAndSaveEducationPlans() {
-		educationPlanService.parseAndSaveEducationPlans();
-		return ResponseEntity.ok("Education plans parsed and saved successfully");
-	}
+    @PostMapping("/parse")
+    public ResponseEntity<String> parseAndSaveEducationPlans() {
+        educationPlanService.parseAndSaveEducationPlans();
+        return ResponseEntity.ok("Education plans parsed and saved successfully");
+    }
 }

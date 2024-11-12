@@ -6,12 +6,12 @@ import lombok.Data;
 @Data
 public class LessonDto {
 
-	@JsonProperty("lab")
-	private String labWork;
+    @JsonProperty("lab")
+    private String labWork;
 
-	@JsonProperty("lecture")
-	private String lecture;
+    @JsonProperty("lecture")
+    private String lecture;
 
-	@JsonProperty("practice")
-	private String practice;
+    @JsonProperty("practice")
+    private String practice;
 }

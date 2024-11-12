@@ -8,9 +8,9 @@ import java.util.List;
 @Data
 public class EducationPlanDto {
 
-	@JsonProperty("profile_name")
-	private String profileName;
+    @JsonProperty("profile_name")
+    private String profileName;
 
-	@JsonProperty("education_plan")
-	private List<SemesterDto> semesters;
+    @JsonProperty("education_plan")
+    private List<SemesterDto> semesters;
 }

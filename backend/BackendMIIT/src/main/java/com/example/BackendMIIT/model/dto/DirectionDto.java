@@ -9,21 +9,21 @@ import java.util.List;
 @Data
 public class DirectionDto {
 
-	@JsonProperty("code")
-	private String code;
+    @JsonProperty("code")
+    private String code;
 
-	@JsonProperty("name")
-	private String name;
+    @JsonProperty("name")
+    private String name;
 
-	@JsonProperty("level")
-	private String level;
+    @JsonProperty("level")
+    private String level;
 
-	@JsonProperty("form")
-	private String form;
+    @JsonProperty("form")
+    private String form;
 
-	@JsonProperty("image_url")
-	private String imageUrl;
+    @JsonProperty("image_url")
+    private String imageUrl;
 
-	@JsonProperty("pass_points")
-	private List<PassPoint> passPoints;
+    @JsonProperty("pass_points")
+    private List<PassPoint> passPoints;
 }

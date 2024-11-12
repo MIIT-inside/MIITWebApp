@@ -14,9 +14,9 @@ import java.util.List;
 @Data
 public class Department extends BaseEntity implements Serializable {
 
-	private String name;
+    private String name;
 
-	@JsonManagedReference
-	@OneToMany(mappedBy = "department")
-	private List<Educator> educator;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "department")
+    private List<Educator> educator;
 }

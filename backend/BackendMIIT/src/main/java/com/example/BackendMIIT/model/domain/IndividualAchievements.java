@@ -17,6 +17,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class IndividualAchievements extends BaseEntity implements Serializable {
 
-	private String description;
-	private String countPoints;
+    private String description;
+    private String countPoints;
 }

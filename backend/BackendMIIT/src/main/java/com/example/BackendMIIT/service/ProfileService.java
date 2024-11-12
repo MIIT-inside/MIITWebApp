@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface ProfileService {
 
-	void parseProfile(String url);
+    void parseProfile(String url);
 
-	void saveProfile(List<String> properties);
+    void saveProfile(List<String> properties);
 
-	List<ProfileDto> getProfilesByInstituteName(String name);
+    List<ProfileDto> getProfilesByInstituteName(String name);
 
-	List<ProfileDto> getAllProfiles();
+    List<ProfileDto> getAllProfiles();
 
-	ProfileDto getProfileByName(String name);
+    ProfileDto getProfileByName(String name);
 
-	List<ProfileDto> getProfilesByDirectionCode(String code);
+    List<ProfileDto> getProfilesByDirectionCode(String code);
 }

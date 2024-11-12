@@ -25,176 +25,176 @@ import java.util.List;
 @Service
 public class ProfileServiceImpl implements ProfileService {
 
-	private final ProfileRepository profileRepository;
-	private final DirectionRepository directionRepository;
-	private final WebClient webClient;
-	private final String BASE_URL = "https://www.miit.ru";
-	private final ProfileMapper profileMapper;
+    private final ProfileRepository profileRepository;
+    private final DirectionRepository directionRepository;
+    private final WebClient webClient;
+    private final String BASE_URL = "https://www.miit.ru";
+    private final ProfileMapper profileMapper;
 
-	public ProfileServiceImpl(ProfileRepository profileRepository,
-							  DirectionRepository directionRepository,
-							  WebClient webClient,
-							  ProfileMapper profileMapper) {
-		this.profileRepository = profileRepository;
-		this.directionRepository = directionRepository;
-		this.webClient = webClient;
-		this.profileMapper = profileMapper;
-	}
+    public ProfileServiceImpl(ProfileRepository profileRepository,
+                              DirectionRepository directionRepository,
+                              WebClient webClient,
+                              ProfileMapper profileMapper) {
+        this.profileRepository = profileRepository;
+        this.directionRepository = directionRepository;
+        this.webClient = webClient;
+        this.profileMapper = profileMapper;
+    }
 
-	@Override
-	@CacheEvict(value = "ProfileService::getProfilesByInstitute", key = "#name")
-	public List<ProfileDto> getProfilesByInstituteName(String name) {
-		List<Profile> profiles = profileRepository.findByInstitute(name)
-				.orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
+    @Override
+    @CacheEvict(value = "ProfileService::getProfilesByInstitute", key = "#name")
+    public List<ProfileDto> getProfilesByInstituteName(String name) {
+        List<Profile> profiles = profileRepository.findByInstitute(name)
+                .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
 
-		return profileMapper.profilesToDtoList(profiles);
-	}
+        return profileMapper.profilesToDtoList(profiles);
+    }
 
-	@Override
-	@CacheEvict(value = "ProfileService::getProfilesByDirection", key = "#code")
-	public List<ProfileDto> getProfilesByDirectionCode(String code) {
-		Direction direction = directionRepository.findByCode(code)
-				.orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
+    @Override
+    @CacheEvict(value = "ProfileService::getProfilesByDirection", key = "#code")
+    public List<ProfileDto> getProfilesByDirectionCode(String code) {
+        Direction direction = directionRepository.findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException("Institute doesn't exist"));
 
-		return profileMapper.profilesToDtoList(direction.getProfiles());
-	}
+        return profileMapper.profilesToDtoList(direction.getProfiles());
+    }
 
-	@Override
-	@CacheEvict(value = "ProfileService::getAllProfiles", key = "'profiles'")
-	public List<ProfileDto> getAllProfiles() {
-		List<Profile> profiles = profileRepository.findAll();
+    @Override
+    @CacheEvict(value = "ProfileService::getAllProfiles", key = "'profiles'")
+    public List<ProfileDto> getAllProfiles() {
+        List<Profile> profiles = profileRepository.findAll();
 
-		return profileMapper.profilesToDtoList(profiles);
-	}
+        return profileMapper.profilesToDtoList(profiles);
+    }
 
-	@Override
-	@CacheEvict(value = "ProfileService::getProfileByName", key = "#name")
-	public ProfileDto getProfileByName(String name) {
-		Profile profile = profileRepository.findByName(name)
-				.orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
-		return profileMapper.profileToDto(profile);
-	}
+    @Override
+    @CacheEvict(value = "ProfileService::getProfileByName", key = "#name")
+    public ProfileDto getProfileByName(String name) {
+        Profile profile = profileRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Profile doesn't exist"));
+        return profileMapper.profileToDto(profile);
+    }
 
-	@Override
-	@SneakyThrows
-	public void parseProfile(String uri) {
+    @Override
+    @SneakyThrows
+    public void parseProfile(String uri) {
 
-		List<String> directionLinks = new ArrayList<>();
+        List<String> directionLinks = new ArrayList<>();
 
-		String json = webClient.get()
-				.uri(uri)
-				.retrieve()
-				.bodyToMono(String.class)
-				.block();
+        String json = webClient.get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
-		JSONObject jsonObject = new JSONObject(json);
+        JSONObject jsonObject = new JSONObject(json);
 
-		JSONArray jsonArray = jsonObject
-				.getJSONArray("result")
-				.getJSONObject(0)
-				.getJSONArray("concourseGroups");
+        JSONArray jsonArray = jsonObject
+                .getJSONArray("result")
+                .getJSONObject(0)
+                .getJSONArray("concourseGroups");
 
-		for (int i = 0; i < jsonArray.length(); i++) {
-			directionLinks.add(jsonArray.getJSONObject(i).getString("planReceptionUrl"));
-		}
+        for (int i = 0; i < jsonArray.length(); i++) {
+            directionLinks.add(jsonArray.getJSONObject(i).getString("planReceptionUrl"));
+        }
 
-		readDirectionLinks(directionLinks);
-	}
+        readDirectionLinks(directionLinks);
+    }
 
-	@SneakyThrows
-	private void readDirectionLinks(List<String> directionLinks) {
+    @SneakyThrows
+    private void readDirectionLinks(List<String> directionLinks) {
 
-		List<String> profileLinks = new ArrayList<>();
-		Elements elements;
+        List<String> profileLinks = new ArrayList<>();
+        Elements elements;
 
-		for (String link : directionLinks) {
-			Document directionPage = Jsoup.connect(BASE_URL + link).maxBodySize(0).get();
+        for (String link : directionLinks) {
+            Document directionPage = Jsoup.connect(BASE_URL + link).maxBodySize(0).get();
 
-			elements = directionPage.select("a[href*=/admissions/degrees/]");
-			for (Element element : elements) {
-				profileLinks.add(element.attr("href"));
-			}
-		}
+            elements = directionPage.select("a[href*=/admissions/degrees/]");
+            for (Element element : elements) {
+                profileLinks.add(element.attr("href"));
+            }
+        }
 
-		readProfiles(profileLinks);
-	}
+        readProfiles(profileLinks);
+    }
 
-	@SneakyThrows
-	private void readProfiles(List<String> profileLinks) {
+    @SneakyThrows
+    private void readProfiles(List<String> profileLinks) {
 
-		List<String> properties = new ArrayList<>();
+        List<String> properties = new ArrayList<>();
 
-		for (String link : profileLinks) {
-			Document profilePage = Jsoup.connect(BASE_URL + link).maxBodySize(0).get();
+        for (String link : profileLinks) {
+            Document profilePage = Jsoup.connect(BASE_URL + link).maxBodySize(0).get();
 
-			String profileHeader = profilePage.select("h2").text();
-			if (profileHeader.contains("набор")) continue;
-			properties.add(profileHeader.substring(0, profileHeader.indexOf(" ")).trim()); //Direction code
-			properties.add(profileHeader.substring(profileHeader.indexOf(". ") + 1, profileHeader.indexOf("(")).trim()); //Profile
+            String profileHeader = profilePage.select("h2").text();
+            if (profileHeader.contains("набор")) continue;
+            properties.add(profileHeader.substring(0, profileHeader.indexOf(" ")).trim()); //Direction code
+            properties.add(profileHeader.substring(profileHeader.indexOf(". ") + 1, profileHeader.indexOf("(")).trim()); //Profile
 
-			Elements elements = profilePage.select("li[class=text-form__item]");
+            Elements elements = profilePage.select("li[class=text-form__item]");
 
-			properties.add(getInstitute(elements)); //Institute
-			properties.add(getGroup(profileHeader)); //Abbreviation
-			saveProfile(properties);
-			properties.clear();
-		}
-	}
+            properties.add(getInstitute(elements)); //Institute
+            properties.add(getGroup(profileHeader)); //Abbreviation
+            saveProfile(properties);
+            properties.clear();
+        }
+    }
 
-	private String getGroup(String profileHeader) {
+    private String getGroup(String profileHeader) {
 
-		StringBuilder sb = new StringBuilder();
-		int index = profileHeader.trim().length() - 1;
-		boolean isGroup = false;
+        StringBuilder sb = new StringBuilder();
+        int index = profileHeader.trim().length() - 1;
+        boolean isGroup = false;
 
-		while (profileHeader.charAt(index) != '(') {
-			if (isGroup) {
-				sb.insert(0, profileHeader.charAt(index--));
-				continue;
-			}
-			if (profileHeader.charAt(index--) == ')')
-				isGroup = true;
-		}
+        while (profileHeader.charAt(index) != '(') {
+            if (isGroup) {
+                sb.insert(0, profileHeader.charAt(index--));
+                continue;
+            }
+            if (profileHeader.charAt(index--) == ')')
+                isGroup = true;
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	private String getInstitute(Elements elements) {
-		String institute = null;
+    private String getInstitute(Elements elements) {
+        String institute = null;
 
-		for (Element element : elements) {
-			String text = element.text();
-			if (text.contains("Институт")) {
-				institute = text.substring(text.indexOf(" "));
-			}
-		}
+        for (Element element : elements) {
+            String text = element.text();
+            if (text.contains("Институт")) {
+                institute = text.substring(text.indexOf(" "));
+            }
+        }
 
-		return institute;
-	}
+        return institute;
+    }
 
-	@Override
-	public void saveProfile(List<String> properties) {
+    @Override
+    public void saveProfile(List<String> properties) {
 
-		int i = 0;
+        int i = 0;
 
-		while (i < properties.size()) {
+        while (i < properties.size()) {
 
-			Profile profile = new Profile();
-			Direction direction = directionRepository.findByCode(properties.get(i++).trim())
-					.orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
+            Profile profile = new Profile();
+            Direction direction = directionRepository.findByCode(properties.get(i++).trim())
+                    .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
 
-			if (profileRepository.findByName(properties.get(i)).isEmpty()) {
-				profile.setName(properties.get(i++).trim());
-				profile.setLevel(direction.getLevel());
-				profile.setForm(direction.getForm());
-				profile.setInstitute(properties.get(i++).trim());
-				profile.setAbbreviation(properties.get(i++).trim());
-				profile.setDirection(direction);
+            if (profileRepository.findByName(properties.get(i)).isEmpty()) {
+                profile.setName(properties.get(i++).trim());
+                profile.setLevel(direction.getLevel());
+                profile.setForm(direction.getForm());
+                profile.setInstitute(properties.get(i++).trim());
+                profile.setAbbreviation(properties.get(i++).trim());
+                profile.setDirection(direction);
 
-				profileRepository.save(profile);
-			} else {
-				break;
-			}
-		}
-	}
+                profileRepository.save(profile);
+            } else {
+                break;
+            }
+        }
+    }
 }

@@ -12,7 +12,7 @@ import java.util.UUID;
 @Getter
 public abstract class BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	protected UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    protected UUID id;
 }

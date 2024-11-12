@@ -10,23 +10,23 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("api/miit/images")
 public class MinioController {
 
-	private final MinioService minioService;
+    private final MinioService minioService;
 
-	public MinioController(MinioService minioService) {
-		this.minioService = minioService;
-	}
+    public MinioController(MinioService minioService) {
+        this.minioService = minioService;
+    }
 
-	@PostMapping(value = "/upload/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<String> uploadProfileImage(@RequestParam String name, @RequestPart MultipartFile image) {
-		String imageUrl = minioService.uploadProfileImage(image, name);
+    @PostMapping(value = "/upload/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> uploadProfileImage(@RequestParam String name, @RequestPart MultipartFile image) {
+        String imageUrl = minioService.uploadProfileImage(image, name);
 
-		return ResponseEntity.ok(imageUrl);
-	}
+        return ResponseEntity.ok(imageUrl);
+    }
 
-	@PostMapping(value = "/upload/direction", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<String> uploadDirectionImage(@RequestParam String name, @RequestPart MultipartFile image) {
-		String imageUrl = minioService.uploadDirectionImage(image, name);
+    @PostMapping(value = "/upload/direction", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> uploadDirectionImage(@RequestParam String name, @RequestPart MultipartFile image) {
+        String imageUrl = minioService.uploadDirectionImage(image, name);
 
-		return ResponseEntity.ok(imageUrl);
-	}
+        return ResponseEntity.ok(imageUrl);
+    }
 }

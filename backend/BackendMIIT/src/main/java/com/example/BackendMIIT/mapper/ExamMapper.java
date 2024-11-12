@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ExamMapper {
 
-	Exam dtoToExam(ExamDto examDto);
+    Exam dtoToExam(ExamDto examDto);
 
-	ExamDto examToDto(Exam exam);
+    ExamDto examToDto(Exam exam);
 }

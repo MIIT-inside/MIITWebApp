@@ -6,24 +6,24 @@ import lombok.Data;
 @Data
 public class ProfileDto {
 
-	@JsonProperty("name")
-	private String name;
+    @JsonProperty("name")
+    private String name;
 
-	@JsonProperty("form")
-	private String form;
+    @JsonProperty("form")
+    private String form;
 
-	@JsonProperty("level")
-	private String level;
+    @JsonProperty("level")
+    private String level;
 
-	@JsonProperty("description")
-	private String description;
+    @JsonProperty("description")
+    private String description;
 
-	@JsonProperty("institute")
-	private String institute;
+    @JsonProperty("institute")
+    private String institute;
 
-	@JsonProperty("abbreviation")
-	private String abbreviation;
+    @JsonProperty("abbreviation")
+    private String abbreviation;
 
-	@JsonProperty("image_url")
-	private String imageUrl;
+    @JsonProperty("image_url")
+    private String imageUrl;
 }

@@ -19,80 +19,80 @@ import java.util.List;
 @Service
 public class PassPointServiceImpl implements PassPointService {
 
-	private final PassPointRepository passPointRepository;
+    private final PassPointRepository passPointRepository;
 
-	private final DirectionRepository directionRepository;
+    private final DirectionRepository directionRepository;
 
-	private final WebClient webClient;
+    private final WebClient webClient;
 
-	public PassPointServiceImpl(PassPointRepository passPointRepository,
-								DirectionRepository directionRepository,
-								WebClient webClient) {
+    public PassPointServiceImpl(PassPointRepository passPointRepository,
+                                DirectionRepository directionRepository,
+                                WebClient webClient) {
 
-		this.passPointRepository = passPointRepository;
-		this.directionRepository = directionRepository;
-		this.webClient = webClient;
-	}
+        this.passPointRepository = passPointRepository;
+        this.directionRepository = directionRepository;
+        this.webClient = webClient;
+    }
 
-	@Override
-	public void parsePoints(String uri) {
+    @Override
+    public void parsePoints(String uri) {
 
-		List<JSONObject> doublesValues = new ArrayList<>();
+        List<JSONObject> doublesValues = new ArrayList<>();
 
-		String json = webClient.get()
-				.uri(uri)
-				.retrieve()
-				.bodyToMono(String.class)
-				.block();
+        String json = webClient.get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
-		JSONObject jsonObject = new JSONObject(json);
+        JSONObject jsonObject = new JSONObject(json);
 
-		JSONArray jsonArray = jsonObject
-				.getJSONArray("result")
-				.getJSONObject(0)
-				.getJSONArray("concourseGroups");
+        JSONArray jsonArray = jsonObject
+                .getJSONArray("result")
+                .getJSONObject(0)
+                .getJSONArray("concourseGroups");
 
-		for (int i = 0; i < jsonArray.length(); i++) {
+        for (int i = 0; i < jsonArray.length(); i++) {
 
-			JSONObject groups = jsonArray.getJSONObject(i);
-			JSONObject doubles = groups.getJSONObject("planNumbers").getJSONObject("doubles");
+            JSONObject groups = jsonArray.getJSONObject(i);
+            JSONObject doubles = groups.getJSONObject("planNumbers").getJSONObject("doubles");
 
-			doublesValues.add(doubles.getJSONObject("CONCOURSE"));
-			doublesValues.add(doubles.getJSONObject("SPECIAL_QUOTA"));
-			doublesValues.add(doubles.getJSONObject("TARGET_QUOTA"));
-			doublesValues.add(doubles.getJSONObject("QUOTA_07"));
-			doublesValues.add(doubles.getJSONObject("PAID_CONCOURSE"));
+            doublesValues.add(doubles.getJSONObject("CONCOURSE"));
+            doublesValues.add(doubles.getJSONObject("SPECIAL_QUOTA"));
+            doublesValues.add(doubles.getJSONObject("TARGET_QUOTA"));
+            doublesValues.add(doubles.getJSONObject("QUOTA_07"));
+            doublesValues.add(doubles.getJSONObject("PAID_CONCOURSE"));
 
-			savePoints(doublesValues, groups);
-			doublesValues.clear();
-		}
-	}
+            savePoints(doublesValues, groups);
+            doublesValues.clear();
+        }
+    }
 
-	@Override
-	public void savePoints(List<JSONObject> doublesValues, JSONObject groups) {
+    @Override
+    public void savePoints(List<JSONObject> doublesValues, JSONObject groups) {
 
-		for (int i = 0; i < doublesValues.size(); i++) {
+        for (int i = 0; i < doublesValues.size(); i++) {
 
-			PassPoint passPoint = new PassPoint();
-			Direction direction = directionRepository.findByName(groups.getString("specName"))
-					.orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
+            PassPoint passPoint = new PassPoint();
+            Direction direction = directionRepository.findByName(groups.getString("specName"))
+                    .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
 
-			int avg = (int) doublesValues.get(i).optDouble("AVERAGE_SCORE");
-			int min = (int) doublesValues.get(i).optDouble("MIN_SCORE");
+            int avg = (int) doublesValues.get(i).optDouble("AVERAGE_SCORE");
+            int min = (int) doublesValues.get(i).optDouble("MIN_SCORE");
 
-			switch (i) {
-				case 0 -> passPoint.setCategory(Category.MAIN);
-				case 1 -> passPoint.setCategory(Category.SPECIAL);
-				case 2 -> passPoint.setCategory(Category.TARGET);
-				case 3 -> passPoint.setCategory(Category.SEPARATE);
-				case 4 -> passPoint.setCategory(Category.CONTRACT);
-			}
+            switch (i) {
+                case 0 -> passPoint.setCategory(Category.MAIN);
+                case 1 -> passPoint.setCategory(Category.SPECIAL);
+                case 2 -> passPoint.setCategory(Category.TARGET);
+                case 3 -> passPoint.setCategory(Category.SEPARATE);
+                case 4 -> passPoint.setCategory(Category.CONTRACT);
+            }
 
-			passPoint.setDirection(direction);
-			passPoint.setAvg(avg);
-			passPoint.setMin(min);
+            passPoint.setDirection(direction);
+            passPoint.setAvg(avg);
+            passPoint.setMin(min);
 
-			passPointRepository.save(passPoint);
-		}
-	}
+            passPointRepository.save(passPoint);
+        }
+    }
 }

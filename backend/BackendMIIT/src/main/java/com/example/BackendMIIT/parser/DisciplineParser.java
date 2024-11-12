@@ -12,73 +12,73 @@ import java.util.List;
 @Component
 public class DisciplineParser {
 
-	private final LessonParser lessonParser;
+    private final LessonParser lessonParser;
 
-	public DisciplineParser(LessonParser lessonParser) {
-		this.lessonParser = lessonParser;
-	}
+    public DisciplineParser(LessonParser lessonParser) {
+        this.lessonParser = lessonParser;
+    }
 
-	public List<Discipline> parseDisciplines(Element semesterElement) {
-		List<Discipline> disciplines = new ArrayList<>();
-		Elements disciplineElements = semesterElement.select("h4.eduplan_discipline-header");
+    public List<Discipline> parseDisciplines(Element semesterElement) {
+        List<Discipline> disciplines = new ArrayList<>();
+        Elements disciplineElements = semesterElement.select("h4.eduplan_discipline-header");
 
-		for (Element disciplineElement : disciplineElements) {
-			String disciplineName = disciplineElement.text();
+        for (Element disciplineElement : disciplineElements) {
+            String disciplineName = disciplineElement.text();
 
-			Element disciplineContent = disciplineElement.nextElementSibling();
+            Element disciplineContent = disciplineElement.nextElementSibling();
 
-			if (disciplineContent != null) {
-				List<Lesson> lessons = lessonParser.parseLessons(disciplineContent);
+            if (disciplineContent != null) {
+                List<Lesson> lessons = lessonParser.parseLessons(disciplineContent);
 
-				String attestationCSS = "div.eduplan_discipline-content-header:contains(Форма промежуточной аттестации) + ul li";
-				Elements attestationElements = disciplineContent.select(attestationCSS);
+                String attestationCSS = "div.eduplan_discipline-content-header:contains(Форма промежуточной аттестации) + ul li";
+                Elements attestationElements = disciplineContent.select(attestationCSS);
 
-				boolean hasAttestation = false;
+                boolean hasAttestation = false;
 
-				if (!attestationElements.isEmpty()) {
-					for (Element attestationElement : attestationElements) {
-						Discipline discipline = new Discipline();
-						discipline.setName(disciplineName);
-						discipline.setLessons(lessons);
+                if (!attestationElements.isEmpty()) {
+                    for (Element attestationElement : attestationElements) {
+                        Discipline discipline = new Discipline();
+                        discipline.setName(disciplineName);
+                        discipline.setLessons(lessons);
 
-						String attestationText = attestationElement.text().replace("\"", "").trim();
-						discipline.setAttestation(attestationText);
+                        String attestationText = attestationElement.text().replace("\"", "").trim();
+                        discipline.setAttestation(attestationText);
 
-						disciplines.add(discipline);
-						hasAttestation = true;
-					}
-				}
+                        disciplines.add(discipline);
+                        hasAttestation = true;
+                    }
+                }
 
-				String finalAttestationCSS = "div.eduplan_discipline-content-header:contains(Форма итоговой аттестации) + ul li";
-				Element finalAttestationElement = disciplineContent.selectFirst(finalAttestationCSS);
+                String finalAttestationCSS = "div.eduplan_discipline-content-header:contains(Форма итоговой аттестации) + ul li";
+                Element finalAttestationElement = disciplineContent.selectFirst(finalAttestationCSS);
 
-				if (finalAttestationElement != null) {
-					Discipline discipline = new Discipline();
-					discipline.setName(disciplineName);
-					discipline.setLessons(lessons);
+                if (finalAttestationElement != null) {
+                    Discipline discipline = new Discipline();
+                    discipline.setName(disciplineName);
+                    discipline.setLessons(lessons);
 
-					String finalAttestationText = finalAttestationElement.text().replace("\"", "").trim();
-					discipline.setAttestation(finalAttestationText);
+                    String finalAttestationText = finalAttestationElement.text().replace("\"", "").trim();
+                    discipline.setAttestation(finalAttestationText);
 
-					disciplines.add(discipline);
-				} else if (!hasAttestation) {
-					Discipline discipline = new Discipline();
-					discipline.setName(disciplineName);
-					discipline.setLessons(lessons);
-					discipline.setAttestation("Не указана");
+                    disciplines.add(discipline);
+                } else if (!hasAttestation) {
+                    Discipline discipline = new Discipline();
+                    discipline.setName(disciplineName);
+                    discipline.setLessons(lessons);
+                    discipline.setAttestation("Не указана");
 
-					disciplines.add(discipline);
-				}
-			} else {
-				Discipline discipline = new Discipline();
-				discipline.setName(disciplineName);
-				discipline.setLessons(lessonParser.parseLessons(disciplineElement));
-				discipline.setAttestation("Не указана");
+                    disciplines.add(discipline);
+                }
+            } else {
+                Discipline discipline = new Discipline();
+                discipline.setName(disciplineName);
+                discipline.setLessons(lessonParser.parseLessons(disciplineElement));
+                discipline.setAttestation("Не указана");
 
-				disciplines.add(discipline);
-			}
-		}
+                disciplines.add(discipline);
+            }
+        }
 
-		return disciplines;
-	}
+        return disciplines;
+    }
 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProfileRepository extends BaseRepository<Profile> {
-	Optional<Profile> findByName(String name);
+    Optional<Profile> findByName(String name);
 
-	Optional<List<Profile>> findByInstitute(String institute);
+    Optional<List<Profile>> findByInstitute(String institute);
 }

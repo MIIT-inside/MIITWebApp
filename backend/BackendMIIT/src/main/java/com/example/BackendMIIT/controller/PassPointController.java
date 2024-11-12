@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "api/miit/points")
 public class PassPointController {
 
-	private final PassPointService passPointService;
+    private final PassPointService passPointService;
 
-	public PassPointController(PassPointService passPointService) {
-		this.passPointService = passPointService;
-	}
+    public PassPointController(PassPointService passPointService) {
+        this.passPointService = passPointService;
+    }
 
-	@PostMapping("/parse")
-	public ResponseEntity<String> parsePassPoints(@RequestParam String uri) {
-		passPointService.parsePoints(uri);
+    @PostMapping("/parse")
+    public ResponseEntity<String> parsePassPoints(@RequestParam String uri) {
+        passPointService.parsePoints(uri);
 
-		return ResponseEntity.ok("Points parsed successfully");
-	}
+        return ResponseEntity.ok("Points parsed successfully");
+    }
 }

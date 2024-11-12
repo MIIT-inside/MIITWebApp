@@ -11,10 +11,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PassPointMapper {
 
-	@Mapping(source = "category", target = "category", qualifiedByName = "categoryToString")
-	List<PassPointDto> passPointsToDto(List<PassPoint> passPoints);
+    @Mapping(source = "category", target = "category", qualifiedByName = "categoryToString")
+    List<PassPointDto> passPointsToDto(List<PassPoint> passPoints);
 
-	private String categoryToString(Category category) {
-		return category != null ? category.getValue() : null;
-	}
+    private String categoryToString(Category category) {
+        return category != null ? category.getValue() : null;
+    }
 }

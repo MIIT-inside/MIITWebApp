@@ -12,36 +12,36 @@ import java.util.List;
 @RequestMapping(path = "api/miit/directions")
 public class DirectionController {
 
-	private final DirectionService directionService;
+    private final DirectionService directionService;
 
-	public DirectionController(DirectionService directionService) {
-		this.directionService = directionService;
-	}
+    public DirectionController(DirectionService directionService) {
+        this.directionService = directionService;
+    }
 
-	@GetMapping("/direction/{code}")
-	public ResponseEntity<DirectionDto> getDirectionByCode(@PathVariable String code) {
-		return ResponseEntity.ok(directionService.getDirectionByCode(code));
-	}
+    @GetMapping("/direction/{code}")
+    public ResponseEntity<DirectionDto> getDirectionByCode(@PathVariable String code) {
+        return ResponseEntity.ok(directionService.getDirectionByCode(code));
+    }
 
-	@PostMapping("/parse")
-	public ResponseEntity<String> parseDirections(@RequestParam String url) {
-		directionService.parseDirections(url);
+    @PostMapping("/parse")
+    public ResponseEntity<String> parseDirections(@RequestParam String url) {
+        directionService.parseDirections(url);
 
-		return ResponseEntity.ok().body("Directions successfully parsed");
-	}
+        return ResponseEntity.ok().body("Directions successfully parsed");
+    }
 
-	@GetMapping("/")
-	public ResponseEntity<List<DirectionDto>> getAllDirections() {
-		return ResponseEntity.ok(directionService.getDirections());
-	}
+    @GetMapping("/")
+    public ResponseEntity<List<DirectionDto>> getAllDirections() {
+        return ResponseEntity.ok(directionService.getDirections());
+    }
 
-	@GetMapping("/{passPoint}")
-	public ResponseEntity<List<DirectionDto>> getDirectionsByPassPoint(@PathVariable int passPoint) {
-		return ResponseEntity.ok(new ArrayList<>());
-	}
+    @GetMapping("/{passPoint}")
+    public ResponseEntity<List<DirectionDto>> getDirectionsByPassPoint(@PathVariable int passPoint) {
+        return ResponseEntity.ok(new ArrayList<>());
+    }
 
-	@GetMapping("/direction")
-	public ResponseEntity<DirectionDto> getDirectionByName(@RequestParam String name) {
-		return ResponseEntity.ok(directionService.getDirectionByName(name));
-	}
+    @GetMapping("/direction")
+    public ResponseEntity<DirectionDto> getDirectionByName(@RequestParam String name) {
+        return ResponseEntity.ok(directionService.getDirectionByName(name));
+    }
 }

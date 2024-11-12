@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface DirectionService {
 
-	void parseDirections(String url);
+    void parseDirections(String url);
 
-	void saveDirection(List<Element> elements);
+    void saveDirection(List<Element> elements);
 
-	DirectionDto getDirectionByName(String name);
+    DirectionDto getDirectionByName(String name);
 
-	DirectionDto getDirectionByCode(String code);
+    DirectionDto getDirectionByCode(String code);
 
 
-	List<DirectionDto> getDirections();
+    List<DirectionDto> getDirections();
 }

@@ -11,14 +11,14 @@ import java.io.Serializable;
 @Data
 public class PassPoint extends BaseEntity implements Serializable {
 
-	private int min;
-	private int avg;
+    private int min;
+    private int avg;
 
-	@Enumerated(EnumType.STRING)
-	private Category category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "direction_id")
-	private Direction direction;
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "direction_id")
+    private Direction direction;
 }

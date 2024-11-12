@@ -14,30 +14,30 @@ import java.util.List;
 @Component
 public class SemesterParser {
 
-	private final DisciplineParser disciplineParser;
+    private final DisciplineParser disciplineParser;
 
-	public SemesterParser(DisciplineParser disciplineParser) {
-		this.disciplineParser = disciplineParser;
-	}
+    public SemesterParser(DisciplineParser disciplineParser) {
+        this.disciplineParser = disciplineParser;
+    }
 
-	@SneakyThrows
-	public List<Semester> parseSemesters(String url, Profile profile) {
-		List<Semester> semesters = new ArrayList<>();
+    @SneakyThrows
+    public List<Semester> parseSemesters(String url, Profile profile) {
+        List<Semester> semesters = new ArrayList<>();
 
-		Elements semesterElements = ParserUtil.getElements(url, "div.info-block.info-block_collapse");
+        Elements semesterElements = ParserUtil.getElements(url, "div.info-block.info-block_collapse");
 
-		for (Element semesterElement : semesterElements) {
-			String semesterName = semesterElement.select("span.info-block__header-text").text().trim();
+        for (Element semesterElement : semesterElements) {
+            String semesterName = semesterElement.select("span.info-block__header-text").text().trim();
 
-			if (semesterName.matches(".*\\d+-й семестр.*")) {
-				Semester semester = new Semester();
-				semester.setName(semesterName);
-				semester.setProfile(profile);
-				semester.setDisciplines(disciplineParser.parseDisciplines(semesterElement));
-				semesters.add(semester);
-			}
-		}
+            if (semesterName.matches(".*\\d+-й семестр.*")) {
+                Semester semester = new Semester();
+                semester.setName(semesterName);
+                semester.setProfile(profile);
+                semester.setDisciplines(disciplineParser.parseDisciplines(semesterElement));
+                semesters.add(semester);
+            }
+        }
 
-		return semesters;
-	}
+        return semesters;
+    }
 }

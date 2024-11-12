@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping(path = "/api/miit/departments")
 public class DepartmentController {
 
-	@GetMapping("/")
-	public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
-		return ResponseEntity.ok(new ArrayList<>());
-	}
+    @GetMapping("/")
+    public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
+        return ResponseEntity.ok(new ArrayList<>());
+    }
 }

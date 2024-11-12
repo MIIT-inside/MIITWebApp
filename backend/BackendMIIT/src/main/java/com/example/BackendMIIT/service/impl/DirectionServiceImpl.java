@@ -20,85 +20,85 @@ import java.util.List;
 @Service
 public class DirectionServiceImpl implements DirectionService {
 
-	private final DirectionRepository directionRepository;
-	private final DirectionMapper directionMapper;
+    private final DirectionRepository directionRepository;
+    private final DirectionMapper directionMapper;
 
-	public DirectionServiceImpl(DirectionRepository directionRepository, DirectionMapper directionMapper) {
-		this.directionRepository = directionRepository;
-		this.directionMapper = directionMapper;
-	}
+    public DirectionServiceImpl(DirectionRepository directionRepository, DirectionMapper directionMapper) {
+        this.directionRepository = directionRepository;
+        this.directionMapper = directionMapper;
+    }
 
-	@Override
-	@CacheEvict(value = "DirectionService::getDirectionByName", key = "#name")
-	public DirectionDto getDirectionByName(String name) {
-		Direction direction = directionRepository.findByName(name)
-				.orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
+    @Override
+    @CacheEvict(value = "DirectionService::getDirectionByName", key = "#name")
+    public DirectionDto getDirectionByName(String name) {
+        Direction direction = directionRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
 
-		return directionMapper.directionToDto(direction);
-	}
+        return directionMapper.directionToDto(direction);
+    }
 
-	@Override
-	@CacheEvict(value = "DirectionService::getDirectionByCode", key = "#code")
-	public DirectionDto getDirectionByCode(String code) {
-		Direction direction = directionRepository.findByCode(code)
-				.orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
+    @Override
+    @CacheEvict(value = "DirectionService::getDirectionByCode", key = "#code")
+    public DirectionDto getDirectionByCode(String code) {
+        Direction direction = directionRepository.findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
 
-		return directionMapper.directionToDto(direction);
-	}
+        return directionMapper.directionToDto(direction);
+    }
 
-	@Override
-	@CacheEvict(value = "DirectionService::getDirections", key = "'directions'")
-	public List<DirectionDto> getDirections() {
-		List<Direction> directions = directionRepository.findAll();
+    @Override
+    @CacheEvict(value = "DirectionService::getDirections", key = "'directions'")
+    public List<DirectionDto> getDirections() {
+        List<Direction> directions = directionRepository.findAll();
 
-		return directionMapper.directionToDirectionDto(directions);
-	}
+        return directionMapper.directionToDirectionDto(directions);
+    }
 
-	@Override
-	@SneakyThrows
-	public void parseDirections(String url) {
+    @Override
+    @SneakyThrows
+    public void parseDirections(String url) {
 
-		Document doc = Jsoup.connect(url).maxBodySize(0).get();
-		List<Element> props = new ArrayList<>();
+        Document doc = Jsoup.connect(url).maxBodySize(0).get();
+        List<Element> props = new ArrayList<>();
 
-		Elements elements = doc.select("tr");
+        Elements elements = doc.select("tr");
 
-		for (Element element : elements) {
-			props.add(element.selectFirst("td[itemprop=eduCode]"));
-			props.add(element.selectFirst("td[itemprop=eduName]"));
-			props.add(element.selectFirst("td[itemprop=eduLevel]"));
-			props.add(element.selectFirst("td[itemprop=eduForm]"));
+        for (Element element : elements) {
+            props.add(element.selectFirst("td[itemprop=eduCode]"));
+            props.add(element.selectFirst("td[itemprop=eduName]"));
+            props.add(element.selectFirst("td[itemprop=eduLevel]"));
+            props.add(element.selectFirst("td[itemprop=eduForm]"));
 
-			saveDirection(props);
-			props.clear();
-		}
-	}
+            saveDirection(props);
+            props.clear();
+        }
+    }
 
-	@Override
-	public void saveDirection(List<Element> props) {
+    @Override
+    public void saveDirection(List<Element> props) {
 
-		if (props.get(0) != null && props.get(1) != null && props.get(2) != null && props.get(3) != null) {
+        if (props.get(0) != null && props.get(1) != null && props.get(2) != null && props.get(3) != null) {
 
-			String code = props.get(0).text().trim();
-			String name = props.get(1).text().trim();
-			String level = props.get(2).text().trim();
-			String form = props.get(3).text().trim();
+            String code = props.get(0).text().trim();
+            String name = props.get(1).text().trim();
+            String level = props.get(2).text().trim();
+            String form = props.get(3).text().trim();
 
-			if (directionRepository.findByCode(code).isEmpty() && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
+            if (directionRepository.findByCode(code).isEmpty() && form.equals("очная") && (level.equals("бакалавриат") || level.equals("специалитет"))) {
 
-				Direction direction = new Direction();
+                Direction direction = new Direction();
 
-				if (name.contains(".")) {
-					name = name.substring(0, name.indexOf("."));
-				}
+                if (name.contains(".")) {
+                    name = name.substring(0, name.indexOf("."));
+                }
 
-				direction.setCode(code);
-				direction.setName(name);
-				direction.setLevel(level);
-				direction.setForm(form);
+                direction.setCode(code);
+                direction.setName(name);
+                direction.setLevel(level);
+                direction.setForm(form);
 
-				directionRepository.save(direction);
-			}
-		}
-	}
+                directionRepository.save(direction);
+            }
+        }
+    }
 }

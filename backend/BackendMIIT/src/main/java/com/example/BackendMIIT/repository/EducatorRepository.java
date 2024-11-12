@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface EducatorRepository extends BaseRepository<Educator> {
-	List<Educator> findByDepartmentName(String departmentName);
+    List<Educator> findByDepartmentName(String departmentName);
 }

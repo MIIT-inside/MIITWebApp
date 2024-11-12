@@ -8,12 +8,12 @@ import java.util.List;
 @Data
 public class DisciplineDto {
 
-	@JsonProperty("name")
-	private String name;
+    @JsonProperty("name")
+    private String name;
 
-	@JsonProperty("attestation")
-	private String attestation;
+    @JsonProperty("attestation")
+    private String attestation;
 
-	@JsonProperty("lessons")
-	private List<LessonDto> lessons;
+    @JsonProperty("lessons")
+    private List<LessonDto> lessons;
 }

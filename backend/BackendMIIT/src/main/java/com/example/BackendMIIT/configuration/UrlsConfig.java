@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "url")
 public class UrlsConfig {
 
-	private String ia;
-	private String miitBaseUrl;
-	private String eduPrograms;
+    private String ia;
+    private String miitBaseUrl;
+    private String eduPrograms;
 }

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler(ImageUploadException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public String handleImageUpload(ImageUploadException e) {
-		return e.getMessage();
-	}
+    @ExceptionHandler(ImageUploadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleImageUpload(ImageUploadException e) {
+        return e.getMessage();
+    }
 }
