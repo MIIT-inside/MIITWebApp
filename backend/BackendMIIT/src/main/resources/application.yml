@@ -34,7 +34,6 @@ minio:
   secret:
     key: minioadmin
 
-
 webclient:
   baseurl: https://localhost:8080
 url:
