@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RestController
+@CrossOrigin
 @RequestMapping(path = "api/miit/profiles")
 public class ProfileController {
 
@@ -45,3 +45,4 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.getProfileByName(name));
     }
 }
+
