@@ -25,11 +25,16 @@ public class DirectionExamPointsParser {
     public Set<DirectionExamPoints> parseDirectionExamPoints(List<Exam> allExams, List<Direction> allDirections) {
         Set<DirectionExamPoints> directionExamPointsSet = new HashSet<>();
 
-        Elements directionElements = ParserUtil.getElements(minPointsUrl, "div.tr_row");
+        Elements directionElements = ParserUtil.getElements(minPointsUrl, "div.tr.row");
+        System.out.println("Found directions on the page: " + directionElements.size());
 
         for (Element directionElement : directionElements) {
-            String directionWithCode = ParserUtil
-                    .getStringFromElement(directionElement, "div.td.col-12.col-md-6.bg-light");
+            Element directionElementWithCode = directionElement.selectFirst("div.td.col-12.col-md-6.bg-light");
+
+            if (directionElementWithCode == null) { continue; }
+
+            String directionWithCode = directionElementWithCode.text();
+
             String directionName = directionWithCode.substring(directionWithCode.indexOf(' ') + 1).trim();
 
             Direction direction = allDirections.stream()
@@ -37,7 +42,10 @@ public class DirectionExamPointsParser {
                     .findFirst()
                     .orElse(null);
 
-            if (direction == null) { continue; }
+            if (direction == null) {
+                System.out.println("Direction: " + directionWithCode + " doesn't exist in the db. Skipping");
+                continue;
+            }
 
             Elements exams = directionElement.select("div.td.col-12.col-md-6.pb-3.pb-md-0 br");
 
@@ -66,8 +74,6 @@ public class DirectionExamPointsParser {
                     directionExamPoints.setExam(exam);
                     directionExamPoints.setMinPoints(minPoints);
                     directionExamPointsSet.add(directionExamPoints);
-
-                    System.out.println("Added: " + direction.getName() + " - " + subject + " with " + minPoints);
                 }
             }
         }
