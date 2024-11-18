@@ -114,7 +114,8 @@ public class ExamServiceImpl implements ExamService {
                             .collect(Collectors.toList()));
 
                     return depDto;
-                }
-                ).collect(Collectors.toList());
+                })
+                .filter(dto -> !dto.getExams().isEmpty())
+                .collect(Collectors.toList());
     }
 }
