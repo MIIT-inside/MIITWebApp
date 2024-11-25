@@ -18,7 +18,5 @@ public interface DirectionService {
 
     List<DirectionDto> getDirections();
 
-    List<DirectionWithProfilesDto> getSortedDirections(String ppType);
-
     List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category);
 }

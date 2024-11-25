@@ -110,21 +110,11 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    public List<DirectionWithProfilesDto> getSortedDirections(String ppType) {
-        Sort sort = getSortOrder(ppType);
-        List<Direction> directions = directionRepository.findAll(sort);
-
-        return directions.stream()
-                .map(direction -> {
-                    DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
-                    dto.setPassPoints(filterAndMapPassPoints(dto.getPassPoints(), ppType));
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category) {
+        if (category.isEmpty()) {
+            getSortedDirections(ppType);
+        }
+
         if (!isValidCategory(category)) {
             throw new CategoryNotFoundException(category);
         }
@@ -136,6 +126,19 @@ public class DirectionServiceImpl implements DirectionService {
                 .map(direction -> {
                     DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
                     dto.setPassPoints(filterAndMapPassPointsByCategory(dto.getPassPoints(), ppType, category));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<DirectionWithProfilesDto> getSortedDirections(String ppType) {
+        Sort sort = getSortOrder(ppType);
+        List<Direction> directions = directionRepository.findAll(sort);
+
+        return directions.stream()
+                .map(direction -> {
+                    DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
+                    dto.setPassPoints(filterAndMapPassPoints(dto.getPassPoints(), ppType));
                     return dto;
                 })
                 .collect(Collectors.toList());

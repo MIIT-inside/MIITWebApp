@@ -51,10 +51,6 @@ public class DirectionController {
             @RequestParam(defaultValue = "min") String ppType,
             @RequestParam String category
     ) {
-        if (category.isEmpty()) {
-            return directionService.getSortedDirections(ppType);
-        } else {
-            return directionService.getSortedDirectionsByCategory(ppType, category);
-        }
+        return directionService.getSortedDirectionsByCategory(ppType, category);
     }
 }
