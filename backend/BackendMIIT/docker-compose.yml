@@ -14,6 +14,8 @@ services:
       context: .
     depends_on:
       - db
+      - redis
+      - minio
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/MiitInside
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -41,3 +43,17 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass TUlJVCBpbnNpZGV2aWV3
     volumes:
       - cache:/data
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    restart: always
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    command: server /minio --console-address :9001
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio-data:/minio

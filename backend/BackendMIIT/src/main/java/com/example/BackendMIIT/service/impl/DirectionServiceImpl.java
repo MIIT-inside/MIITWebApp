@@ -11,7 +11,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    @Cacheable(value = "DirectionService::getDirectionByName", key = "#name")
+    @CacheEvict(value = "DirectionService::getDirectionByName", key = "#name")
     public DirectionDto getDirectionByName(String name) {
         Direction direction = directionRepository.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
@@ -38,7 +38,7 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    @Cacheable(value = "DirectionService::getDirectionByCode", key = "#code")
+    @CacheEvict(value = "DirectionService::getDirectionByCode", key = "#code")
     public DirectionDto getDirectionByCode(String code) {
         Direction direction = directionRepository.findByCode(code)
                 .orElseThrow(() -> new EntityNotFoundException("Direction doesn't exist"));
@@ -47,7 +47,7 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    @Cacheable(value = "DirectionService::getDirections", key = "'directions'")
+    @CacheEvict(value = "DirectionService::getDirections", key = "'directions'")
     public List<DirectionDto> getDirections() {
         List<Direction> directions = directionRepository.findAll();
 
