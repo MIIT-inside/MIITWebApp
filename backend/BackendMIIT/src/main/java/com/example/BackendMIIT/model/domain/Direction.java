@@ -2,6 +2,7 @@ package com.example.BackendMIIT.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -30,4 +31,7 @@ public class Direction extends BaseEntity implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "direction")
     private List<PassPoint> passPoints;
+
+    @ManyToOne
+    private Department department;
 }
