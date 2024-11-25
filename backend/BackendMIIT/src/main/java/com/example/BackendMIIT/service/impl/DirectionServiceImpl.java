@@ -145,13 +145,11 @@ public class DirectionServiceImpl implements DirectionService {
 
 
     private Sort getSortOrder(String ppType) {
-        if ("min".equalsIgnoreCase(ppType)) {
-            return Sort.by(Sort.Order.desc("passPoints.min"), Sort.Order.asc("name"));
-        } else if ("avg".equalsIgnoreCase(ppType)) {
-            return Sort.by(Sort.Order.desc("passPoints.avg"), Sort.Order.asc("name"));
-        } else {
-            return Sort.by(Sort.Order.asc("name"));
-        }
+        return switch (ppType.toLowerCase()) {
+            case "min" -> Sort.by(Sort.Order.desc("passPoints.min"), Sort.Order.asc("name"));
+            case "avg" -> Sort.by(Sort.Order.desc("passPoints.avg"), Sort.Order.asc("name"));
+            default -> Sort.by(Sort.Order.asc("name"));
+        };
     }
 
     private boolean isValidCategory(String categoryName) {
