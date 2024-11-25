@@ -112,37 +112,37 @@ public class DirectionServiceImpl implements DirectionService {
     @Override
     public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category) {
         if (category.isEmpty()) {
-            getSortedDirections(ppType);
+            return getSortedDirections(ppType);
         }
 
         if (!isValidCategory(category)) {
             throw new CategoryNotFoundException(category);
         }
 
-        Sort sort = getSortOrder(ppType);
-        List<Direction> directions = directionRepository.findAll(sort);
-
-        return directions.stream()
-                .map(direction -> {
-                    DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
-                    dto.setPassPoints(filterAndMapPassPointsByCategory(dto.getPassPoints(), ppType, category));
-                    return dto;
-                })
-                .collect(Collectors.toList());
+        return mapDirections(ppType, category);
     }
 
     private List<DirectionWithProfilesDto> getSortedDirections(String ppType) {
+        return mapDirections(ppType, null);
+    }
+
+    private List<DirectionWithProfilesDto> mapDirections(String ppType, String category) {
         Sort sort = getSortOrder(ppType);
         List<Direction> directions = directionRepository.findAll(sort);
 
         return directions.stream()
                 .map(direction -> {
                     DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
-                    dto.setPassPoints(filterAndMapPassPoints(dto.getPassPoints(), ppType));
+                    if (category != null) {
+                        dto.setPassPoints(filterAndMapPassPointsByCategory(dto.getPassPoints(), ppType, category));
+                    } else {
+                        dto.setPassPoints(filterAndMapPassPoints(dto.getPassPoints(), ppType));
+                    }
                     return dto;
                 })
                 .collect(Collectors.toList());
     }
+
 
     private Sort getSortOrder(String ppType) {
         if ("min".equalsIgnoreCase(ppType)) {
