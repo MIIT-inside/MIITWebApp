@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "institutes")
+@Data
 @NoArgsConstructor
 public class Institute extends BaseEntity implements Serializable {
 
@@ -24,5 +26,5 @@ public class Institute extends BaseEntity implements Serializable {
 	private List<Department> departments;
 
 	@OneToMany
-	private List<Direction> directions;
+	private List<Profile> profiles;
 }

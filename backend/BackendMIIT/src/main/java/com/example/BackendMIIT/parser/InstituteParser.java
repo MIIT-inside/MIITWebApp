@@ -13,29 +13,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Getter
 public class InstituteParser {
 
 	private final String deptsUrl;
-	private final List<String> instLinks = new ArrayList<>();
-	private final List<String> instNames = new ArrayList<>();
+	private final List<String> profiles = new ArrayList<>();
 
 	public InstituteParser(UrlsConfig urlsConfig) {
 		this.deptsUrl = urlsConfig.getDeptsUrl();
 	}
 
 	@SneakyThrows
-	public void parseInstitutes() {
+	public Elements parseInstitutes() {
 
 		Document doc = Jsoup.connect(deptsUrl).maxBodySize(0).get();
-
-
 		Element container = doc.selectFirst("div[class=info-block__content info-block__content_top-padding]");
-		Elements deptProps = container.select("a");
 
-		for (Element dept : deptProps) {
-			instLinks.add(dept.attr("abs:href"));
-			instNames.add(dept.text());
+		return container.select("a");
+	}
+
+	@SneakyThrows
+	public List<String> getProfiles(String link) {
+
+		Document doc = Jsoup.connect(link).maxBodySize(0).get();
+		Element divContainer = doc.selectFirst("div[class=info-block info-block_collapse dept-about");
+		Element ul = divContainer.selectFirst("ul");
+		Elements profilesTag = ul.select("a");
+
+		for (Element profile : profilesTag) {
+
+			String profileText = profile.text();
+			profiles.add(profileText.substring(profileText.indexOf(". ")).trim());
 		}
+
+		return profiles;
 	}
 }

@@ -31,7 +31,4 @@ public class Direction extends BaseEntity implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "direction")
     private List<PassPoint> passPoints;
-
-    @ManyToOne
-    private Department department;
 }
