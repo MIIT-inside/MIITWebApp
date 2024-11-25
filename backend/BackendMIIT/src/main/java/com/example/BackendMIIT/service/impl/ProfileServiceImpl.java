@@ -189,7 +189,6 @@ public class ProfileServiceImpl implements ProfileService {
                 profile.setForm(direction.getForm());
                 profile.setAbbreviation(properties.get(i++).trim());
                 profile.setDirection(direction);
-
                 profileRepository.save(profile);
             } else {
                 break;

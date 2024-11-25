@@ -35,7 +35,8 @@ public class InstituteParser {
 	public List<String> getProfiles(String link) {
 
 		Document doc = Jsoup.connect(link).maxBodySize(0).get();
-		Element divContainer = doc.selectFirst("div[class=info-block info-block_collapse dept-about");
+		Element divContainer = doc.selectFirst("div[class=info-block info-block_collapse dept-about]");
+		if (divContainer == null) return null;
 		Element ul = divContainer.selectFirst("ul");
 		Elements profilesTag = ul.select("a");
 

@@ -38,9 +38,17 @@ public class InstituteServiceImpl implements InstituteService {
 		for (Element inst : insts) {
 
 			String link = extractLink(inst);
-			saveInstitute(extractName(inst),
-					extractAbbreviation(inst),
-					extractProfiles(link)
+			String name = extractName(inst);
+			String abbreviation = extractAbbreviation(inst);
+			List<Profile> profiles = extractProfiles(link);
+
+			if (profiles == null) {
+				saveInstitute(name, abbreviation);
+			}
+
+			saveInstitute(name,
+					abbreviation,
+					profiles
 			);
 		}
 
@@ -62,6 +70,8 @@ public class InstituteServiceImpl implements InstituteService {
 		List<String> names = instituteParser.getProfiles(link);
 		List<Profile> profiles = new ArrayList<>();
 
+		if (names == null || names.isEmpty()) return null;
+
 		for (String name : names) {
 			Optional<Profile> profile = profileRepository.findByName(name);
 
@@ -81,6 +91,14 @@ public class InstituteServiceImpl implements InstituteService {
 		Institute institute = new Institute();
 
 		institute.setProfiles(profiles);
+		institute.setName(name);
+		institute.setAbbreviation(abbreviation);
+	}
+
+	private void saveInstitute(String name, String abbreviation) {
+
+		Institute institute = new Institute();
+
 		institute.setName(name);
 		institute.setAbbreviation(abbreviation);
 	}
