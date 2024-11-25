@@ -112,7 +112,7 @@ public class DirectionServiceImpl implements DirectionService {
         }
     }
 
-    public List<DirectionWithProfilesDto> getSortedDirections(String ppType, int page, int size) {
+    private List<DirectionWithProfilesDto> getSortedDirections(String ppType, int page, int size) {
         return mapDirections(ppType, null, page, size);
     }
 
