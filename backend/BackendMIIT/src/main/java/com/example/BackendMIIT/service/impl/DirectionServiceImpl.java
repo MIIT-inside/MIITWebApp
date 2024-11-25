@@ -112,51 +112,47 @@ public class DirectionServiceImpl implements DirectionService {
         }
     }
 
-    @Override
     public List<DirectionWithProfilesDto> getSortedDirections(String ppType, int page, int size) {
-        Pageable pageable = getPageable(ppType, page, size);
-        Page<Direction> directions = directionRepository.findAll(pageable);
-
-        return directions.getContent()
-                .stream()
-                .map(direction -> {
-                    DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
-                    dto.setPassPoints(filterAndMapPassPoints(dto.getPassPoints(), ppType));
-                    return dto;
-                })
-                .collect(Collectors.toList());
+        return mapDirections(ppType, null, page, size);
     }
 
     @Override
-    public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType,
-                                                                        String category,
-                                                                        int page,
-                                                                        int size) {
+    public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category, int page, int size) {
+        if (category == null || category.isEmpty()) {
+            return getSortedDirections(ppType, page, size);
+        }
+
         if (!isValidCategory(category)) {
             throw new CategoryNotFoundException(category);
         }
 
+        return mapDirections(ppType, category, page, size);
+    }
+
+    private List<DirectionWithProfilesDto> mapDirections(String ppType, String category, int page, int size) {
         Pageable pageable = getPageable(ppType, page, size);
         Page<Direction> directions = directionRepository.findAll(pageable);
 
-        return directions.getContent()
-                .stream()
+        return directions.getContent().stream()
                 .map(direction -> {
                     DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
-                    dto.setPassPoints(filterAndMapPassPointsByCategory(dto.getPassPoints(), ppType, category));
+                    if (category != null) {
+                        dto.setPassPoints(filterAndMapPassPointsByCategory(dto.getPassPoints(), ppType, category));
+                    } else {
+                        dto.setPassPoints(filterAndMapPassPoints(dto.getPassPoints(), ppType));
+                    }
                     return dto;
                 })
                 .collect(Collectors.toList());
     }
 
+
     private Sort getSortOrder(String ppType) {
-        if ("min".equalsIgnoreCase(ppType)) {
-            return Sort.by(Sort.Order.desc("passPoints.min"), Sort.Order.asc("name"));
-        } else if ("avg".equalsIgnoreCase(ppType)) {
-            return Sort.by(Sort.Order.desc("passPoints.avg"), Sort.Order.asc("name"));
-        } else {
-            return Sort.by(Sort.Order.asc("name"));
-        }
+        return switch (ppType.toLowerCase()) {
+            case "min" -> Sort.by(Sort.Order.desc("passPoints.min"), Sort.Order.asc("name"));
+            case "avg" -> Sort.by(Sort.Order.desc("passPoints.avg"), Sort.Order.asc("name"));
+            default -> Sort.by(Sort.Order.asc("name"));
+        };
     }
 
     private boolean isValidCategory(String categoryName) {
@@ -171,9 +167,7 @@ public class DirectionServiceImpl implements DirectionService {
                 .collect(Collectors.toList());
     }
 
-    private List<PassPointDto> filterAndMapPassPointsByCategory(List<PassPointDto> passPoints,
-                                                                String ppType,
-                                                                String category) {
+    private List<PassPointDto> filterAndMapPassPointsByCategory(List<PassPointDto> passPoints, String ppType, String category) {
         return passPoints.stream()
                 .filter(pp -> pp.getCategory().equalsIgnoreCase(category) && (pp.getMin() != 0 || pp.getAvg() != 0))
                 .map(pp -> mapPassPointDto(pp, ppType))
