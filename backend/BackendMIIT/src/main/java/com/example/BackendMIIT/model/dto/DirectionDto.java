@@ -20,6 +20,9 @@ public class DirectionDto {
     @JsonProperty("form")
     private String form;
 
+    @JsonProperty("image_url")
+    private String imageUrl;
+
     @JsonProperty("pass_points")
     private List<PassPointDto> passPoints;
 }

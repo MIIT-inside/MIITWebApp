@@ -19,17 +19,17 @@ const FooterBlock = () => {
                                 <Item textItem="Часто задаваемые вопросы"></Item>
                             </Link>
 
-                            <Link to="/main" className="hover:underline">
+                            <Link to="/specialties" className="hover:underline">
                                 <Item textItem="Специальности"></Item>
                             </Link>
 
                     </div>
                     <div className="flex items-center space-x-5">
-                        <a href="" className="flex items-center space-x-2">
+                        <a href="https://vk.com/rutmiitvk?ysclid=m3dfo1zpcd324832534" target="_blank" className="flex items-center space-x-2">
                             <img src={vk} alt="vk" className="w-6 h-auto"/>
                             <span>Вконтакте</span>
                         </a>
-                        <a href="" className="flex items-center space-x-2">
+                        <a href="https://t.me/s/rut_live" target="_blank" className="flex items-center space-x-2">
                             <img src={telegram} alt="telegram" className="w-6 h-auto"/>
                             <span>Телеграм</span>
                         </a>
@@ -38,7 +38,7 @@ const FooterBlock = () => {
                 <hr className="flex justify-center border-black"/>
                 <div className="flex space-x-5 mt-10 text-[14px] text-gray-600 justify-between">
                     <span className="w-1/2">2024 РУТ(МИИТ). Все права защищены. Мы стараемся предоставить абитуриентам полную информацию о наших курсах и помочь им в выборе специальности</span>
-                    <span>Связь с разработчиками</span>
+                    <a href = "https://t.me/vnezapniy_losos" target="_blank">Связь с разработчиками</a>
                 </div>
             </div>
         </footer>
