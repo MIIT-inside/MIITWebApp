@@ -32,16 +32,22 @@ export default function MainPage() {
 
     return (<div>
             <motion.div
-                style={{scale, backgroundImage: `url(${mainPage})`}}
-                className="h-screen relative bg-fixed bg-cover">
+                className="h-screen relative overflow-hidden bg-fixed bg-cover">
+                <motion.div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{
+                        backgroundImage: `url(${mainPage})`,
+                        transformOrigin: 'center',
+                        scale,
+                    }}
+                ></motion.div>
                 <div className="absolute inset-0 bg-black opacity-60"></div>
-
                 <div
-                    className="relative flex flex-col w-full lg:w-[47%] mx-auto space-y-6 items-center justify-center size-full border-0 rounded-xl pt-16 px-4 text-center">
+                    className="relative flex flex-col w-full lg:w-[47%] mx-auto space-y-6 items-center justify-center size-full border-0 rounded-xl pt-16 px-4 text-center z-10">
                     <span className="text-2xl md:text-4xl text-white font-bold">Добро пожаловать в РУТ МИИТ</span>
                     <span className="text-lg md:text-xl text-white">
-                Откройте для себя возможности, которые предлагает наш университет. Узнайте больше о наших специальностях и карьерных перспективах.
-            </span>
+            Откройте для себя возможности, которые предлагает наш университет. Узнайте больше о наших специальностях и карьерных перспективах.
+        </span>
                     <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-5">
                         <button className="bg-white px-5 py-3 rounded">Подробнее</button>
                         <button className="bg-none px-5 py-3 border rounded text-white">Контакты</button>
@@ -56,7 +62,8 @@ export default function MainPage() {
                 <span className="text-lg md:text-xl text-[#1E1E1E]">
                     Миссия Российского университета транспорта – быть интеллектуальным драйвером транспортной отрасли.
                 </span>
-                        <div className="flex flex-col space-y-4 lg:space-y-0 md:space-y-0 md:flex-row md:space-x-4 justify-center">
+                        <div
+                            className="flex flex-col space-y-4 lg:space-y-0 md:space-y-0 md:flex-row md:space-x-4 justify-center">
                             <InfoBlock
                                 title="Профили подготовки"
                                 description="Подробная информация о профилях подготовки"/>
@@ -93,7 +100,7 @@ export default function MainPage() {
                             </div>
                         </FadeInSection>
                         <FadeInSection>
-                            <div className="grid items-center lg:grid-cols-2 md:grid-cols-2 gap-5 mt-14">
+                            <div className="grid items-center lg:grid-cols-2 md:grid-cols-2 mt-14">
                                 <InfoBlock title="> 29000" description="студентов по программам высшего образования"/>
                                 <InfoBlock title="> 440"
                                            description="образовательных программ высшего и среднего профессионального образования"/>
