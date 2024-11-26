@@ -18,6 +18,7 @@ public class Direction extends BaseEntity implements Serializable {
     private String name;
     private String level;
     private String form;
+    private String imageUrl;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "direction")

@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import Header from "../components/Header";
 import InfoBlock from "../components/InfoBlock";
 import Accordion from "../components/Accordion";
 import image1 from "../assets/inostr.jpg"
 import BlueCard from "../components/BlueCard";
 import {AnimatePresence, motion, useScroll, useTransform} from "framer-motion";
 import axios from "axios";
-import FooterBlock from "../components/FooterBlock";
 import {FadeInSection} from "../components/FadeInSection";
+import mainPage from "../assets/image_2024-10-22_12-22-33.png"
 
 export default function MainPage() {
     const {scrollY} = useScroll();
@@ -33,8 +32,8 @@ export default function MainPage() {
 
     return (<div>
             <motion.div
-                style={{scale}}
-                className="h-screen relative bg-[url('./src/assets/image_2024-10-22_12-22-33.png')] bg-fixed bg-cover">
+                style={{scale, backgroundImage: `url(${mainPage})`}}
+                className="h-screen relative bg-fixed bg-cover">
                 <div className="absolute inset-0 bg-black opacity-60"></div>
 
                 <div

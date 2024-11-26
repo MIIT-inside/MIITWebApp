@@ -19,6 +19,7 @@ public class Profile extends BaseEntity implements Serializable {
     private String description;
     private String institute;
     private String abbreviation;
+    private String imageUrl;
 
     @JsonBackReference
     @ManyToOne

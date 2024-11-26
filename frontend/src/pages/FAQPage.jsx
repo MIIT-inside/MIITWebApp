@@ -5,7 +5,7 @@ import {FadeInSection} from "../components/FadeInSection";
 const HelpBlock = () => {
     return (
 
-        <div className="mx-auto py-20 space-y-20 mt-20 max-w-[1280px]">
+        <div className="mx-auto py-20 space-y-20 mt-40 max-w-[1280px]">
             <FadeInSection>
                 <div className="flex justify-between items-start">
                     <div className="w-1/2 pr-10 space-y-4">
