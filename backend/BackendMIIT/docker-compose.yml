@@ -7,6 +7,12 @@ volumes:
     driver: local
   minio-data:
     driver: local
+  es-data:
+    driver: local
+
+networks:
+  elk:
+    driver: bridge
 
 services:
   app:
@@ -67,9 +73,8 @@ services:
       - '9200:9200'
       - '9300:9300'
     volumes:
-      - es-data:/data
+      - es-data:/usr/share/elasticsearch/data
       - ./elk-config/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-
     environment:
       - discovery.type=single-node
       - node.name=elastic
@@ -87,7 +92,6 @@ services:
     volumes:
       - ./elk-config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./elk-config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - ls-data:/usr/share/logstash/data
     networks:
       - elk
     depends_on:
@@ -98,9 +102,8 @@ services:
     container_name: kibana
     ports:
       - '5601:5601'
-    volumes:
-      - ./elk-config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-      - kibana-data:/usr/share/kibana/data
+    environment:
+      ELASTICSEARCH.URL: http://elasticsearch:9200
     networks:
       - elk
     depends_on:
