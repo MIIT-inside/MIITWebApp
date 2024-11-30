@@ -59,3 +59,14 @@ services:
       - '9001:9001'
     volumes:
       - minio-data:/minio
+
+  nginx:
+    image: nginx:1.27
+    container_name: nginx
+    restart: always
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
