@@ -4,7 +4,7 @@ network:
   host: 0.0.0.0
 
 action:
-  auto_create_index: .security*,.kibana*
+  auto_create_index: ".security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*"
 
 xpack:
   security:

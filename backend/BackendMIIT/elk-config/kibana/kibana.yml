@@ -1,12 +1,11 @@
 server:
   name: kibana
   host: 0.0.0.0
-  publicBaseUrl: "http://localhost:5601"
 
 elasticsearch:
   hosts: [ "http://elasticsearch:9200" ]
-  serviceAccountToken: AAEAAWVsYXN0aWMva2liYW5hL3Rva2VuX0g3dFplcE1CcTZWc2lnMUp5QjV0OnN4UzhLYXJUUTF5Ny00bkNKaW50d1E
-  password: elastic
+  username: kibana_system
+  password: G3n3ratedPass
 
 monitoring:
   ui:
