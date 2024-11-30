@@ -11,7 +11,7 @@ volumes:
     driver: local
 
 networks:
-  elk:
+  entrant:
     driver: bridge
 
 services:
@@ -82,7 +82,7 @@ services:
       - ELASTIC_USERNAME=elastic
       - ELASTIC_PASSWORD=elastic
     networks:
-      - elk
+      - entrant
 
   logstash:
     image: logstash:8.10.2
@@ -93,7 +93,7 @@ services:
       - ./elk-config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./elk-config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
     networks:
-      - elk
+      - entrant
     depends_on:
       - elasticsearch
 
@@ -107,6 +107,6 @@ services:
     volumes:
       - ./elk-config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     networks:
-      - elk
+      - entrant
     depends_on:
       - elasticsearch
