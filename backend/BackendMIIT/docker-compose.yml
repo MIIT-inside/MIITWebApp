@@ -8,6 +8,10 @@ volumes:
   minio-data:
     driver: local
 
+networks:
+  entrant:
+    driver: bridge
+
 services:
   app:
     container_name: inside-view
@@ -24,6 +28,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
     ports:
       - '8080:8080'
+    networks:
+      - entrant
 
   db:
     image: postgres:16.4-alpine
@@ -35,6 +41,8 @@ services:
     volumes:
       - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
       - db-data:/var/lib/postgresql/data
+    networks:
+      - entrant
 
   redis:
     image: redis:7.4-alpine
@@ -45,6 +53,8 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass TUlJVCBpbnNpZGV2aWV3
     volumes:
       - cache:/data
+    networks:
+      - entrant
 
   minio:
     image: minio/minio:latest
@@ -59,14 +69,17 @@ services:
       - '9001:9001'
     volumes:
       - minio-data:/minio
+    networks:
+      - entrant
 
   nginx:
     image: nginx:1.27
     container_name: nginx
-    restart: always
     ports:
       - '80:80'
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - app
+    networks:
+      - entrant
