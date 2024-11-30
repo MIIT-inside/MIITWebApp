@@ -2,3 +2,13 @@ cluster:
   name: "elasticsearch"
 network:
   host: 0.0.0.0
+
+action:
+  auto_create_index: .security*,.kibana*
+
+xpack:
+  security:
+    enabled: true
+  license:
+    self_generated:
+      type: basic
