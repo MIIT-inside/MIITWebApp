@@ -1,0 +1,14 @@
+server:
+  name: kibana
+  host: 0.0.0.0
+
+elasticsearch:
+  hosts: [ "http://elasticsearch:9200" ]
+  username: kibana_system
+  password: G3n3ratedPass
+
+monitoring:
+  ui:
+    container:
+      elasticsearch:
+        enabled: true

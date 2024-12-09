@@ -7,6 +7,12 @@ volumes:
     driver: local
   minio-data:
     driver: local
+  es-data:
+    driver: local
+
+networks:
+  entrant:
+    driver: bridge
 
 services:
   app:
@@ -24,6 +30,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
     ports:
       - '8080:8080'
+    networks:
+      - entrant
 
   db:
     image: postgres:16.4-alpine
@@ -35,6 +43,8 @@ services:
     volumes:
       - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
       - db-data:/var/lib/postgresql/data
+    networks:
+      - entrant
 
   redis:
     image: redis:7.4-alpine
@@ -45,6 +55,8 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass TUlJVCBpbnNpZGV2aWV3
     volumes:
       - cache:/data
+    networks:
+      - entrant
 
   minio:
     image: minio/minio:latest
@@ -59,3 +71,51 @@ services:
       - '9001:9001'
     volumes:
       - minio-data:/minio
+    networks:
+      - entrant
+
+  elasticsearch:
+    image: elasticsearch:8.10.2
+    container_name: elastic
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+      - ./elk-config/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      - node.name=elastic
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=elastic
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    networks:
+      - entrant
+
+  logstash:
+    image: logstash:8.10.2
+    container_name: logstash
+    ports:
+      - '5044:5044'
+    volumes:
+      - ./elk-config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./elk-config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+    networks:
+      - entrant
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: kibana:8.10.2
+    container_name: kibana
+    ports:
+      - '5601:5601'
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    volumes:
+      - ./elk-config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    networks:
+      - entrant
+    depends_on:
+      - elasticsearch
