@@ -2,12 +2,15 @@ package com.example.BackendMIIT.controller;
 
 import com.example.BackendMIIT.model.dto.DirectionDto;
 import com.example.BackendMIIT.model.dto.DirectionWithProfilesDto;
+import com.example.BackendMIIT.model.dto.SimplifiedDirectionsWithProfilesDto;
 import com.example.BackendMIIT.service.DirectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -55,5 +58,15 @@ public class DirectionController {
             @RequestParam(defaultValue = "5") int size
     ) {
         return directionService.getSortedDirectionsByCategory(ppType, category, page, size);
+    }
+
+    @GetMapping("/by-pp")
+    public List<SimplifiedDirectionsWithProfilesDto> getDirectionsByTotalPp(@RequestParam Map<String, String> examAndPp) {
+        HashMap<String, Integer> examsAndPpMap = new HashMap<>();
+        for (Map.Entry<String, String> entry : examAndPp.entrySet()) {
+            examsAndPpMap.put(entry.getKey(), Integer.parseInt(entry.getValue()));
+        }
+
+        return directionService.getDirectionsByExamsAndPp(examsAndPpMap);
     }
 }
