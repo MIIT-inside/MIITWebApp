@@ -1,6 +1,7 @@
 package com.example.BackendMIIT.controller;
 
 import com.example.BackendMIIT.model.dto.DirectionDto;
+import com.example.BackendMIIT.model.dto.DirectionWithProfilesDto;
 import com.example.BackendMIIT.service.DirectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +45,15 @@ public class DirectionController {
     @GetMapping("/direction")
     public ResponseEntity<DirectionDto> getDirectionByName(@RequestParam String name) {
         return ResponseEntity.ok(directionService.getDirectionByName(name));
+    }
+
+    @GetMapping("/sorted")
+    public List<DirectionWithProfilesDto> getSortedDirections(
+            @RequestParam(defaultValue = "min") String ppType,
+            @RequestParam String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return directionService.getSortedDirectionsByCategory(ppType, category, page, size);
     }
 }

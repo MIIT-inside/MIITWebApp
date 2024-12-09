@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class DirectionDto {
+public class DirectionWithProfilesDto {
 
     @JsonProperty("code")
     private String code;
@@ -20,9 +20,10 @@ public class DirectionDto {
     @JsonProperty("form")
     private String form;
 
-    @JsonProperty("image_url")
-    private String imageUrl;
-
     @JsonProperty("pass_points")
     private List<PassPointDto> passPoints;
+
+    @JsonProperty("profiles")
+    private List<ProfileDto> profiles;
 }
+

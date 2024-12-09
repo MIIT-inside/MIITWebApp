@@ -1,21 +1,31 @@
 package com.example.BackendMIIT.service.impl;
 
 import com.example.BackendMIIT.mapper.DirectionMapper;
+import com.example.BackendMIIT.model.domain.Category;
 import com.example.BackendMIIT.model.domain.Direction;
 import com.example.BackendMIIT.model.dto.DirectionDto;
+import com.example.BackendMIIT.model.dto.DirectionWithProfilesDto;
+import com.example.BackendMIIT.model.dto.PassPointDto;
 import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.service.DirectionService;
+import com.example.BackendMIIT.util.exceptions.CategoryNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DirectionServiceImpl implements DirectionService {
@@ -100,5 +110,84 @@ public class DirectionServiceImpl implements DirectionService {
                 directionRepository.save(direction);
             }
         }
+    }
+
+    private List<DirectionWithProfilesDto> getSortedDirections(String ppType, int page, int size) {
+        return mapDirections(ppType, null, page, size);
+    }
+
+    @Override
+    public List<DirectionWithProfilesDto> getSortedDirectionsByCategory(String ppType, String category, int page, int size) {
+        if (category == null || category.isEmpty()) {
+            return getSortedDirections(ppType, page, size);
+        }
+
+        if (!isValidCategory(category)) {
+            throw new CategoryNotFoundException(category);
+        }
+
+        return mapDirections(ppType, category, page, size);
+    }
+
+    private List<DirectionWithProfilesDto> mapDirections(String ppType, String category, int page, int size) {
+        Pageable pageable = getPageable(ppType, page, size);
+        Page<Direction> directions = directionRepository.findAll(pageable);
+
+        return directions.getContent().stream()
+                .map(direction -> {
+                    DirectionWithProfilesDto dto = directionMapper.directionToWithProfilesDto(direction);
+                    if (category != null) {
+                        dto.setPassPoints(filterAndMapPassPointsByCategory(dto.getPassPoints(), ppType, category));
+                    } else {
+                        dto.setPassPoints(filterAndMapPassPoints(dto.getPassPoints(), ppType));
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private Sort getSortOrder(String ppType) {
+        return switch (ppType.toLowerCase()) {
+            case "min" -> Sort.by(Sort.Order.desc("passPoints.min"), Sort.Order.asc("name"));
+            case "avg" -> Sort.by(Sort.Order.desc("passPoints.avg"), Sort.Order.asc("name"));
+            default -> Sort.by(Sort.Order.asc("name"));
+        };
+    }
+
+    private boolean isValidCategory(String categoryName) {
+        return Arrays.stream(Category.values())
+                .anyMatch(category -> category.getValue().equalsIgnoreCase(categoryName));
+    }
+
+    private List<PassPointDto> filterAndMapPassPoints(List<PassPointDto> passPoints, String ppType) {
+        return passPoints.stream()
+                .filter(pp -> !(pp.getMin() == 0 && pp.getAvg() == 0))
+                .map(pp -> mapPassPointDto(pp, ppType))
+                .collect(Collectors.toList());
+    }
+
+    private List<PassPointDto> filterAndMapPassPointsByCategory(List<PassPointDto> passPoints, String ppType, String category) {
+        return passPoints.stream()
+                .filter(pp -> pp.getCategory().equalsIgnoreCase(category) && (pp.getMin() != 0 || pp.getAvg() != 0))
+                .map(pp -> mapPassPointDto(pp, ppType))
+                .collect(Collectors.toList());
+    }
+
+    private PassPointDto mapPassPointDto(PassPointDto pp, String ppType) {
+        PassPointDto filteredPoints = new PassPointDto();
+        filteredPoints.setCategory(pp.getCategory());
+
+        if ("avg".equalsIgnoreCase(ppType)) {
+            filteredPoints.setAvg(pp.getAvg());
+        } else {
+            filteredPoints.setMin(pp.getMin());
+        }
+
+        return filteredPoints;
+    }
+
+    private Pageable getPageable(String ppType, int page, int size) {
+        Sort sort = getSortOrder(ppType);
+        return PageRequest.of(page, size, sort);
     }
 }
