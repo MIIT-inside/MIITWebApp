@@ -3,9 +3,8 @@ package com.example.BackendMIIT.service.impl;
 import com.example.BackendMIIT.mapper.DirectionMapper;
 import com.example.BackendMIIT.model.domain.Category;
 import com.example.BackendMIIT.model.domain.Direction;
-import com.example.BackendMIIT.model.dto.DirectionDto;
-import com.example.BackendMIIT.model.dto.DirectionWithProfilesDto;
-import com.example.BackendMIIT.model.dto.PassPointDto;
+import com.example.BackendMIIT.model.domain.PassPoint;
+import com.example.BackendMIIT.model.dto.*;
 import com.example.BackendMIIT.repository.DirectionRepository;
 import com.example.BackendMIIT.service.DirectionService;
 import com.example.BackendMIIT.util.exceptions.CategoryNotFoundException;
@@ -22,9 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -127,6 +124,57 @@ public class DirectionServiceImpl implements DirectionService {
         }
 
         return mapDirections(ppType, category, page, size);
+    }
+
+    @Override
+    public List<SimplifiedDirectionsWithProfilesDto> getDirectionsByExamsAndPp(HashMap<String, Integer> examsAndPp) {
+        int totalSum = examsAndPp.values()
+                .stream()
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        List<Direction> directions = directionRepository.findByMinPassPointsLessThanEqual(Category.MAIN, totalSum);
+
+        return directions.stream()
+                .map(direction -> {
+                    SimplifiedDirectionsWithProfilesDto dto = new SimplifiedDirectionsWithProfilesDto();
+
+                    dto.setCode(direction.getCode());
+                    dto.setName(direction.getName());
+                    dto.setLevel(direction.getLevel());
+                    dto.setForm(direction.getForm());
+
+                    List<PassPointDto> passPointDtos = direction.getPassPoints().stream()
+                            .map(this::convertToPassPointDto)
+                            .collect(Collectors.toList());
+
+                    List<PassPointDto> filteredPoints = filterAndMapPassPointsByCategory(
+                            passPointDtos,
+                            "min",
+                            Category.MAIN.getValue());
+
+                    if (!filteredPoints.isEmpty()) { dto.setPassPoints(filteredPoints.get(0).getMin()); }
+
+                    dto.setProfiles(direction.getProfiles().stream()
+                            .map(profile -> {
+                                ProfileDto profileDto = new ProfileDto();
+                                profileDto.setName(profile.getName());
+                                return profileDto;
+                            })
+                            .collect(Collectors.toList()));
+
+                    return dto;
+                })
+                .filter(dto -> dto.getPassPoints() != null)
+                .collect(Collectors.toList());
+    }
+
+    private PassPointDto convertToPassPointDto(PassPoint passPoint) {
+        PassPointDto dto = new PassPointDto();
+        dto.setMin(passPoint.getMin());
+        dto.setCategory(passPoint.getCategory().getValue());
+        return dto;
     }
 
     private List<DirectionWithProfilesDto> mapDirections(String ppType, String category, int page, int size) {
