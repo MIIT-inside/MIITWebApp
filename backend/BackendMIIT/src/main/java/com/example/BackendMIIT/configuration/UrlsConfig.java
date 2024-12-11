@@ -14,4 +14,5 @@ public class UrlsConfig {
     private String ia;
     private String miitBaseUrl;
     private String eduPrograms;
+    private String minPoints;
 }

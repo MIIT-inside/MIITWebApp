@@ -1,23 +1,21 @@
 package com.example.BackendMIIT.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "exams")
 @Data
 public class Exam extends BaseEntity implements Serializable {
 
-    private String name;
+    private String subjectName;
 
     @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "direction_id")
-    private Direction direction;
+    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL)
+    private Set<DirectionExamPoints> directionExamPoints = new HashSet<>();
 }

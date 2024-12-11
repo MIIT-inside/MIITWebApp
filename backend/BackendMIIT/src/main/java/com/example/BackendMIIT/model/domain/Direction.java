@@ -1,13 +1,13 @@
 package com.example.BackendMIIT.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "directions")
@@ -26,9 +26,8 @@ public class Direction extends BaseEntity implements Serializable {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "direction")
-    private List<Exam> exams;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "direction")
     private List<PassPoint> passPoints;
+
+    @OneToMany(mappedBy = "direction", cascade = CascadeType.ALL)
+    private Set<DirectionExamPoints> directionExamScores = new HashSet<>();
 }

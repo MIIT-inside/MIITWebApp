@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(DirectionNotFoundException.class)
+    public ResponseEntity<String> handleDirectionNotFoundException(DirectionNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Введите название направления");
+    }
     @ExceptionHandler(ImageUploadException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleImageUpload(ImageUploadException e) {
