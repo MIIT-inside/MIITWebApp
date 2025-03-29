@@ -17,7 +17,6 @@ public class Profile extends BaseEntity implements Serializable {
     private String form;
     private String level;
     private String description;
-    private String institute;
     private String abbreviation;
     private String imageUrl;
 
@@ -29,4 +28,7 @@ public class Profile extends BaseEntity implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "profile")
     private List<Semester> semesters;
+
+    @ManyToOne
+    private Institute institute;
 }

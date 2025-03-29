@@ -20,9 +20,6 @@ public class ProfileDto {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("institute")
-    private String institute;
-
     @JsonProperty("abbreviation")
     private String abbreviation;
 

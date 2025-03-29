@@ -2,6 +2,7 @@ package com.example.BackendMIIT.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -15,6 +16,9 @@ import java.util.List;
 public class Department extends BaseEntity implements Serializable {
 
     private String name;
+
+    @ManyToOne
+    private Institute institute;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "department")

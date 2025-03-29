@@ -1,6 +1,8 @@
 package com.example.BackendMIIT.repository;
 
+import com.example.BackendMIIT.model.domain.Institute;
 import com.example.BackendMIIT.model.domain.Profile;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,5 +12,6 @@ import java.util.Optional;
 public interface ProfileRepository extends BaseRepository<Profile> {
     Optional<Profile> findByName(String name);
 
+    @Query(value = "select p.institute.name from Profile p")
     Optional<List<Profile>> findByInstitute(String institute);
 }
